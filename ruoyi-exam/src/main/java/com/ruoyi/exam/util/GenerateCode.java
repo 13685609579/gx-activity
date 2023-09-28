@@ -24,7 +24,7 @@ public class GenerateCode {
     public static void main(String[] args) {
 
         //常用设置
-        String moduleName = "";  //模块路径
+        String moduleName = "/ruoyi-exam";  //模块路径
         String packageName = "com.ruoyi.exam"; //包名
         //是否覆盖
         boolean override = false;
@@ -33,7 +33,7 @@ public class GenerateCode {
         String tablePrefix = "";//前缀
         //映射的表名
         List<String> tables = new ArrayList<>();
-        tables.add("md_dict");
+        tables.add("exam_manage");
 
         String[] tableNames = tables.toArray(new String[1]);
 
