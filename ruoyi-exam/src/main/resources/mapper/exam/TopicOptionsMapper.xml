@@ -4,6 +4,7 @@
 
     <insert id="insertTopicOptionsData" parameterType="com.ruoyi.exam.domain.TopicOptions">
         insert into topic_options(
+        <if test="topicOptionsId != null">topic_options_id,</if>
         <if test="topicId != null">topic_id,</if>
         <if test="optionsContent != null and optionsContent != ''">options_content,</if>
         <if test="optionsState != null and optionsState != ''">options_state,</if>
@@ -12,6 +13,7 @@
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time
         )values(
+        <if test="topicOptionsId != null">#{topicOptionsId},</if>
         <if test="topicId != null">#{topicId},</if>
         <if test="optionsContent != null and optionsContent != ''">#{optionsContent},</if>
         <if test="optionsState != null and optionsState != ''">#{optionsState},</if>
