@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.exam.mapper.QuestionBankManageMapper">
+
+    <resultMap type="QuestionBankManage" id="QuestionBankManageResult">
+        <id     property="topicId"       column="topic_id"      />
+        <result property="topicNum"       column="topic_num"      />
+        <result property="topicCode"     column="topic_code"    />
+        <result property="topicContent"     column="topic_content"    />
+        <result property="topicSort"        column="topic_sort"        />
+        <result property="topicType"  column="topic_type"  />
+        <result property="answerAnalysis"       column="answer_analysis"       />
+        <result property="perScore"     column="per_score"     />
+        <result property="delFlag"      column="del_flag"     />
+        <result property="createBy"     column="create_by"    />
+        <result property="createTime"   column="create_time"  />
+        <result property="updateBy"     column="update_by"    />
+        <result property="updateTime"   column="update_time"  />
+        <result property="remark"       column="remark"       />
+    </resultMap>
+
+    <select id="selectQuestionBankList" parameterType="com.ruoyi.exam.domain.QuestionBankManage" resultMap="QuestionBankManageResult">
+        SELECT topic_id, topic_num, topic_code, topic_content, topic_sort, topic_type, answer_analysis,
+        per_score, del_flag, create_time, update_time, create_by, update_by, remark FROM question_bank_manage
+        where del_flag = 1
+        <if test="topicSort != null and topicSort != ''">
+            AND topic_sort = #{topicSort}
+        </if>
+        <if test="topicType != null and topicType != ''">
+            AND topic_type = #{topicType}
+        </if>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+
+    <select id="selectMaxTopicNum" resultType="String">
+        select max(topic_num) max_topic_num FROM question_bank_manage where del_flag = 1
+    </select>
+
+    <select id="selectNewQuestionBank" resultMap="QuestionBankManageResult">
+        SELECT topic_id, topic_num, topic_code, topic_content, topic_sort, topic_type, answer_analysis,
+        per_score, del_flag, create_time, update_time, create_by, update_by, remark FROM question_bank_manage
+        where del_flag = 1
+        order by create_time desc
+        limit 1
+    </select>
+
+    <insert id="insertQuestionBankData" parameterType="com.ruoyi.exam.domain.QuestionBankManage">
+        insert into question_bank_manage(
+        <if test="topicId != null">topic_id,</if>
+        <if test="topicNum != null">topic_num,</if>
+        <if test="topicCode != null and topicCode != ''">topic_code,</if>
+        <if test="topicContent != null and topicContent != ''">topic_content,</if>
+        <if test="topicSort != null and topicSort != ''">topic_sort,</if>
+        <if test="topicType != null and topicType != ''">topic_type,</if>
+        <if test="answerAnalysis != null and answerAnalysis != ''">answer_analysis,</if>
+        <if test="perScore != null">per_score,</if>
+        <if test="delFlag != null">del_flag,</if>
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="topicId != null">#{topicId},</if>
+        <if test="topicNum != null">#{topicNum},</if>
+        <if test="topicCode != null and topicCode != ''">#{topicCode},</if>
+        <if test="topicContent != null and topicContent != ''">#{topicContent},</if>
+        <if test="topicSort != null and topicSort != ''">#{topicSort},</if>
+        <if test="topicType != null and topicType != ''">#{topicType},</if>
+        <if test="answerAnalysis != null and answerAnalysis != ''">#{answerAnalysis},</if>
+        <if test="perScore != null">#{perScore},</if>
+        1,
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
+</mapper>
