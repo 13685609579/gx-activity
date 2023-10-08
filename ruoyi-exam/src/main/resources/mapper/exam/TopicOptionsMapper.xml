@@ -8,7 +8,7 @@
         <if test="topicId != null">topic_id,</if>
         <if test="optionsContent != null and optionsContent != ''">options_content,</if>
         <if test="optionsState != null and optionsState != ''">options_state,</if>
-        <if test="delFlag != null">del_flag,</if>
+        del_flag,
         <if test="remark != null and remark != ''">remark,</if>
         <if test="createBy != null and createBy != ''">create_by,</if>
         create_time
@@ -23,5 +23,15 @@
         sysdate()
         )
     </insert>
+
+    <update id="updateTopicOptions" parameterType="com.ruoyi.exam.domain.TopicOptions">
+        update topic_options
+        <set>
+            <if test="optionsContent != null and optionsContent != ''">options_content = #{optionsContent},</if>
+            <if test="optionsState != null and optionsState != ''">options_state = #{optionsState},</if>
+            update_time = sysdate()
+        </set>
+        where topic_options_id = #{topicOptionsId}
+    </update>
 
 </mapper>

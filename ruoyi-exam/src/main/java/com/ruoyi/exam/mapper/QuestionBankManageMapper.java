@@ -31,6 +31,11 @@ public interface QuestionBankManageMapper extends BaseMapper<QuestionBankManage>
     public QuestionBankManage selectNewQuestionBank();
 
     /**
+     * 获取最新题目编号
+     * @return
+     */
+    public String selectNewTopicCode(String today);
+    /**
      * 获取题库题目最大题目编号
      * @return
      */

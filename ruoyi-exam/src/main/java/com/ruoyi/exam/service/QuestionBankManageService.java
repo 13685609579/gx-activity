@@ -25,6 +25,12 @@ public interface QuestionBankManageService extends IService<QuestionBankManage> 
     public List<QuestionBankManage> selectQuestionBankList(QuestionBankManage questionBankManage);
 
     /**
+     * 获取最新题目编号
+     * @return
+     */
+    public String getTopicCode();
+
+    /**
      * 新增题库题目
      * @param questionBankManage
      * @return

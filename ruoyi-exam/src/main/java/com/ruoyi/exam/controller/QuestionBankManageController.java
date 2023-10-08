@@ -49,6 +49,15 @@ public class QuestionBankManageController extends BaseController {
     }
 
     /**
+     * 获取当前题目详情
+     * @return
+     */
+    @GetMapping(value = "/getTopicCode")
+    public AjaxResult getTopicCode(){
+        return success(questionBankManageService.getTopicCode());
+    }
+
+    /**
      * 新增题库题目
      * @param questionBankManage
      * @return
@@ -59,7 +68,6 @@ public class QuestionBankManageController extends BaseController {
     {
 //        questionBankManage.setCreateBy(getUsername());
         questionBankManage.setCreateBy("admin");
-        questionBankManage.setDelFlag("1");
         return toAjax(questionBankManageService.insertQuestionBankData(questionBankManage));
     }
 

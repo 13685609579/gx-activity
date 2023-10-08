@@ -50,6 +50,9 @@ public class QuestionBankManage extends BaseEntity {
     @ApiModelProperty(value = "题目类型（1：单选题 2：多选题 3：判断题）")
     private String topicType;
 
+    @ApiModelProperty(value = "题目答案（1：正确 0：错误）")
+    private String topicAnswer;
+
     @ApiModelProperty(value = "答案解析")
     private String answerAnalysis;
 
@@ -77,6 +80,11 @@ public class QuestionBankManage extends BaseEntity {
 
     @ApiModelProperty(value = "备注")
     private String remark;
+
+    /**
+     * 题目选项
+     */
+    public String topicOptions;
 
     private List<TopicOptions> topicOptionsList;
 

@@ -1,10 +1,17 @@
 package com.ruoyi.exam.service.impl;
 
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.exam.domain.ClassHourSf;
 import com.ruoyi.exam.domain.ExamManage;
+import com.ruoyi.exam.mapper.ClassHourSfMapper;
 import com.ruoyi.exam.mapper.ExamManageMapper;
 import com.ruoyi.exam.service.ExamManageService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.exam.util.DataUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * <p>
@@ -16,5 +23,58 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ExamManageServiceImpl extends ServiceImpl<ExamManageMapper, ExamManage> implements ExamManageService {
+
+    @Autowired
+    private ExamManageMapper examManageMapper;
+
+    @Autowired
+    private ClassHourSfMapper classHourSfMapper;
+
+    /**
+     * 考试管理列表
+     * @param examManage
+     * @return
+     */
+    @Override
+    public List<ExamManage> selectExamManageList(ExamManage examManage) {
+        List<ExamManage> examManageList = examManageMapper.selectExamManageList(examManage);
+        return examManageList;
+    }
+
+    /**
+     * 新增考试项目
+     * @param examManage
+     * @return
+     */
+    @Override
+    public int insertExamManageData(ExamManage examManage) {
+        examManage.setExamYear(examManage.getStartTime().substring(0, 4));
+        String examId = DataUtils.uuids();
+        examManage.setExamId(examId);
+        int row = examManageMapper.insertExamManageData(examManage);
+        List<ClassHourSf> classHourSfList = examManage.getClassHourSfList();
+        if(null != classHourSfList && classHourSfList.size()>0){
+            for(int i=0; i<classHourSfList.size(); i++){
+                ClassHourSf classHourSf = classHourSfList.get(i);
+                classHourSf.setHourId(DataUtils.uuids());
+                classHourSf.setExamId(examId);
+                classHourSf.setCreateBy(examManage.getCreateBy());
+                classHourSf.setDelFlag("1");
+                classHourSfMapper.insertClassHourSfData(classHourSf);
+            }
+        }
+        return row;
+    }
+
+    /**
+     * 获取考试项目详情
+     * @param examId
+     * @return
+     */
+    @Override
+    public ExamManage examManageInfo(String examId) {
+        ExamManage examManage = examManageMapper.examManageInfo(examId);
+        return examManage;
+    }
 
 }

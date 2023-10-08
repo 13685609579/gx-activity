@@ -1,6 +1,7 @@
 package com.ruoyi.exam.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.exam.domain.QuestionBankManage;
 import com.ruoyi.exam.domain.TopicOptions;
@@ -12,6 +13,7 @@ import com.ruoyi.exam.util.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,7 +41,43 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
     @Override
     public List<QuestionBankManage> selectQuestionBankList(QuestionBankManage questionBankManage) {
         List<QuestionBankManage> list = questionBankManageMapper.selectQuestionBankList(questionBankManage);
+        if(null != list && list.size()>0){
+            list.stream().forEach(m->{
+                LambdaQueryWrapper<TopicOptions> lambdaQueryWrapper = new LambdaQueryWrapper<TopicOptions>();
+                lambdaQueryWrapper.eq(TopicOptions::getTopicId, m.getTopicId()).eq(TopicOptions::getDelFlag, 1);
+                List<TopicOptions> topicOptionsList = topicOptionsMapper.selectList(lambdaQueryWrapper);
+                if(null != topicOptionsList && topicOptionsList.size()>0){
+                    String topicOptions = "";
+                    for(int i=0; i<topicOptionsList.size(); i++){
+                        TopicOptions options = topicOptionsList.get(i);
+                        if(i<topicOptionsList.size()-1){
+                            topicOptions += options.getOptionsContent()+"、";
+                        }else{
+                            topicOptions += options.getOptionsContent();
+                        }
+                    }
+                    m.setTopicOptions(topicOptions);
+                }
+            });
+        }
         return list;
+    }
+
+    /**
+     * 获取最新题目编号
+     * @return
+     */
+    @Override
+    public String getTopicCode() {
+        String newTopicCode = questionBankManageMapper.selectNewTopicCode(DateUtils.getDate()+" 00:00:00");
+        String topicCode = "";
+        if(StringUtils.isEmpty(newTopicCode) || StringUtils.isBlank(newTopicCode)){
+            topicCode = "SFKS"+ DateUtils.getDate().replace("-", "")+"1";
+        }else{
+            int serial_number = Integer.parseInt(newTopicCode.substring(12));
+            topicCode = "SFKS"+ DateUtils.getDate().replace("-", "")+(serial_number+1);
+        }
+        return topicCode;
     }
 
     /**
@@ -56,16 +94,21 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
         }else{
             questionBankManage.setTopicNum("1");
         }
-        questionBankManage.setTopicId(DataUtils.uuids());
+        String topicId = DataUtils.uuids();
+        questionBankManage.setTopicId(topicId);
+        if(StringUtils.equals("1", questionBankManage.getTopicType()) || StringUtils.equals("3", questionBankManage.getTopicType())){
+            questionBankManage.setPerScore("2");
+        }
+        if(StringUtils.equals("2", questionBankManage.getTopicType())){
+            questionBankManage.setPerScore("5");
+        }
         int row = questionBankManageMapper.insertQuestionBankData(questionBankManage);
         List<TopicOptions> topicOptionsList = questionBankManage.getTopicOptionsList();
         if(null != topicOptionsList && topicOptionsList.size()>0){
-            QuestionBankManage questionBankManage1 = questionBankManageMapper.selectNewQuestionBank();
             for(int i=0; i<topicOptionsList.size(); i++){
                 TopicOptions topicOptions = topicOptionsList.get(i);
                 topicOptions.setTopicOptionsId(DataUtils.uuids());
-                topicOptions.setTopicId(questionBankManage1.getTopicId());
-                topicOptions.setDelFlag("1");
+                topicOptions.setTopicId(topicId);
                 topicOptions.setCreateBy(questionBankManage.getCreateBy());
                 topicOptionsMapper.insertTopicOptionsData(topicOptions);
             }
@@ -95,6 +138,15 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
      */
     @Override
     public int updateQuestionBank(QuestionBankManage questionBankManage) {
-        return 0;
+        int row = questionBankManageMapper.updateQuestionBank(questionBankManage);
+        if(StringUtils.equals("1", questionBankManage.getTopicType()) || StringUtils.equals("3", questionBankManage.getTopicType())){
+            List<TopicOptions> topicOptionsList = questionBankManage.getTopicOptionsList();
+            if(null != topicOptionsList && topicOptionsList.size()>0){
+                topicOptionsList.stream().forEach(m->{
+                    topicOptionsMapper.updateTopicOptions(m);
+                });
+            }
+        }
+        return row;
     }
 }

@@ -16,8 +16,32 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/exam-manage")
-@Api(tags = "此处填写控制器名称")
-public class ExamManageController {
+public class ExamManageController extends BaseController{
+
+    @Autowired
+    private ExamManageService examManageService;
+
+    /**
+     * 获取考试管理列表
+     * @param questionBankManage
+     * @return
+     */
+    @GetMapping("/list")
+    public TableDataInfo list(ExamManage examManage)
+    {
+        startPage();
+        List<ExamManage> list = examManageService.selectExamManageList(examManage);
+        return getDataTable(list);
+    }
+
+    @Log(title = "新增题库题目", businessType = BusinessType.INSERT)
+    @PostMapping(value = "/insertExamManageData")
+    public AjaxResult insertExamManageData(@Validated @RequestBody ExamManage examManage)
+    {
+//        questionBankManage.setCreateBy(getUsername());
+        questionBankManage.setCreateBy("admin");
+        return toAjax(examManageService.insertExamManageData(examManage));
+    }
 
 }
 

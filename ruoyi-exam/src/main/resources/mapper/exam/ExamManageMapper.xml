@@ -2,4 +2,65 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.exam.mapper.ExamManageMapper">
 
+    <resultMap type="ExamManage" id="ExamManageResult">
+        <id     property="examId"       column="exam_id"      />
+        <result property="examTitle"       column="exam_title"      />
+        <result property="startTime"     column="start_time"    />
+        <result property="endTime"     column="end_time"    />
+        <result property="examYear"        column="exam_year"        />
+        <result property="publishState"  column="publish_state"  />
+        <result property="delFlag"      column="del_flag"     />
+        <result property="createBy"     column="create_by"    />
+        <result property="createTime"   column="create_time"  />
+        <result property="updateBy"     column="update_by"    />
+        <result property="updateTime"   column="update_time"  />
+        <result property="remark"       column="remark"       />
+    </resultMap>
+
+    <select id="selectExamManageList" parameterType="com.ruoyi.exam.domain.ExamManage" resultMap="ExamManageResult">
+        select exam_id, exam_title, start_time, end_time, exam_year, publish_state,
+        del_flag, create_time, update_time, create_by, update_by, remark from exam_manage
+        where del_flag = 1
+        <if test="examTitle != null and examTitle != ''">
+            AND exam_title like concat('%', #{examTitle}, '%')
+        </if>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+
+    <select id="examManageInfo" parameterType="String" resultMap="ExamManageResult">
+        select exam_id, exam_title, start_time, end_time, exam_year, publish_state,
+        del_flag, create_time, update_time, create_by, update_by, remark from exam_manage
+        where del_flag = 1
+        <if test="examId != null and examId != ''">
+            AND exam_id = #{examId}
+        </if>
+    </select>
+
+    <insert id="insertExamManageData" parameterType="com.ruoyi.exam.domain.ExamManage">
+        insert into exam_manage(
+        <if test="examId != null">exam_id,</if>
+        <if test="examTitle != null">exam_title,</if>
+        <if test="startTime != null and startTime != ''">start_time,</if>
+        <if test="endTime != null and endTime != ''">end_time,</if>
+        <if test="examYear != null and examYear != ''">exam_year,</if>
+        <if test="publishState != null and publishState != ''">publish_state,</if>
+        del_flag,
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="examId != null">#{examId},</if>
+        <if test="examTitle != null">#{examTitle},</if>
+        <if test="startTime != null and startTime != ''">#{startTime},</if>
+        <if test="endTime != null and endTime != ''">#{endTime},</if>
+        <if test="examYear != null and examYear != ''">#{examYear},</if>
+        <if test="publishState != null and publishState != ''">#{publishState},</if>
+        1,
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
+
 </mapper>
