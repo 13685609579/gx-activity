@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import java.io.Serializable;
+
+import com.ruoyi.common.core.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -24,7 +26,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @TableName("candidate_info")
 @ApiModel(value="CandidateInfo对象", description="考生信息表")
-public class CandidateInfo implements Serializable {
+public class CandidateInfo extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,7 +44,8 @@ public class CandidateInfo implements Serializable {
     private String personCategory;
 
     @ApiModelProperty(value = "所属单位")
-    private String unit;
+    private String unitId;
+    private String unitName;
 
     @ApiModelProperty(value = "状态（2：待审核 1：通过 0：不通过）")
     private String personState;

@@ -7,6 +7,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.exam.domain.ExamManage;
+import com.ruoyi.exam.domain.QuestionBankManage;
 import com.ruoyi.exam.service.ExamManageService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,28 @@ public class ExamManageController extends BaseController {
     @GetMapping(value = "/examManageInfo")
     public AjaxResult examManageInfo(String examId){
         return success(examManageService.examManageInfo(examId));
+    }
+
+    /**
+     * 修改考试项目
+     * @param examManage
+     * @return
+     */
+    @Log(title = "修改考试项目", businessType = BusinessType.UPDATE)
+    @PostMapping(value = "/updateExamManage")
+    public AjaxResult updateExamManage(@Validated @RequestBody ExamManage examManage){
+        return toAjax(examManageService.updateExamManage(examManage));
+    }
+
+    /**
+     * 修改发布状态
+     * @param examId
+     * @return
+     */
+    @Log(title = "修改发布状态", businessType = BusinessType.UPDATE)
+    @GetMapping(value = "/updatePublicState")
+    public AjaxResult updatePublicState(String examId){
+        return toAjax(examManageService.updatePublicState(examId));
     }
 
 }

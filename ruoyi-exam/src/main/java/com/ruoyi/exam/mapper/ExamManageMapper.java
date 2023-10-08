@@ -36,4 +36,18 @@ public interface ExamManageMapper extends BaseMapper<ExamManage> {
      */
     public ExamManage examManageInfo(String examId);
 
+    /**
+     * 修改考试项目
+     * @param examManage
+     * @return
+     */
+    public int updateExamManage(ExamManage examManage);
+
+    /**
+     * 修改发布状态
+     * @param examId
+     * @return
+     */
+    public int updatePublicState(ExamManage examManage);
+
 }

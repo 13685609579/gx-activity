@@ -95,6 +95,7 @@
         update question_bank_manage
         <set>
             <if test="topicContent != null and topicContent != ''">topic_content = #{topicContent},</if>
+            <if test="topicAnswer != null and topicAnswer != ''">topic_answer = #{topicAnswer},</if>
             <if test="answerAnalysis != null and answerAnalysis != ''">answer_analysis = #{answerAnalysis},</if>
             update_time = sysdate()
         </set>

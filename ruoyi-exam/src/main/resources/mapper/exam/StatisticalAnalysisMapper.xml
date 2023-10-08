@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.exam.mapper.StatisticalAnalysisMapper">
+
+    <resultMap type="StatisticalAnalysis" id="StatisticalAnalysisResult">
+        <id     property="personCategory"       column="person_category"      />
+        <result property="unitId"       column="unit_id"      />
+        <result property="unitName"       column="unit_name"      />
+        <result property="classHour"       column="class_hour"      />
+        <result property="examYear"        column="exam_year"        />
+        <result property="startTime"     column="start_time"    />
+        <result property="endTime"     column="end_time"    />
+    </resultMap>
+
+    <select id="selectStatisticalAnalysisList" parameterType="com.ruoyi.exam.domain.StatisticalAnalysis" resultMap="StatisticalAnalysisResult">
+        select tbl.person_category, tbl.unit_id, tbl.unit_name, sum(tbl.class_hour) as class_hour, tbl.exam_year, tbl.start_time, tbl.end_time from
+        (
+        select tbl.candidate_id, tbl.person_category, tbl.unit_id, tbl.unit_name, case when sum(tbl.class_hour) > 8 then 8 else sum(tbl.class_hour) end class_hour, tbl.topic_sort, tbl.exam_year, tbl.start_time, tbl.end_time from (
+        SELECT tbl1.candidate_id, tbl1.person_category, tbl2.unit_id, tbl2.unit_name, tbl3.class_hour, tbl3.topic_sort, tbl3.exam_year, tbl3.start_time, tbl3.end_time
+        FROM candidate_info tbl1 left join unit_manage tbl2 on tbl1.unit_id = tbl2.unit_id left join person_class_hour tbl3 on tbl1.candidate_id = tbl3.candidate_id
+        WHERE tbl1.del_flag = 1
+        <if test="unitName != null and unitName != ''">
+            AND tbl3.unit_name like concat('%', #{unitName}, '%')
+        </if>
+        <if test="examYear != null and examYear != ''">
+            AND tbl3.exam_year = #{examYear}
+        </if>
+        and tbl3.class_hour is not null and tbl3.topic_sort is not null
+        ) tbl group by tbl.candidate_id, tbl1.person_category, tbl.unit_id, tbl.topic_sort, tbl.exam_year, tbl.start_time, tbl.end_time
+        ) tbl
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+    
+
+</mapper>

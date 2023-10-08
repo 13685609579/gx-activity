@@ -63,4 +63,26 @@
         )
     </insert>
 
+    <update id="updateExamManage" parameterType="com.ruoyi.exam.domain.ExamManage">
+        update exam_manage
+        <set>
+            <if test="examTitle != null and examTitle != ''">exam_title = #{examTitle},</if>
+            <if test="startTime != null and startTime != ''">start_time = #{startTime},</if>
+            <if test="endTime != null and endTime != ''">end_time = #{endTime},</if>
+            <if test="examYear != null and examYear != ''">exam_year = #{examYear},</if>
+            <if test="publishState != null and publishState != ''">publish_state = #{publishState},</if>
+            update_time = sysdate()
+        </set>
+        where exam_id = #{examId}
+    </update>
+
+    <update id="updatePublicState" parameterType="com.ruoyi.exam.domain.ExamManage">
+        update exam_manage
+        <set>
+            <if test="publishState != null and publishState != ''">publish_state = #{publishState},</if>
+            update_time = sysdate()
+        </set>
+        where exam_id = #{examId}
+    </update>
+
 </mapper>

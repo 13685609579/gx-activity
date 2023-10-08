@@ -2,6 +2,7 @@ package com.ruoyi.exam.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.exam.domain.ClassHourSf;
 import com.ruoyi.exam.domain.ExamManage;
 import com.ruoyi.exam.mapper.ClassHourSfMapper;
@@ -80,6 +81,44 @@ public class ExamManageServiceImpl extends ServiceImpl<ExamManageMapper, ExamMan
         List<ClassHourSf> classHourSfList = classHourSfMapper.selectList(lambdaQueryWrapper);
         examManage.setClassHourSfList(classHourSfList);
         return examManage;
+    }
+
+    /**
+     * 修改考试项目
+     * @param examManage
+     * @return
+     */
+    @Override
+    public int updateExamManage(ExamManage examManage) {
+        examManage.setExamYear(examManage.getStartTime().substring(0, 4));
+        int row = examManageMapper.updateExamManage(examManage);
+        List<ClassHourSf> classHourSfList = examManage.getClassHourSfList();
+        if(null != classHourSfList && classHourSfList.size()>0){
+            classHourSfList.stream().forEach(m->{
+                classHourSfMapper.updateClassHourSf(m);
+            });
+        }
+        return row;
+    }
+
+    /**
+     * 修改发布状态
+     * @param examId
+     * @return
+     */
+    @Override
+    public int updatePublicState(String examId) {
+        ExamManage examManage = examManageMapper.examManageInfo(examId);
+        ExamManage examManage1 = new ExamManage();
+        examManage1.setExamId(examId);
+        if(StringUtils.equals("1", examManage.getPublishState())){
+            examManage1.setPublishState("0");
+        }
+        if(StringUtils.equals("0", examManage.getPublishState())){
+            examManage1.setPublishState("1");
+        }
+        int row = examManageMapper.updatePublicState(examManage1);
+        return row;
     }
 
 }

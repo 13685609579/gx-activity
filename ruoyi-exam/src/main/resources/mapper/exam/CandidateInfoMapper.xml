@@ -2,4 +2,46 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.exam.mapper.CandidateInfoMapper">
 
+    <resultMap type="CandidateInfo" id="CandidateInfoResult">
+        <id     property="candidateId"       column="candidate_id"      />
+        <result property="candidateName"       column="candidate_name"      />
+        <result property="mobile"     column="mobile"    />
+        <result property="personCategory"     column="person_category"    />
+        <result property="unitId"        column="unit_id"        />
+        <result property="unitName"        column="unit_name"        />
+        <result property="personState"  column="person_state"  />
+        <result property="delFlag"      column="del_flag"     />
+        <result property="createBy"     column="create_by"    />
+        <result property="createTime"   column="create_time"  />
+        <result property="updateBy"     column="update_by"    />
+        <result property="updateTime"   column="update_time"  />
+        <result property="remark"       column="remark"       />
+    </resultMap>
+
+    <select id="selectCandidateInfoList" parameterType="com.ruoyi.exam.domain.CandidateInfo" resultMap="CandidateInfoResult">
+        SELECT tbl1.candidate_id, tbl1.candidate_name, tbl1.mobile,
+        CASE WHEN tbl1.person_category = '1' THEN '执法司法人员' ELSE '非执法司法人员' END person_category,
+        CASE WHEN tbl1.person_state = '1' THEN '通过' WHEN tbl1.person_state = '0' THEN '不通过' ELSE '待审核' END person_state,
+        tbl1.unit_id, tbl2.unit_name, tbl1.del_flag, tbl1.create_time, tbl1.update_time, tbl1.create_by, tbl1.update_by, tbl1.remark
+        FROM candidate_info tbl1 left join unit_manage tbl2 on tbl1.unit_id = tbl2.unit_id
+        where tbl1.del_flag = 1
+        <if test="candidateName != null and candidateName != ''">
+            AND tbl1.candidate_name like concat('%', #{candidateName}, '%')
+        </if>
+        <if test="mobile != null and mobile != ''">
+            AND tbl1.mobile like concat('%', #{mobile}, '%')
+        </if>
+        <!-- 数据范围过滤 -->
+        ${params.dataScope}
+    </select>
+
+    <update id="updatePersonState" parameterType="com.ruoyi.exam.domain.CandidateInfo">
+        update candidate_info
+        <set>
+            <if test="personState != null and personState != ''">person_state = #{personState},</if>
+            update_time = sysdate()
+        </set>
+        where candidate_id = #{candidateId}
+    </update>
+
 </mapper>

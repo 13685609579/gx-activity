@@ -33,7 +33,7 @@ public class GenerateCode {
         String tablePrefix = "";//前缀
         //映射的表名
         List<String> tables = new ArrayList<>();
-        tables.add("class_hour_sf");
+        tables.add("unit_manage");
 
         String[] tableNames = tables.toArray(new String[1]);
 
