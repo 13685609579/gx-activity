@@ -2,6 +2,28 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.exam.mapper.TopicOptionsMapper">
 
+    <resultMap type="TopicOptions" id="TopicOptionsResult">
+        <id     property="topic_options_id"       column="topicOptionsId"      />
+        <result property="topic_id"       column="topicId"      />
+        <result property="options_content"     column="optionsContent"    />
+        <result property="options_state"     column="optionsState"    />
+        <result property="delFlag"      column="del_flag"     />
+        <result property="createBy"     column="create_by"    />
+        <result property="createTime"   column="create_time"  />
+        <result property="updateBy"     column="update_by"    />
+        <result property="updateTime"   column="update_time"  />
+        <result property="remark"       column="remark"       />
+    </resultMap>
+
+    <select id="selectTopicOptionsList" parameterType="com.ruoyi.exam.domain.TopicOptions" resultMap="TopicOptionsResult">
+        select topic_options_id, topic_id, options_content, options_state,
+        del_flag, create_time, update_time, create_by, update_by, remark from topic_options
+        where del_flag = 1
+        <if test="topicId != null and topicId != ''">
+            AND topic_id = #{topicId}
+        </if>
+    </select>
+
     <insert id="insertTopicOptionsData" parameterType="com.ruoyi.exam.domain.TopicOptions">
         insert into topic_options(
         <if test="topicOptionsId != null">topic_options_id,</if>

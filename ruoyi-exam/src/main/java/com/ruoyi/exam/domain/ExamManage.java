@@ -1,6 +1,7 @@
 package com.ruoyi.exam.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.ruoyi.common.core.domain.BaseEntity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -8,6 +9,7 @@ import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -21,13 +23,16 @@ import java.util.Date;
 @EqualsAndHashCode(callSuper = false)
 @TableName("exam_manage")
 @ApiModel(value="ExamManage对象", description="考试管理表")
-public class ExamManage implements Serializable {
+public class ExamManage extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键ID")
     @TableId(value = "exam_id", type = IdType.AUTO)
-    private Integer examId;
+    private String examId;
+
+    @ApiModelProperty(value = "考试标题")
+    private String examTitle;
 
     @ApiModelProperty(value = "开始时间")
     private String startTime;
@@ -68,6 +73,8 @@ public class ExamManage implements Serializable {
 
     @ApiModelProperty(value = "备注")
     private String remark;
+
+    private List<ClassHourSf> classHourSfList;
 
 
 }

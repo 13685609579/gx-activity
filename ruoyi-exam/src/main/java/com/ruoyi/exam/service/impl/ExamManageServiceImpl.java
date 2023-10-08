@@ -1,5 +1,6 @@
 package com.ruoyi.exam.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.exam.domain.ClassHourSf;
 import com.ruoyi.exam.domain.ExamManage;
@@ -74,6 +75,10 @@ public class ExamManageServiceImpl extends ServiceImpl<ExamManageMapper, ExamMan
     @Override
     public ExamManage examManageInfo(String examId) {
         ExamManage examManage = examManageMapper.examManageInfo(examId);
+        LambdaQueryWrapper<ClassHourSf> lambdaQueryWrapper = new LambdaQueryWrapper<ClassHourSf>();
+        lambdaQueryWrapper.eq(ClassHourSf::getExamId, examId).eq(ClassHourSf::getDelFlag, 1);
+        List<ClassHourSf> classHourSfList = classHourSfMapper.selectList(lambdaQueryWrapper);
+        examManage.setClassHourSfList(classHourSfList);
         return examManage;
     }
 

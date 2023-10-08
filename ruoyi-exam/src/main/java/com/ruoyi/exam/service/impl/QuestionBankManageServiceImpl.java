@@ -43,20 +43,20 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
         List<QuestionBankManage> list = questionBankManageMapper.selectQuestionBankList(questionBankManage);
         if(null != list && list.size()>0){
             list.stream().forEach(m->{
-                LambdaQueryWrapper<TopicOptions> lambdaQueryWrapper = new LambdaQueryWrapper<TopicOptions>();
-                lambdaQueryWrapper.eq(TopicOptions::getTopicId, m.getTopicId()).eq(TopicOptions::getDelFlag, 1);
-                List<TopicOptions> topicOptionsList = topicOptionsMapper.selectList(lambdaQueryWrapper);
+                TopicOptions topicOptions = new TopicOptions();
+                topicOptions.setTopicId(m.getTopicId());
+                List<TopicOptions> topicOptionsList = topicOptionsMapper.selectTopicOptionsList(topicOptions);
                 if(null != topicOptionsList && topicOptionsList.size()>0){
-                    String topicOptions = "";
+                    String topicOptions1 = "";
                     for(int i=0; i<topicOptionsList.size(); i++){
                         TopicOptions options = topicOptionsList.get(i);
                         if(i<topicOptionsList.size()-1){
-                            topicOptions += options.getOptionsContent()+"、";
+                            topicOptions1 += options.getOptionsContent()+"、";
                         }else{
-                            topicOptions += options.getOptionsContent();
+                            topicOptions1 += options.getOptionsContent();
                         }
                     }
-                    m.setTopicOptions(topicOptions);
+                    m.setTopicOptions(topicOptions1);
                 }
             });
         }

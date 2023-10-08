@@ -3,6 +3,8 @@ package com.ruoyi.exam.mapper;
 import com.ruoyi.exam.domain.TopicOptions;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
+import java.util.List;
+
 /**
  * <p>
  * 题目选项字典表 Mapper 接口
@@ -19,5 +21,14 @@ public interface TopicOptionsMapper extends BaseMapper<TopicOptions> {
      * @return
      */
     public int insertTopicOptionsData(TopicOptions topicOptions);
+
+    /**
+     * 修改题目选项
+     * @param topicOptions
+     * @return
+     */
+    public int updateTopicOptions(TopicOptions topicOptions);
+
+    public List<TopicOptions> selectTopicOptionsList(TopicOptions topicOptions);
 
 }
