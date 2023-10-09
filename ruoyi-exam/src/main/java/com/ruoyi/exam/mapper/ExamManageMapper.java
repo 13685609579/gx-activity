@@ -10,7 +10,7 @@ import java.util.List;
  * 考试管理表 Mapper 接口
  * </p>
  *
- * @author hougq
+ * @author yxp
  * @since 2023-09-28
  */
 public interface ExamManageMapper extends BaseMapper<ExamManage> {
@@ -49,5 +49,11 @@ public interface ExamManageMapper extends BaseMapper<ExamManage> {
      * @return
      */
     public int updatePublicState(ExamManage examManage);
+
+    /**
+     * 获取最新考试信息
+     * @return
+     */
+    public ExamManage latestExamManageInfo();
 
 }

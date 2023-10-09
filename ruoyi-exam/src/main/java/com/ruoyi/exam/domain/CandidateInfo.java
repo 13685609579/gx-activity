@@ -72,5 +72,6 @@ public class CandidateInfo extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "备注")
     private String remark;
 
+    private String openId;
 
 }

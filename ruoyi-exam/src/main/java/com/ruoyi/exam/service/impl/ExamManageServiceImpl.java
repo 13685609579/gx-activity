@@ -1,7 +1,6 @@
 package com.ruoyi.exam.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.exam.domain.ClassHourSf;
 import com.ruoyi.exam.domain.ExamManage;
@@ -20,7 +19,7 @@ import java.util.List;
  * 考试管理表 服务实现类
  * </p>
  *
- * @author hougq
+ * @author xyp
  * @since 2023-09-28
  */
 @Service

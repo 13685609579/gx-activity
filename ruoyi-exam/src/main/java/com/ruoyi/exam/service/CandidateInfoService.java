@@ -1,7 +1,10 @@
 package com.ruoyi.exam.service;
 
+import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.exam.domain.CandidateInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ruoyi.exam.domain.ExamManage;
+import com.ruoyi.exam.domain.vo.ExamManageVo;
 
 import java.util.List;
 
@@ -14,6 +17,27 @@ import java.util.List;
  * @since 2023-09-28
  */
 public interface CandidateInfoService extends IService<CandidateInfo> {
+
+    /**
+     * 校验考生信息
+     * @param openId
+     * @return
+     */
+    public AjaxResult verifyCandidateInfo(String openId);
+
+    /**
+     * 首页重要信息
+     * @param openId
+     * @return
+     */
+    public ExamManageVo importantInformation(String openId);
+
+    /**
+     * 注册考生信息
+     * @param candidateInfo
+     * @return
+     */
+    public int signInCandidateInfo(CandidateInfo candidateInfo);
 
     /**
      * 获取考生信息列表

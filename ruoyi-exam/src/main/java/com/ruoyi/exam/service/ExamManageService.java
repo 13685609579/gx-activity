@@ -10,7 +10,7 @@ import java.util.List;
  * 考试管理表 服务类
  * </p>
  *
- * @author hougq
+ * @author yxp
  * @since 2023-09-28
  */
 public interface ExamManageService extends IService<ExamManage> {

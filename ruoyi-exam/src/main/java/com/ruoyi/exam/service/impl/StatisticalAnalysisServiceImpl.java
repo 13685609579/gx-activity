@@ -1,6 +1,7 @@
 package com.ruoyi.exam.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.exam.domain.StatisticalAnalysis;
 import com.ruoyi.exam.mapper.StatisticalAnalysisMapper;
 import com.ruoyi.exam.service.StatisticalAnalysisService;
@@ -33,7 +34,10 @@ public class StatisticalAnalysisServiceImpl extends ServiceImpl<StatisticalAnaly
         List<StatisticalAnalysis> statisticalAnalysisList = statisticalAnalysisMapper.selectStatisticalAnalysisList(statisticalAnalysis);
         if(null != statisticalAnalysisList && statisticalAnalysisList.size()>0){
             statisticalAnalysisList.stream().forEach(m->{
-                m.setExam_phase(m.getStartTime()+"~"+m.getEndTime());
+                if(StringUtils.isNotBlank(m.getStartTime()) && StringUtils.isNotEmpty(m.getStartTime())
+                && StringUtils.isNotBlank(m.getEndTime()) && StringUtils.isNotEmpty(m.getEndTime())){
+                    m.setExam_phase(m.getStartTime()+"~"+m.getEndTime());
+                }
             });
         }
         return statisticalAnalysisList;

@@ -4,6 +4,7 @@
 
     <resultMap type="ExamManage" id="ExamManageResult">
         <id     property="examId"       column="exam_id"      />
+        <result property="rowNum"       column="row_num"      />
         <result property="examTitle"       column="exam_title"      />
         <result property="startTime"     column="start_time"    />
         <result property="endTime"     column="end_time"    />
@@ -18,8 +19,8 @@
     </resultMap>
 
     <select id="selectExamManageList" parameterType="com.ruoyi.exam.domain.ExamManage" resultMap="ExamManageResult">
-        select exam_id, exam_title, start_time, end_time, exam_year, publish_state,
-        del_flag, create_time, update_time, create_by, update_by, remark from exam_manage
+        select ROW_NUMBER() OVER (ORDER BY create_time) AS row_num, exam_id, exam_title, start_time, end_time,
+        exam_year, publish_state, del_flag, create_time, update_time, create_by, update_by, remark from exam_manage
         where del_flag = 1
         <if test="examTitle != null and examTitle != ''">
             AND exam_title like concat('%', #{examTitle}, '%')
@@ -84,5 +85,14 @@
         </set>
         where exam_id = #{examId}
     </update>
+
+    <select id="latestExamManageInfo" resultMap="ExamManageResult">
+        select exam_id, exam_title, start_time, end_time, exam_year, publish_state,
+        del_flag, create_time, update_time, create_by, update_by, remark from exam_manage
+        where del_flag = 1
+        and publish_state = 1
+        order by create_time desc
+        limit 1
+    </select>
 
 </mapper>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.exam.mapper.CandidateSignUpMapper">
+
+    <insert id="insertCandidateSignUpData" parameterType="com.ruoyi.exam.domain.CandidateSignUp">
+        insert into candidate_sign_up(
+        <if test="signUpId != null">sign_up_id,</if>
+        <if test="candidateId != null">candidate_id,</if>
+        <if test="candidateName != null">candidate_name,</if>
+        <if test="personCategory != null">person_category,</if>
+        <if test="unitId != null">unit_id,</if>
+        <if test="examId != null">exam_id,</if>
+        <if test="startTime != null and startTime != ''">start_time,</if>
+        <if test="endTime != null and endTime != ''">end_time,</if>
+        <if test="examYear != null and examYear != ''">exam_year,</if>
+        del_flag
+        )values(
+        <if test="signUpId != null">#{signUpId},</if>
+        <if test="candidateId != null">#{candidateId},</if>
+        <if test="candidateName != null">#{candidateName},</if>
+        <if test="personCategory != null">#{personCategory},</if>
+        <if test="unitId != null">#{unitId},</if>
+        <if test="examId != null">#{examId},</if>
+        <if test="startTime != null and startTime != ''">#{startTime},</if>
+        <if test="endTime != null and endTime != ''">#{endTime},</if>
+        <if test="examYear != null and examYear != ''">#{examYear},</if>
+        1
+        )
+    </insert>
+
+</mapper>

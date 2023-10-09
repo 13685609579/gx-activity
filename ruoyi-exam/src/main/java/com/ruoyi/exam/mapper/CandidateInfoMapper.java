@@ -10,10 +10,24 @@ import java.util.List;
  * 考生信息表 Mapper 接口
  * </p>
  *
- * @author hougq
+ * @author yxp
  * @since 2023-09-28
  */
 public interface CandidateInfoMapper extends BaseMapper<CandidateInfo> {
+
+    /**
+     * 获取当前考生信息
+     * @param candidateInfo
+     * @return
+     */
+    public CandidateInfo selectCandidateInfo(CandidateInfo candidateInfo);
+
+    /**
+     * 注册考生信息
+     * @param candidateInfo
+     * @return
+     */
+    public int insertCandidateInfoData(CandidateInfo candidateInfo);
 
     /**
      * 获取考生信息列表

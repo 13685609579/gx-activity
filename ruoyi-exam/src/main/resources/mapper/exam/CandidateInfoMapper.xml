@@ -18,6 +18,14 @@
         <result property="remark"       column="remark"       />
     </resultMap>
 
+    <select id="selectCandidateInfo" parameterType="com.ruoyi.exam.domain.CandidateInfo" resultMap="CandidateInfoResult">
+        select candidate_id, candidate_name, mobile, person_category, unit_id, person_state, del_flag, create_time, update_time, create_by, update_by, remark
+        from candidate_info where del_flag = 1
+        <if test="openId != null and openId != ''">
+            AND candidate_id = #{openId}
+        </if>
+    </select>
+
     <select id="selectCandidateInfoList" parameterType="com.ruoyi.exam.domain.CandidateInfo" resultMap="CandidateInfoResult">
         SELECT tbl1.candidate_id, tbl1.candidate_name, tbl1.mobile,
         CASE WHEN tbl1.person_category = '1' THEN '执法司法人员' ELSE '非执法司法人员' END person_category,
@@ -34,6 +42,32 @@
         <!-- 数据范围过滤 -->
         ${params.dataScope}
     </select>
+
+    <insert id="insertCandidateInfoData" parameterType="com.ruoyi.exam.domain.CandidateInfo">
+        insert into candidate_info(
+        <if test="candidateId != null">candidate_id,</if>
+        <if test="candidateName != null">candidate_name,</if>
+        <if test="mobile != null and mobile != ''">mobile,</if>
+        <if test="personCategory != null and personCategory != ''">person_category,</if>
+        <if test="unitId != null and unitId != ''">unit_id,</if>
+        person_state,
+        del_flag,
+        <if test="remark != null and remark != ''">remark,</if>
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
+        )values(
+        <if test="candidateId != null">#{candidateId},</if>
+        <if test="candidateName != null">#{candidateName},</if>
+        <if test="mobile != null and mobile != ''">#{mobile},</if>
+        <if test="personCategory != null and personCategory != ''">#{personCategory},</if>
+        <if test="unitId != null and unitId != ''">#{unitId},</if>
+        2,
+        1,
+        <if test="remark != null and remark != ''">#{remark},</if>
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
+        )
+    </insert>
 
     <update id="updatePersonState" parameterType="com.ruoyi.exam.domain.CandidateInfo">
         update candidate_info

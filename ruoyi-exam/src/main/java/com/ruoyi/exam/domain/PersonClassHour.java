@@ -50,6 +50,9 @@ public class PersonClassHour implements Serializable {
     @ApiModelProperty(value = "考试学时年份")
     private String examYear;
 
+    @ApiModelProperty(value = "题目分类字典编码")
+    private String dictCode;
+
     @ApiModelProperty(value = "开始时间")
     private String startTime;
 

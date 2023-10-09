@@ -74,6 +74,8 @@ public class ExamManage extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "备注")
     private String remark;
 
+    private String rowNum;
+
     private List<ClassHourSf> classHourSfList;
 
 
