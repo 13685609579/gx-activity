@@ -1,5 +1,6 @@
 package com.ruoyi.exam.service;
 
+import com.ruoyi.common.core.domain.entity.QuestionBank;
 import com.ruoyi.common.core.domain.entity.SysDictData;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.exam.domain.QuestionBankManage;
@@ -50,5 +51,15 @@ public interface QuestionBankManageService extends IService<QuestionBankManage> 
      * @return
      */
     public int updateQuestionBank(QuestionBankManage questionBankManage);
+
+    /**
+     * 导入题目数据
+     *
+     * @param questionBankList 题目数据列表
+     * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
+     * @param operName 操作用户
+     * @return 结果
+     */
+    public String importQuestionBank(List<QuestionBank> questionBankList, Boolean isUpdateSupport, String operName);
 
 }

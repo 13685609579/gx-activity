@@ -25,6 +25,9 @@ public class CandidateClassHourVo extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "考试管理ID")
     private String examId;
 
+    @ApiModelProperty(value = "考试名称")
+    private String examTitle;
+
     @ApiModelProperty(value = "单位ID")
     private String unitId;
 

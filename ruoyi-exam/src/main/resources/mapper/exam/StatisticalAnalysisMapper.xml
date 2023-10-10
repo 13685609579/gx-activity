@@ -4,6 +4,7 @@
 
     <resultMap type="CandidateClassHourVo" id="CandidateClassHourVoResult">
         <result property="examId"       column="exam_id"      />
+        <result property="examTitle"       column="exam_title"      />
         <result property="unitId"       column="unit_id"      />
         <result property="unitName"       column="unit_name"      />
         <result property="examYear"        column="exam_year"        />
@@ -13,10 +14,10 @@
     </resultMap>
 
     <select id="selectStatisticalAnalysisList" parameterType="com.ruoyi.exam.domain.vo.CandidateClassHourVo" resultMap="CandidateClassHourVoResult">
-        select tbl4.exam_id, tbl4.unit_id, tbl4.unit_name, tbl4.exam_year, tbl4.candidate_id,
+        select tbl4.exam_id, tbl4.exam_title, tbl4.unit_id, tbl4.unit_name, tbl4.exam_year, tbl4.candidate_id,
         case when sum(tbl5.class_hour) is null then '0' else sum(tbl5.class_hour) end class_hour from
         (
-        select tbl1.exam_id, tbl3.unit_id, tbl3.unit_name, tbl1.exam_year, tbl2.candidate_id
+        select tbl1.exam_id, tbl1.exam_title, tbl3.unit_id, tbl3.unit_name, tbl1.exam_year, tbl2.candidate_id
         from exam_manage tbl1 LEFT JOIN candidate_sign_up tbl2 on tbl1.exam_id = tbl2.exam_id
         LEFT JOIN unit_manage tbl3 ON tbl2.unit_id = tbl3.unit_id
         where tbl1.del_flag = '1'
@@ -34,7 +35,7 @@
         </if>
         and tbl2.candidate_id is not null
         ) tbl4 LEFT JOIN person_class_hour tbl5 on tbl4.candidate_id = tbl5.candidate_id and tbl4.exam_id = tbl5.exam_id
-        GROUP BY tbl4.exam_id, tbl4.unit_id, tbl4.unit_name, tbl4.exam_year, tbl4.candidate_id
+        GROUP BY tbl4.exam_id, tbl4.exam_title, tbl4.unit_id, tbl4.unit_name, tbl4.exam_year, tbl4.candidate_id
         <!-- 数据范围过滤 -->
         ${params.dataScope}
     </select>
@@ -67,6 +68,9 @@
         </if>
         <if test="mobile != null and mobile != ''">
             AND tbl2.mobile = #{mobile}
+        </if>
+        <if test="examId != null and examId != ''">
+            AND tbl3.exam_id = #{examId}
         </if>
         <if test="examYear != null and examYear != ''">
             AND tbl3.exam_year = #{examYear}

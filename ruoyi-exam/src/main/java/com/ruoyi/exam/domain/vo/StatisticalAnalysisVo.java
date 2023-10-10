@@ -27,6 +27,11 @@ public class StatisticalAnalysisVo extends BaseEntity implements Serializable {
     private String examId;
 
     /**
+     * 考试名称
+     */
+    private String examTitle;
+
+    /**
      * 单位ID
      */
     private String unitId;
