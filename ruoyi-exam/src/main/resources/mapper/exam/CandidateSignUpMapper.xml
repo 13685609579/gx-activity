@@ -2,6 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.exam.mapper.CandidateSignUpMapper">
 
+    <resultMap type="CandidateSignUp" id="CandidateSignUpResult">
+        <id     property="signUpId"       column="sign_up_id"      />
+        <result property="candidateId"       column="candidate_id"      />
+        <result property="candidateName"     column="candidate_name"    />
+        <result property="personCategory"     column="person_category"    />
+        <result property="unitId"        column="unit_id"        />
+        <result property="examId"        column="exam_id"        />
+        <result property="delFlag"      column="del_flag"     />
+        <result property="createTime"   column="create_time"  />
+        <result property="createBy"     column="create_by"    />
+    </resultMap>
+
     <insert id="insertCandidateSignUpData" parameterType="com.ruoyi.exam.domain.CandidateSignUp">
         insert into candidate_sign_up(
         <if test="signUpId != null">sign_up_id,</if>
@@ -10,10 +22,9 @@
         <if test="personCategory != null">person_category,</if>
         <if test="unitId != null">unit_id,</if>
         <if test="examId != null">exam_id,</if>
-        <if test="startTime != null and startTime != ''">start_time,</if>
-        <if test="endTime != null and endTime != ''">end_time,</if>
-        <if test="examYear != null and examYear != ''">exam_year,</if>
-        del_flag
+        del_flag,
+        <if test="createBy != null and createBy != ''">create_by,</if>
+        create_time
         )values(
         <if test="signUpId != null">#{signUpId},</if>
         <if test="candidateId != null">#{candidateId},</if>
@@ -21,11 +32,18 @@
         <if test="personCategory != null">#{personCategory},</if>
         <if test="unitId != null">#{unitId},</if>
         <if test="examId != null">#{examId},</if>
-        <if test="startTime != null and startTime != ''">#{startTime},</if>
-        <if test="endTime != null and endTime != ''">#{endTime},</if>
-        <if test="examYear != null and examYear != ''">#{examYear},</if>
-        1
+        1,
+        <if test="createBy != null and createBy != ''">#{createBy},</if>
+        sysdate()
         )
     </insert>
+
+    <select id="latestCandidateSignUp" parameterType="com.ruoyi.exam.domain.CandidateSignUp" resultMap="CandidateSignUpResult">
+        select sign_up_id, candidate_id, candidate_name, person_category, unit_id, exam_id, del_flag, create_time, create_by
+        from candidate_sign_up
+        where del_flag = 1
+        <if test="candidateId != null">and candidate_id = #{candidateId}</if>
+        order by create_time desc limit 1
+    </select>
 
 </mapper>

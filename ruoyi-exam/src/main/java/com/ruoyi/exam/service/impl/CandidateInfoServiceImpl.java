@@ -2,20 +2,15 @@ package com.ruoyi.exam.service.impl;
 
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.exam.domain.CandidateInfo;
-import com.ruoyi.exam.domain.ClassHourSf;
-import com.ruoyi.exam.domain.ExamManage;
-import com.ruoyi.exam.domain.PersonClassHour;
+import com.ruoyi.exam.domain.*;
 import com.ruoyi.exam.domain.vo.ExamManageVo;
-import com.ruoyi.exam.mapper.CandidateInfoMapper;
-import com.ruoyi.exam.mapper.ClassHourSfMapper;
-import com.ruoyi.exam.mapper.ExamManageMapper;
-import com.ruoyi.exam.mapper.PersonClassHourMapper;
+import com.ruoyi.exam.mapper.*;
 import com.ruoyi.exam.service.CandidateInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Wrapper;
 import java.util.List;
 
 /**
@@ -40,6 +35,9 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
 
     @Autowired
     private PersonClassHourMapper personClassHourMapper;
+
+    @Autowired
+    private CandidateSignUpMapper candidateSignUpMapper;
 
     /**
      * 校验考生信息
@@ -83,7 +81,15 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
     @Override
     public ExamManageVo importantInformation(String openId) {
         ExamManageVo examManageVo = new ExamManageVo();
-        ExamManage examManage = examManageMapper.latestExamManageInfo();
+        CandidateSignUp candidateSignUp = new CandidateSignUp();
+        candidateSignUp.setCandidateId(openId);
+        candidateSignUp = candidateSignUpMapper.latestCandidateSignUp(candidateSignUp);
+        ExamManage examManage = new ExamManage();
+        if(null != candidateSignUp){
+            examManage = examManageMapper.examManageInfo(candidateSignUp.getExamId());
+        }else{
+            examManage = examManageMapper.latestExamManageInfo();
+        }
         if(null != examManage && StringUtils.equals("1", examManage.getPublishState())){
             CandidateInfo candidateInfo = new CandidateInfo();
             candidateInfo.setOpenId(openId);
@@ -94,15 +100,17 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
             String targetHours = classHourSfMapper.getTargetHours(classHourSf);
             if(StringUtils.isNotEmpty(targetHours) && StringUtils.isNotBlank(targetHours)){
                 targetHours = targetHours.substring(0, targetHours.indexOf("."));
+            }else{
+                targetHours = "0";
             }
             PersonClassHour personClassHour = new PersonClassHour();
             personClassHour.setCandidateId(openId);
-            personClassHour.setExamYear(examManage.getExamYear());
-            personClassHour.setStartTime(examManage.getStartTime());
-            personClassHour.setEndTime(examManage.getEndTime());
+            personClassHour.setExamId(examManage.getExamId());
             String acquiredHours = personClassHourMapper.getAcquiredHours(personClassHour);
             if(StringUtils.isNotEmpty(acquiredHours) && StringUtils.isNotBlank(acquiredHours)){
                 acquiredHours = acquiredHours.substring(0, acquiredHours.indexOf("."));
+            }else{
+                acquiredHours = "0";
             }
 
             examManageVo.setExamId(examManage.getExamId());

@@ -1,7 +1,9 @@
 package com.ruoyi.exam.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.ruoyi.exam.domain.StatisticalAnalysis;
+import com.ruoyi.exam.domain.vo.CandidateClassHourVo;
+import com.ruoyi.exam.domain.vo.StatisticalAnalysisDetailsVo;
+import com.ruoyi.exam.domain.vo.StatisticalAnalysisVo;
 
 import java.util.List;
 
@@ -13,12 +15,20 @@ import java.util.List;
  * @author yxp
  * @since 2023-10-08
  */
-public interface StatisticalAnalysisService extends IService<StatisticalAnalysis> {
+public interface StatisticalAnalysisService extends IService<StatisticalAnalysisVo> {
 
     /**
      * 统计分析列表
-     * @param statisticalAnalysis
+     * @param candidateClassHourVo
      * @return
      */
-    public List<StatisticalAnalysis> selectStatisticalAnalysisList(StatisticalAnalysis statisticalAnalysis);
+    public List<StatisticalAnalysisVo> selectStatisticalAnalysisList(CandidateClassHourVo candidateClassHourVo);
+
+    /**
+     * 统计分析详情
+     * @param detailsVo
+     * @return
+     */
+    public List<StatisticalAnalysisDetailsVo> getStatisticalAnalysisDetails(StatisticalAnalysisDetailsVo detailsVo);
+
 }

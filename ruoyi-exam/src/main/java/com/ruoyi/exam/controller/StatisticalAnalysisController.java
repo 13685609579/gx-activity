@@ -2,8 +2,9 @@ package com.ruoyi.exam.controller;
 
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.page.TableDataInfo;
-import com.ruoyi.exam.domain.CandidateInfo;
-import com.ruoyi.exam.domain.StatisticalAnalysis;
+import com.ruoyi.exam.domain.vo.CandidateClassHourVo;
+import com.ruoyi.exam.domain.vo.StatisticalAnalysisDetailsVo;
+import com.ruoyi.exam.domain.vo.StatisticalAnalysisVo;
 import com.ruoyi.exam.service.StatisticalAnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,14 +32,27 @@ public class StatisticalAnalysisController extends BaseController {
 
     /**
      * 统计分析列表
-     * @param statisticalAnalysis
+     * @param candidateClassHourVo
      * @return
      */
     @GetMapping("/list")
-    public TableDataInfo list(StatisticalAnalysis statisticalAnalysis)
+    public TableDataInfo list(CandidateClassHourVo candidateClassHourVo)
     {
         startPage();
-        List<StatisticalAnalysis> list = statisticalAnalysisService.selectStatisticalAnalysisList(statisticalAnalysis);
+        List<StatisticalAnalysisVo> list = statisticalAnalysisService.selectStatisticalAnalysisList(candidateClassHourVo);
+        return getDataTable(list);
+    }
+
+    /**
+     * 统计分析详情
+     * @param detailsVo
+     * @return
+     */
+    @GetMapping("/getStatisticalAnalysisDetails")
+    public TableDataInfo getStatisticalAnalysisDetails(StatisticalAnalysisDetailsVo detailsVo)
+    {
+        startPage();
+        List<StatisticalAnalysisDetailsVo> list = statisticalAnalysisService.getStatisticalAnalysisDetails(detailsVo);
         return getDataTable(list);
     }
 

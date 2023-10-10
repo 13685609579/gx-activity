@@ -1,7 +1,9 @@
 package com.ruoyi.exam.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.ruoyi.exam.domain.StatisticalAnalysis;
+import com.ruoyi.exam.domain.vo.CandidateClassHourVo;
+import com.ruoyi.exam.domain.vo.StatisticalAnalysisDetailsVo;
+import com.ruoyi.exam.domain.vo.StatisticalAnalysisVo;
 
 import java.util.List;
 
@@ -13,13 +15,20 @@ import java.util.List;
  * @author yxp
  * @since 2023-10-08
  */
-public interface StatisticalAnalysisMapper extends BaseMapper<StatisticalAnalysis> {
+public interface StatisticalAnalysisMapper extends BaseMapper<StatisticalAnalysisVo> {
 
     /**
      * 统计分析列表
-     * @param statisticalAnalysis
+     * @param candidateClassHourVo
      * @return
      */
-    public List<StatisticalAnalysis> selectStatisticalAnalysisList(StatisticalAnalysis statisticalAnalysis);
+    public List<CandidateClassHourVo> selectStatisticalAnalysisList(CandidateClassHourVo candidateClassHourVo);
+
+    /**
+     * 统计分析详情
+     * @param detailsVo
+     * @return
+     */
+    public List<StatisticalAnalysisDetailsVo> getStatisticalAnalysisDetails(StatisticalAnalysisDetailsVo detailsVo);
 
 }

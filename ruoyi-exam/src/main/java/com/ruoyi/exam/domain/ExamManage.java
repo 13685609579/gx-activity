@@ -2,6 +2,8 @@ package com.ruoyi.exam.domain;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.exam.domain.vo.CreditHoursDistributionVo;
+import com.ruoyi.exam.domain.vo.PersonClassHourVo;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -10,6 +12,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -76,7 +79,14 @@ public class ExamManage extends BaseEntity implements Serializable {
 
     private String rowNum;
 
-    private List<ClassHourSf> classHourSfList;
+    /**
+     * 司法人员完成获取学时
+     */
+    private Map<String, List<PersonClassHourVo>> sfClassHours;
+
+    List<ClassHourSf> classHourSfList;
+
+
 
 
 }

@@ -20,9 +20,9 @@
         select dict_code,  sum(class_hour) as classHour from person_class_hour
         where del_flag = 1
         <if test="null != candidateId and '' != candidateId">and candidate_id = #{candidateId}</if>
-        <if test="null != examYear and '' != examYear">and exam_year = #{examYear}</if>
-        <if test="null != startTime and '' != startTime">and start_time = #{startTime}</if>
-        <if test="null != endTime and '' != endTime">and end_time = #{endTime}</if>
+        <if test="examId != null and examId != ''">
+            AND exam_id = #{examId}
+        </if>
         group by dict_code
         ) tbl2 on tbl1.dict_code = tbl2.dict_code LEFT JOIN sys_dict_data tbl3 on tbl1.dict_code = tbl3.dict_code
     </select>

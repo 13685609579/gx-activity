@@ -47,17 +47,11 @@ public class PersonClassHour implements Serializable {
     @ApiModelProperty(value = "学时")
     private String classHour;
 
-    @ApiModelProperty(value = "考试学时年份")
-    private String examYear;
+    @ApiModelProperty(value = "考试ID")
+    private String examId;
 
     @ApiModelProperty(value = "题目分类字典编码")
     private String dictCode;
-
-    @ApiModelProperty(value = "开始时间")
-    private String startTime;
-
-    @ApiModelProperty(value = "结束时间")
-    private String endTime;
 
     @ApiModelProperty(value = "数据状态（1：正常  0：删除）")
     private String delFlag;

@@ -1,18 +1,25 @@
 package com.ruoyi.exam.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.ruoyi.common.core.domain.entity.SysDictData;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.exam.domain.ClassHourSf;
 import com.ruoyi.exam.domain.ExamManage;
+import com.ruoyi.exam.domain.vo.CreditHoursDistributionVo;
+import com.ruoyi.exam.domain.vo.PersonClassHourVo;
 import com.ruoyi.exam.mapper.ClassHourSfMapper;
 import com.ruoyi.exam.mapper.ExamManageMapper;
 import com.ruoyi.exam.service.ExamManageService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.exam.util.DataUtils;
+import com.ruoyi.system.mapper.SysDictDataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -30,6 +37,9 @@ public class ExamManageServiceImpl extends ServiceImpl<ExamManageMapper, ExamMan
 
     @Autowired
     private ClassHourSfMapper classHourSfMapper;
+
+    @Autowired
+    private SysDictDataMapper sysDictDataMapper;
 
     /**
      * 考试管理列表
@@ -75,10 +85,24 @@ public class ExamManageServiceImpl extends ServiceImpl<ExamManageMapper, ExamMan
     @Override
     public ExamManage examManageInfo(String examId) {
         ExamManage examManage = examManageMapper.examManageInfo(examId);
-        LambdaQueryWrapper<ClassHourSf> lambdaQueryWrapper = new LambdaQueryWrapper<ClassHourSf>();
-        lambdaQueryWrapper.eq(ClassHourSf::getExamId, examId).eq(ClassHourSf::getDelFlag, 1);
-        List<ClassHourSf> classHourSfList = classHourSfMapper.selectList(lambdaQueryWrapper);
-        examManage.setClassHourSfList(classHourSfList);
+        List<PersonClassHourVo> personLabelHourList = classHourSfMapper.getPersonLabelHour(examManage.getExamId());
+        Map<String, List<PersonClassHourVo>> maps = new HashMap<>();
+        List<PersonClassHourVo> listZf = new ArrayList<PersonClassHourVo>();
+        List<PersonClassHourVo> listFzf = new ArrayList<PersonClassHourVo>();
+        if(null != personLabelHourList && personLabelHourList.size()>0){
+            personLabelHourList.stream().forEach(m->{
+                m.setTargetHours(m.getTargetHours().substring(0, m.getTargetHours().indexOf(".")));
+                if(StringUtils.equals("1", m.getPersonType())){
+                    listZf.add(m);
+                }
+                if(StringUtils.equals("2", m.getPersonType())){
+                    listFzf.add(m);
+                }
+            });
+        }
+        maps.put("zf", listZf);
+        maps.put("fzf", listFzf);
+        examManage.setSfClassHours(maps);
         return examManage;
     }
 

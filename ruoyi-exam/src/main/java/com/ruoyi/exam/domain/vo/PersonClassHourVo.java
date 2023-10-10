@@ -20,6 +20,11 @@ public class PersonClassHourVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 学时ID
+     */
+    private String hourId;
+
+    /**
      * 人员类型
      */
     private String personType;

@@ -3,12 +3,10 @@
 <mapper namespace="com.ruoyi.exam.mapper.PersonClassHourMapper">
 
     <select id="getAcquiredHours" parameterType="com.ruoyi.exam.domain.PersonClassHour" resultType="String">
-        select sum(class_hour) as classHour from person_class_hour
+        select case when sum(class_hour) is null then '0' else sum(class_hour) end classHour from person_class_hour
             where del_flag = 1
             <if test="null != candidateId and '' != candidateId">and candidate_id = #{candidateId}</if>
-            <if test="null != examYear and '' != examYear">and exam_year = #{examYear}</if>
-            <if test="null != startTime and '' != startTime">and start_time = #{startTime}</if>
-            <if test="null != endTime and '' != endTime">and end_time = #{endTime}</if>
+            <if test="null != examId and '' != examId">and exam_id = #{examId}</if>
     </select>
 
 </mapper>
