@@ -60,4 +60,14 @@ public class MybatisPlusConfig
         return new BlockAttackInnerInterceptor();
     }
 
+    /**
+     * 注入自定义自动填充组件
+     *
+     * @return
+     */
+    @Bean
+    public MyMetaObjectHandler myMetaObjectHandler() {
+        return new MyMetaObjectHandler();
+    }
+
 }
