@@ -9,11 +9,13 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.exam.domain.ExamManage;
 import com.ruoyi.exam.domain.QuestionBankManage;
 import com.ruoyi.exam.service.ExamManageService;
+import com.ruoyi.exam.util.SecretKeyCheckUtil;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -90,5 +92,13 @@ public class ExamManageController extends BaseController {
         return toAjax(examManageService.updatePublicState(examId));
     }
 
+
+    public AjaxResult appTest(HttpServletRequest request) {
+        if (!SecretKeyCheckUtil.appCheck(request.getHeader("sign"), request.getHeader("timestamp"))) {
+            throw new RuntimeException("md5校验失败");
+        }
+
+        return AjaxResult.success();
+    }
 }
 
