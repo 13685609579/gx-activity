@@ -7,12 +7,15 @@ import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.exam.domain.UnitManage;
 import com.ruoyi.exam.service.UnitManageService;
+import com.ruoyi.exam.util.DataUtils;
+import com.ruoyi.exam.util.SecretKeyCheckUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -36,8 +39,9 @@ public class UnitManageController extends BaseController {
      */
     @GetMapping("/getUnitNames")
     @Anonymous
-    public TableDataInfo getUnitNames()
+    public TableDataInfo getUnitNames(HttpServletRequest request)
     {
+        DataUtils.appCheck(request);
         startPage();
         List<SysDept> list = unitManageService.getUnitNames();
         return getDataTable(list);

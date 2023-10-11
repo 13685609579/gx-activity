@@ -25,6 +25,13 @@ public interface QuestionBankManageMapper extends BaseMapper<QuestionBankManage>
     public List<QuestionBankManage> selectQuestionBankList(QuestionBankManage questionBankManage);
 
     /**
+     * 从题库中随机获取题目作为考题（单选题30道、多选题10道、判断题4道）
+     * @param questionBankManage
+     * @return
+     */
+    public List<QuestionBankManage> selectExamQuestion(QuestionBankManage questionBankManage);
+
+    /**
      * 获取最新一条题目
      * @return
      */

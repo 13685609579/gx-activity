@@ -37,10 +37,10 @@ public interface CandidateInfoMapper extends BaseMapper<CandidateInfo> {
     public List<CandidateInfo> selectCandidateInfoList(CandidateInfo candidateInfo);
 
     /**
-     * 修改考生状态
+     * 修改考生信息
      * @param candidateInfo
      * @return
      */
-    public int updatePersonState(CandidateInfo candidateInfo);
+    public int updateCandidateInfo(CandidateInfo candidateInfo);
 
 }

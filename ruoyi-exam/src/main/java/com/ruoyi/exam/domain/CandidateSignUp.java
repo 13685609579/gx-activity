@@ -67,5 +67,4 @@ public class CandidateSignUp implements Serializable {
     @ApiModelProperty(value = "备注")
     private String remark;
 
-
 }

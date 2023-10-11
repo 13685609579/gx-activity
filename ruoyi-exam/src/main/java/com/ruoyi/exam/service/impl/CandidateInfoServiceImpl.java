@@ -50,7 +50,7 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
         int code = -1;
         String msg = "";
         CandidateInfo candidateInfo = new CandidateInfo();
-        candidateInfo.setOpenId(openId);
+        candidateInfo.setCandidateId(openId);
         candidateInfo = candidateInfoMapper.selectCandidateInfo(candidateInfo);
         if(null == candidateInfo){
             msg = "当前用户未注册，请注册！";
@@ -92,7 +92,7 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
         }
         if(null != examManage && StringUtils.equals("1", examManage.getPublishState())){
             CandidateInfo candidateInfo = new CandidateInfo();
-            candidateInfo.setOpenId(openId);
+            candidateInfo.setCandidateId(openId);
             candidateInfo = candidateInfoMapper.selectCandidateInfo(candidateInfo);
             ClassHourSf classHourSf = new ClassHourSf();
             classHourSf.setExamId(examManage.getExamId());
@@ -125,6 +125,19 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
     }
 
     /**
+     * 修改考试信息
+     * @param candidateInfo
+     * @return
+     */
+    @Override
+    public int updateCandidateInfo(CandidateInfo candidateInfo) {
+        candidateInfo.setCandidateId(candidateInfo.getOpenId());
+        candidateInfo.setPersonState("2");
+        int row = candidateInfoMapper.updateCandidateInfo(candidateInfo);
+        return row;
+    }
+
+    /**
      * 注册考生信息
      * @param candidateInfo
      * @return
@@ -154,7 +167,7 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
      */
     @Override
     public int updatePersonState(CandidateInfo candidateInfo) {
-        int row = candidateInfoMapper.updatePersonState(candidateInfo);
+        int row = candidateInfoMapper.updateCandidateInfo(candidateInfo);
         return row;
     }
 }

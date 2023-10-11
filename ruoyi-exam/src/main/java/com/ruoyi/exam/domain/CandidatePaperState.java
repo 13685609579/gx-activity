@@ -14,43 +14,43 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 考试结果表
+ * 司法考试-考生试卷状态表
  * </p>
  *
- * @author hougq
- * @since 2023-09-28
+ * @author yxp
+ * @since 2023-10-11
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("exam_result")
-@ApiModel(value="ExamResult对象", description="考试结果表")
-public class ExamResult implements Serializable {
+@TableName("candidate_paper_state")
+@ApiModel(value="CandidatePaperState对象", description="司法考试-考生试卷状态表")
+public class CandidatePaperState implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键ID")
-    @TableId(value = "exam_result_id", type = IdType.AUTO)
-    private String examResultId;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
     @ApiModelProperty(value = "考生ID")
     private String candidateId;
 
-    @ApiModelProperty(value = "考题ID")
-    private String topicId;
+    @ApiModelProperty(value = "考试管理ID")
+    private String examId;
 
-    @ApiModelProperty(value = "题目分类（1：法治思想 2：民法典 3：宪法 4：党内法规 5：行政处罚法）")
-    private String topicSort;
+    @ApiModelProperty(value = "考试试卷状态（0：已结束 1：未结束）")
+    private String paperState;
 
-    @ApiModelProperty(value = "题目类型（1：单选题 2：多选题 3：判断题）")
-    private String topicType;
+    @ApiModelProperty(value = "考试开始时间")
+    private String startTime;
 
-    @ApiModelProperty(value = "考生答案")
-    private String candidateAnswer;
+    @ApiModelProperty(value = "考试结束时间")
+    private String endTime;
 
-    @ApiModelProperty(value = "答题结果是否正确（1：正确 0：错误）")
-    private String answerResult;
+    @ApiModelProperty(value = "当前考试剩余时间")
+    private String remainTime;
 
-    @ApiModelProperty(value = "数据状态（0：正常  1：删除）")
+    @ApiModelProperty(value = "数据状态（0：正常 1：删除）")
     private String delFlag;
 
     @ApiModelProperty(value = "创建时间")

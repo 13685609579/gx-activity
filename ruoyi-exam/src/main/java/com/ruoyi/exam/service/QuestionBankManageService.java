@@ -53,6 +53,13 @@ public interface QuestionBankManageService extends IService<QuestionBankManage> 
     public int updateQuestionBank(QuestionBankManage questionBankManage);
 
     /**
+     * 删除题目
+     * @param topicId
+     * @return
+     */
+    public int removeQuestionBank(String topicId);
+
+    /**
      * 导入题目数据
      *
      * @param questionBankList 题目数据列表

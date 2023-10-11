@@ -68,7 +68,7 @@ public class StatisticalAnalysisServiceImpl extends ServiceImpl<StatisticalAnaly
                     candidateClassHourVoList.stream().forEach(o->{
                         if(StringUtils.equals(n, o.getUnitName())){
                             CandidateInfo candidateInfo = new CandidateInfo();
-                            candidateInfo.setOpenId(o.getCandidateId());
+                            candidateInfo.setCandidateId(o.getCandidateId());
                             CandidateInfo candidateInfo1 = candidateInfoMapper.selectCandidateInfo(candidateInfo);
                             ClassHourSf classHourSf = new ClassHourSf();
                             classHourSf.setExamId(o.getExamId());

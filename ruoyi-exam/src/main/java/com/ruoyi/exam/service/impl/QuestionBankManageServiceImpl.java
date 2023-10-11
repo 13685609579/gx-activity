@@ -2,6 +2,7 @@ package com.ruoyi.exam.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.common.core.domain.entity.QuestionBank;
+import com.ruoyi.common.core.domain.entity.SysDictData;
 import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DateUtils;
@@ -15,6 +16,7 @@ import com.ruoyi.exam.mapper.TopicOptionsMapper;
 import com.ruoyi.exam.service.QuestionBankManageService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.exam.util.DataUtils;
+import com.ruoyi.system.mapper.SysDictDataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,9 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
     @Autowired
     private TopicOptionsMapper topicOptionsMapper;
 
+    @Autowired
+    private SysDictDataMapper sysDictDataMapper;
+
     /**
      * 获取题库列表
      * @param questionBankManage
@@ -49,6 +54,8 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
         List<QuestionBankManage> list = questionBankManageMapper.selectQuestionBankList(questionBankManage);
         if(null != list && list.size()>0){
             list.stream().forEach(m->{
+                SysDictData sysDictData = sysDictDataMapper.selectDictDataById(Long.valueOf(m.getTopicSort()));
+                m.setTopicSortName(sysDictData.getDictLabel());
                 TopicOptions topicOptions = new TopicOptions();
                 topicOptions.setTopicId(m.getTopicId());
                 List<TopicOptions> topicOptionsList = topicOptionsMapper.selectTopicOptionsList(topicOptions);
@@ -157,6 +164,29 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
     }
 
     /**
+     * 删除题目
+     * @param topicId
+     * @return
+     */
+    @Override
+    public int removeQuestionBank(String topicId) {
+        int row = 1;
+        if(StringUtils.isNotEmpty(topicId) && StringUtils.isNotBlank(topicId)){
+            String[] topicIds = topicId.split(",");
+            for(int i=0; i<topicIds.length; i++){
+                QuestionBankManage questionBankManage = new QuestionBankManage();
+                questionBankManage.setTopicId(topicIds[i]);
+                questionBankManage.setDelFlag("1");
+                row = questionBankManageMapper.updateQuestionBank(questionBankManage);
+                if(1 != row){
+                    break;
+                }
+            }
+        }
+        return row;
+    }
+
+    /**
      * 导入题目数据
      *
      * @param questionBankList 题目数据列表
@@ -200,15 +230,15 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
                 String tAnswer = "";
                 if(StringUtils.equals("3", questionBank.getTopicType())){
                     if(null != topicAnswer){
-                        if(StringUtils.equals("选项一", topicAnswer)){
-                            if(StringUtils.equals("正确", questionBank.getOptionOne())){
+                        if(topicAnswer.contains("选项一")){
+                            if(questionBank.getOptionOne().contains("正确")){
                                 tAnswer = "1";
                             }else{
                                 tAnswer = "0";
                             }
                         }
-                        if(StringUtils.equals("选项二", topicAnswer)){
-                            if(StringUtils.equals("正确", questionBank.getOptionTwo())){
+                        if(topicAnswer.contains("选项二")){
+                            if(questionBank.getOptionTwo().contains("正确")){
                                 tAnswer = "1";
                             }else{
                                 tAnswer = "0";
@@ -222,13 +252,13 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
                 List<TopicOptions> topicOptionsList = new ArrayList<>();
                 if(StringUtils.equals("1", questionBank.getTopicType()) || StringUtils.equals("2", questionBank.getTopicType())){
                     TopicOptions topicOptions1 = new TopicOptions();
-                    topicOptions1.setOptionsContent(questionBank.getOptionOne());
+                    topicOptions1.setOptionsContent(questionBank.getOptionOne().replace(" ", ""));
                     TopicOptions topicOptions2 = new TopicOptions();
-                    topicOptions2.setOptionsContent(questionBank.getOptionTwo());
+                    topicOptions2.setOptionsContent(questionBank.getOptionTwo().replace(" ", ""));
                     TopicOptions topicOptions3 = new TopicOptions();
-                    topicOptions3.setOptionsContent(questionBank.getOptionThree());
+                    topicOptions3.setOptionsContent(questionBank.getOptionThree().replace(" ", ""));
                     TopicOptions topicOptions4 = new TopicOptions();
-                    topicOptions4.setOptionsContent(questionBank.getOptionFour());
+                    topicOptions4.setOptionsContent(questionBank.getOptionFour().replace(" ", ""));
                     if(StringUtils.isNotBlank(topicAnswer) && StringUtils.isNotEmpty(topicAnswer)){
                         if(topicAnswer.contains("选项一")){
                             topicOptions1.setOptionsState("1");

@@ -7,11 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 考题表 前端控制器
+ * 司法考试-考题表 前端控制器
  * </p>
  *
- * @author hougq
- * @since 2023-09-28
+ * @author yxp
+ * @since 2023-10-11
  */
 @RestController
 @RequestMapping("/exam-question")
