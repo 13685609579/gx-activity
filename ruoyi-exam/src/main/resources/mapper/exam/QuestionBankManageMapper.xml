@@ -23,7 +23,7 @@
     <select id="selectQuestionBankList" parameterType="com.ruoyi.exam.domain.QuestionBankManage" resultMap="QuestionBankManageResult">
         SELECT topic_id, topic_num, topic_code, topic_content, topic_sort, topic_type, topic_answer, answer_analysis,
         per_score, del_flag, create_time, update_time, create_by, update_by, remark FROM question_bank_manage
-        where del_flag = 1
+        where del_flag = 0
         <if test="topicSort != null and topicSort != ''">
             AND topic_sort = #{topicSort}
         </if>
@@ -35,17 +35,17 @@
     </select>
 
     <select id="selectNewTopicCode" parameterType="String" resultType="String">
-        select topic_code from question_bank_manage where del_flag = 1 and create_time >= #{today} order by create_time desc limit 1
+        select topic_code from question_bank_manage where del_flag = 0 and create_time >= #{today} order by create_time desc limit 1
     </select>
 
     <select id="selectMaxTopicNum" resultType="String">
-        select max(topic_num) max_topic_num FROM question_bank_manage where del_flag = 1
+        select max(topic_num) max_topic_num FROM question_bank_manage where del_flag = 0
     </select>
 
     <select id="selectNewQuestionBank" resultMap="QuestionBankManageResult">
         SELECT topic_id, topic_num, topic_code, topic_content, topic_sort, topic_type, topic_answer, answer_analysis,
         per_score, del_flag, create_time, update_time, create_by, update_by, remark FROM question_bank_manage
-        where del_flag = 1
+        where del_flag = 0
         order by create_time desc
         limit 1
     </select>
@@ -75,7 +75,7 @@
         <if test="topicAnswer != null and topicAnswer != ''">#{topicAnswer},</if>
         <if test="answerAnalysis != null and answerAnalysis != ''">#{answerAnalysis},</if>
         <if test="perScore != null">#{perScore},</if>
-        1,
+        0,
         <if test="remark != null and remark != ''">#{remark},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         sysdate()
@@ -85,7 +85,7 @@
     <select id="questionBankInfo" parameterType="String" resultMap="QuestionBankManageResult">
         SELECT topic_id, topic_num, topic_code, topic_content, topic_sort, topic_type, topic_answer, answer_analysis,
         per_score, del_flag, create_time, update_time, create_by, update_by, remark FROM question_bank_manage
-        where del_flag = 1
+        where del_flag = 0
         <if test="topicId != null and topicId != ''">
             AND topic_id = #{topicId}
         </if>

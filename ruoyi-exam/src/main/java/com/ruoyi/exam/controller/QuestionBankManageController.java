@@ -70,8 +70,8 @@ public class QuestionBankManageController extends BaseController {
     @PostMapping(value = "/addQuestionBank")
     public AjaxResult addQuestionBank(@Validated @RequestBody QuestionBankManage questionBankManage)
     {
-        questionBankManage.setCreateBy(getUsername());
-//        questionBankManage.setCreateBy("admin");
+//        questionBankManage.setCreateBy(getUsername());
+        questionBankManage.setCreateBy("admin");
         return toAjax(questionBankManageService.insertQuestionBankData(questionBankManage));
     }
 

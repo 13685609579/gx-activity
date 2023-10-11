@@ -6,7 +6,7 @@
         select tbl3.dict_label as dictLabel, tbl1.targetHours, case when tbl2.classHour is null then '0' else tbl2.classHour end classHour from
         (
         SELECT dict_code, sum(target_hours) as targetHours FROM class_hour_sf
-        where del_flag = 1
+        where del_flag = 0
         <if test="examId != null and examId != ''">
             AND exam_id = #{examId}
         </if>
@@ -18,7 +18,7 @@
         left join
         (
         select dict_code,  sum(class_hour) as classHour from person_class_hour
-        where del_flag = 1
+        where del_flag = 0
         <if test="null != candidateId and '' != candidateId">and candidate_id = #{candidateId}</if>
         <if test="examId != null and examId != ''">
             AND exam_id = #{examId}

@@ -59,7 +59,7 @@ public class QuestionBankManage extends BaseEntity {
     @ApiModelProperty(value = "每题分数")
     private String perScore;
 
-    @ApiModelProperty(value = "数据状态（1：正常  0：删除）")
+    @ApiModelProperty(value = "数据状态（0：正常  1：删除）")
     private String delFlag;
 
     @ApiModelProperty(value = "创建时间")

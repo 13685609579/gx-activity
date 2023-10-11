@@ -38,7 +38,7 @@ public class CandidateExamRelate implements Serializable {
     @ApiModelProperty(value = "考题ID")
     private String examQuestionId;
 
-    @ApiModelProperty(value = "数据状态（1：正常  0：删除）")
+    @ApiModelProperty(value = "数据状态（0：正常  1：删除）")
     private String delFlag;
 
     @ApiModelProperty(value = "创建时间")

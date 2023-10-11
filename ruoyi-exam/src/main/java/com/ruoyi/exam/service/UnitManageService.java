@@ -1,5 +1,6 @@
 package com.ruoyi.exam.service;
 
+import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.exam.domain.UnitManage;
 import com.baomidou.mybatisplus.extension.service.IService;
 
@@ -19,6 +20,6 @@ public interface UnitManageService extends IService<UnitManage> {
      * 获取所有单位
      * @return
      */
-    public List<UnitManage> getUnitNames();
+    public List<SysDept> getUnitNames();
 
 }

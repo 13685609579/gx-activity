@@ -43,7 +43,7 @@ public class TopicOptions implements Serializable {
     @ApiModelProperty(value = "题目选项是否正确（1：正确 0：错误）")
     private String optionsState;
 
-    @ApiModelProperty(value = "数据状态（1：正常  0：删除）")
+    @ApiModelProperty(value = "数据状态（0：正常  1：删除）")
     private String delFlag;
 
     @ApiModelProperty(value = "创建时间")

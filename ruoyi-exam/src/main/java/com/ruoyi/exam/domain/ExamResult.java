@@ -50,7 +50,7 @@ public class ExamResult implements Serializable {
     @ApiModelProperty(value = "答题结果是否正确（1：正确 0：错误）")
     private String answerResult;
 
-    @ApiModelProperty(value = "数据状态（1：正常  0：删除）")
+    @ApiModelProperty(value = "数据状态（0：正常  1：删除）")
     private String delFlag;
 
     @ApiModelProperty(value = "创建时间")

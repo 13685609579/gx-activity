@@ -45,16 +45,27 @@ public class CandidateSignUp implements Serializable {
     @ApiModelProperty(value = "考试管理ID")
     private String examId;
 
-    @ApiModelProperty(value = "数据状态（1：正常  0：删除）")
+    @ApiModelProperty(value = "数据状态（0：正常  1：删除）")
     private String delFlag;
 
     @ApiModelProperty(value = "创建时间")
     @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
+    @ApiModelProperty(value = "更新时间")
+    @TableField(fill = FieldFill.UPDATE)
+    private Date updateTime;
+
     @ApiModelProperty(value = "创建人")
     @TableField(fill = FieldFill.INSERT)
     private String createBy;
+
+    @ApiModelProperty(value = "更新人")
+    @TableField(fill = FieldFill.UPDATE)
+    private String updateBy;
+
+    @ApiModelProperty(value = "备注")
+    private String remark;
 
 
 }

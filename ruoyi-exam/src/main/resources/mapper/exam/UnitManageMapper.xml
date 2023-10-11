@@ -9,15 +9,15 @@
     </resultMap>
 
     <select id="selectUnitAllList" parameterType="com.ruoyi.exam.domain.UnitManage" resultMap="UnitManageResult">
-        select unit_id, unit_name, del_flag from unit_manage where del_flag = 1
+        select dept_id as unit_id, dept_name as unit_name, del_flag from sys_dept where del_flag = 0
     </select>
 
     <select id="selectUnitList" parameterType="com.ruoyi.exam.domain.vo.CandidateClassHourVo" resultMap="UnitManageResult">
-        select unit_id, unit_name, del_flag from unit_manage where del_flag = 1 and unit_id in
+        select dept_id as unit_id, dept_name as unit_name, del_flag from sys_dept where del_flag = 0 and dept_id in
         (
-        select distinct unit_id from candidate_sign_up where del_flag = 1 and exam_id in
+        select distinct unit_id from candidate_sign_up where del_flag = 0 and exam_id in
         (
-        select distinct exam_id from exam_manage where del_flag = 1
+        select distinct exam_id from exam_manage where del_flag = 0
         <if test="examYear != null and examYear != ''">
             AND exam_year = #{examYear}
         </if>
@@ -25,7 +25,7 @@
         )
         )
         <if test="unitName != null and unitName != ''">
-            AND unit_name like concat('%', #{unitName}, '%')
+            AND dept_name like concat('%', #{unitName}, '%')
         </if>
         <!-- 数据范围过滤 -->
         ${params.dataScope}

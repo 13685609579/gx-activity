@@ -46,7 +46,7 @@ public class ClassHourSf implements Serializable {
     @ApiModelProperty(value = "人员类型（1：执法司法人员 2：非执法司法人员）")
     private String personType;
 
-    @ApiModelProperty(value = "数据状态（1：正常  0：删除）")
+    @ApiModelProperty(value = "数据状态（0：正常  1：删除）")
     private String delFlag;
 
     @ApiModelProperty(value = "创建时间")

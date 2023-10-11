@@ -1,7 +1,9 @@
 package com.ruoyi.exam.controller;
 
 
+import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.exam.domain.UnitManage;
 import com.ruoyi.exam.service.UnitManageService;
@@ -33,10 +35,11 @@ public class UnitManageController extends BaseController {
      * @return
      */
     @GetMapping("/getUnitNames")
+    @Anonymous
     public TableDataInfo getUnitNames()
     {
         startPage();
-        List<UnitManage> list = unitManageService.getUnitNames();
+        List<SysDept> list = unitManageService.getUnitNames();
         return getDataTable(list);
     }
 

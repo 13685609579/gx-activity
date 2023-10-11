@@ -4,7 +4,7 @@
 
     <select id="getAcquiredHours" parameterType="com.ruoyi.exam.domain.PersonClassHour" resultType="String">
         select case when sum(class_hour) is null then '0' else sum(class_hour) end classHour from person_class_hour
-            where del_flag = 1
+            where del_flag = 0
             <if test="null != candidateId and '' != candidateId">and candidate_id = #{candidateId}</if>
             <if test="null != examId and '' != examId">and exam_id = #{examId}</if>
     </select>

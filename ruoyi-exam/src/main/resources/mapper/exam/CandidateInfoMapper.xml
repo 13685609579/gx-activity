@@ -21,7 +21,7 @@
 
     <select id="selectCandidateInfo" parameterType="com.ruoyi.exam.domain.CandidateInfo" resultMap="CandidateInfoResult">
         select candidate_id, candidate_name, mobile, person_category, unit_id, person_state, del_flag, create_time, update_time, create_by, update_by, remark
-        from candidate_info where del_flag = 1
+        from candidate_info where del_flag = 0
         <if test="openId != null and openId != ''">
             AND candidate_id = #{openId}
         </if>
@@ -31,9 +31,9 @@
         SELECT ROW_NUMBER() OVER (ORDER BY tbl1.create_time) AS row_num, tbl1.candidate_id, tbl1.candidate_name, tbl1.mobile,
         CASE WHEN tbl1.person_category = '1' THEN '执法司法人员' ELSE '非执法司法人员' END person_category,
         CASE WHEN tbl1.person_state = '1' THEN '通过' WHEN tbl1.person_state = '0' THEN '不通过' ELSE '待审核' END person_state,
-        tbl1.unit_id, tbl2.unit_name, tbl1.del_flag, tbl1.create_time, tbl1.update_time, tbl1.create_by, tbl1.update_by, tbl1.remark
-        FROM candidate_info tbl1 left join unit_manage tbl2 on tbl1.unit_id = tbl2.unit_id
-        where tbl1.del_flag = 1
+        tbl1.unit_id, tbl2.dept_name as unit_name, tbl1.del_flag, tbl1.create_time, tbl1.update_time, tbl1.create_by, tbl1.update_by, tbl1.remark
+        FROM candidate_info tbl1 left join sys_dept tbl2 on tbl1.unit_id = tbl2.dept_id
+        where tbl1.del_flag = 0
         <if test="candidateName != null and candidateName != ''">
             AND tbl1.candidate_name like concat('%', #{candidateName}, '%')
         </if>
@@ -63,7 +63,7 @@
         <if test="personCategory != null and personCategory != ''">#{personCategory},</if>
         <if test="unitId != null and unitId != ''">#{unitId},</if>
         2,
-        1,
+        0,
         <if test="remark != null and remark != ''">#{remark},</if>
         <if test="createBy != null and createBy != ''">#{createBy},</if>
         sysdate()
