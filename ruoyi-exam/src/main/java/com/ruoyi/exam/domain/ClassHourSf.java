@@ -16,39 +16,35 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 考生信息表
+ * 司法人员学时管理表
  * </p>
  *
  * @author hougq
- * @since 2023-09-28
+ * @since 2023-10-08
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("candidate_info")
-@ApiModel(value="CandidateInfo对象", description="考生信息表")
-public class CandidateInfo extends BaseEntity implements Serializable {
+@TableName("class_hour_sf")
+@ApiModel(value="ClassHourSf对象", description="司法人员学时管理表")
+public class ClassHourSf implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键ID")
-    @TableId(value = "candidate_id", type = IdType.AUTO)
-    private String candidateId;
+    @TableId(value = "hour_id", type = IdType.AUTO)
+    private String hourId;
 
-    @ApiModelProperty(value = "考生姓名")
-    private String candidateName;
+    @ApiModelProperty(value = "考试管理ID")
+    private String examId;
 
-    @ApiModelProperty(value = "手机号")
-    private String mobile;
+    @ApiModelProperty(value = "字典编码")
+    private Long dictCode;
 
-    @ApiModelProperty(value = "人员类别（1：执法司法人员 2：非执法司法人员）")
-    private String personCategory;
+    @ApiModelProperty(value = "目标学时")
+    private String targetHours;
 
-    @ApiModelProperty(value = "所属单位")
-    private String unitId;
-    private String unitName;
-
-    @ApiModelProperty(value = "状态（2：待审核 1：通过 0：不通过）")
-    private String personState;
+    @ApiModelProperty(value = "人员类型（1：执法司法人员 2：非执法司法人员）")
+    private String personType;
 
     @ApiModelProperty(value = "数据状态（1：正常  0：删除）")
     private String delFlag;
@@ -72,8 +68,9 @@ public class CandidateInfo extends BaseEntity implements Serializable {
     @ApiModelProperty(value = "备注")
     private String remark;
 
-    private String rowNum;
-
-    private String openId;
+    /**
+     * 题目分类名称
+     */
+    private String dictLabel;
 
 }
