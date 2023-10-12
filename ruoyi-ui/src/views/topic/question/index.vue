@@ -5,9 +5,9 @@
         <el-select v-model="queryParams.topicSort" placeholder="请选择">
           <el-option
             v-for="item in typelist"
-            :key="item.dictValue"
+            :key="item.dictCode"
             :label="item.dictLabel"
-            :value="item.dictValue">
+            :value="item.dictCode">
           </el-option>
         </el-select>
       </el-form-item>
@@ -132,9 +132,9 @@
               <el-select v-model="form.topictype" placeholder="请选择">
                 <el-option
                   v-for="item in typelist"
-                  :key="item.dictValue"
+                  :key="item.dictCode"
                   :label="item.dictLabel"
-                  :value="item.dictValue">
+                  :value="item.dictCode">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -157,11 +157,17 @@
           <el-col :span="12">
             <el-form-item label="题目分类" prop="topictype">
               <el-select v-model="form.topictype" disabled placeholder="请选择">
-                <el-option
+                <!-- <el-option
                   v-for="item in typelist"
                   :key="item.dictValue"
                   :label="item.dictLabel"
                   :value="item.dictValue">
+                </el-option> -->
+                <el-option
+                  v-for="item in typelist"
+                  :key="item.dictCode"
+                  :label="item.dictLabel"
+                  :value="item.dictCode">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -242,11 +248,17 @@
           <el-col :span="12">
             <el-form-item label="题目分类" prop="topictype">
               <el-select v-model="form.topictype" disabled placeholder="请选择">
-                <el-option
+                <!-- <el-option
                   v-for="item in typelist"
                   :key="item.dictValue"
                   :label="item.dictLabel"
                   :value="item.dictValue">
+                </el-option> -->
+                <el-option
+                  v-for="item in typelist"
+                  :key="item.dictCode"
+                  :label="item.dictLabel"
+                  :value="item.dictCode">
                 </el-option>
               </el-select>
             </el-form-item>
@@ -439,6 +451,7 @@ export default {
         dictType:'topic_sort',
         status:'0',
       })
+      console.log('push进typelist的数据',res.rows);
       res.rows.forEach((v,i) => {
         this.typelist.push(v)
       });
@@ -460,21 +473,21 @@ export default {
       this.loading = true;
       questionlist(this.queryParams).then(response => {
         response.rows.forEach((v,i) => {
-          if (v.topicSort == '1') {
-            v.topicSortName = '法治思想'
-          }
-          if (v.topicSort == '2') {
-            v.topicSortName = '民法典'
-          }
-          if (v.topicSort == '3') {
-            v.topicSortName = '宪法'
-          }
-          if (v.topicSort == '4') {
-            v.topicSortName = '党内法规'
-          }
-          if (v.topicSort == '5') {
-            v.topicSortName = '行政处罚法'
-          }
+          // if (v.topicSort == '1') {
+          //   v.topicSortName = '法治思想'
+          // }
+          // if (v.topicSort == '2') {
+          //   v.topicSortName = '民法典'
+          // }
+          // if (v.topicSort == '3') {
+          //   v.topicSortName = '宪法'
+          // }
+          // if (v.topicSort == '4') {
+          //   v.topicSortName = '党内法规'
+          // }
+          // if (v.topicSort == '5') {
+          //   v.topicSortName = '行政处罚法'
+          // }
           if (v.topicType == '1') {
             v.topicTypeName = '单选题'
           }
@@ -488,7 +501,7 @@ export default {
         this.loading = false;
         this.postList = response.rows;
         this.total = response.total;
-        // console.log(response);
+        console.log(this.postList);
       });
     },
     // 取消按钮
@@ -548,7 +561,7 @@ export default {
         this.topicId = response.data.topicId;
         this.topicCode = response.data.topicCode;
         this.form.topiccont = response.data.topicContent;
-        this.form.topictype = response.data.topicSort
+        this.form.topictype = Number(response.data.topicSort)//不知道为什么用Number别问，问就是组件敏感
         this.form.topictixing = response.data.topicType
         this.topicAnswer = response.data.topicAnswer;
         this.topicOptionsList = response.data.topicOptionsList;
@@ -559,6 +572,7 @@ export default {
         this.title = "修改题目";
       });
     },
+    //进入详情
     hanleInfo(row){
       console.log(row);
       this.reset();
@@ -569,7 +583,7 @@ export default {
         this.topicId = response.data.topicId;
         this.topicCode = response.data.topicCode;
         this.form.topiccont = response.data.topicContent;
-        this.form.topictype = response.data.topicSort
+        this.form.topictype = Number(response.data.topicSort)
         this.form.topictixing = response.data.topicType
         this.topicAnswer = response.data.topicAnswer;
         this.topicOptionsList = response.data.topicOptionsList;
@@ -582,82 +596,84 @@ export default {
     },
     /** 提交按钮 */
     submitForm: function() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          //判断选项至少要有一个正确的
-          if (this.form.topictixing != 3) {
-            let errshuliang = 0
-            this.topicOptionsList.forEach((v,i) => {
-              if (v.optionsState == '1') {
-                errshuliang = errshuliang + 1
-              }
-            });
-            if (errshuliang == 0) {
-              this.$alert('至少选择一个正确答案', {
-                confirmButtonText: '确定',
-              });
-              return
-            }
-          }
+      
+      console.log(this.form.topictype);
+      // this.$refs["form"].validate(valid => {
+      //   if (valid) {
+      //     //判断选项至少要有一个正确的
+      //     if (this.form.topictixing != 3) {
+      //       let errshuliang = 0
+      //       this.topicOptionsList.forEach((v,i) => {
+      //         if (v.optionsState == '1') {
+      //           errshuliang = errshuliang + 1
+      //         }
+      //       });
+      //       if (errshuliang == 0) {
+      //         this.$alert('至少选择一个正确答案', {
+      //           confirmButtonText: '确定',
+      //         });
+      //         return
+      //       }
+      //     }
           
-          //判断题选项且至少要有一个正确的
-          if (this.form.topictixing == 3) {
-            this.topicOptionsList = []
-          }
-          //单选题至少要有一个正确的
-          if (this.form.topictixing == 1) {
-            let shuliang = 0
-            this.topicOptionsList.forEach((v,i) => {
-              if (v.optionsState == '1') {
-                shuliang = shuliang + 1
-              }
-            });
-            if (shuliang > 1) {
-              this.$alert('正确答案不能超过一个', {
-                confirmButtonText: '确定',
-              });
-              return
-            }
-          }
-          // console.log(this.form);
-          // console.log(this.topicId);
-          // console.log(this.topicCode);
-          // console.log(this.topicOptionsList);
-          // console.log(this.topicAnswer);
-          if (this.open2) {
-            updateQuestionBank({
-              topicId:this.topicId,
-              topicCode:this.topicCode,
-              topicContent:this.form.topiccont,
-              topicSort:this.form.topictype,
-              topicType:this.form.topictixing,
-              topicOptionsList:this.topicOptionsList,
-              answerAnalysis:this.form.remark,
-              topicAnswer:this.topicAnswer,
-            }).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.open3 = false;
-              this.getList();
-            });
-          } else {
-            addQuestionBank({
-              topicCode:this.topicCode,
-              topicContent:this.form.topiccont,
-              topicSort:this.form.topictype,
-              topicType:this.form.topictixing,
-              topicAnswer:this.topicAnswer,
-              topicOptionsList:this.topicOptionsList,
-              answerAnalysis:this.form.remark,
-            }).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.open3 = false;
-              this.getList();
-            });
-          }
-        }
-      });
+      //     //判断题选项且至少要有一个正确的
+      //     if (this.form.topictixing == 3) {
+      //       this.topicOptionsList = []
+      //     }
+      //     //单选题至少要有一个正确的
+      //     if (this.form.topictixing == 1) {
+      //       let shuliang = 0
+      //       this.topicOptionsList.forEach((v,i) => {
+      //         if (v.optionsState == '1') {
+      //           shuliang = shuliang + 1
+      //         }
+      //       });
+      //       if (shuliang > 1) {
+      //         this.$alert('正确答案不能超过一个', {
+      //           confirmButtonText: '确定',
+      //         });
+      //         return
+      //       }
+      //     }
+      //     // console.log(this.form);
+      //     // console.log(this.topicId);
+      //     // console.log(this.topicCode);
+      //     // console.log(this.topicOptionsList);
+      //     // console.log(this.topicAnswer);
+      //     if (this.open2) {
+      //       updateQuestionBank({
+      //         topicId:this.topicId,
+      //         topicCode:this.topicCode,
+      //         topicContent:this.form.topiccont,
+      //         topicSort:this.form.topictype,
+      //         topicType:this.form.topictixing,
+      //         topicOptionsList:this.topicOptionsList,
+      //         answerAnalysis:this.form.remark,
+      //         topicAnswer:this.topicAnswer,
+      //       }).then(response => {
+      //         this.$modal.msgSuccess("修改成功");
+      //         this.open = false;
+      //         this.open3 = false;
+      //         this.getList();
+      //       });
+      //     } else {
+      //       addQuestionBank({
+      //         topicCode:this.topicCode,
+      //         topicContent:this.form.topiccont,
+      //         topicSort:this.form.topictype,
+      //         topicType:this.form.topictixing,
+      //         topicAnswer:this.topicAnswer,
+      //         topicOptionsList:this.topicOptionsList,
+      //         answerAnalysis:this.form.remark,
+      //       }).then(response => {
+      //         this.$modal.msgSuccess("新增成功");
+      //         this.open = false;
+      //         this.open3 = false;
+      //         this.getList();
+      //       });
+      //     }
+      //   }
+      // });
     },
     /** 删除按钮操作 */
     handleDelete(row) {
