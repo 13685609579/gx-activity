@@ -2,6 +2,7 @@ package com.ruoyi.exam.util;
 
 import com.ruoyi.common.utils.uuid.UUID;
 
+import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 
 public class DataUtils {
@@ -35,6 +36,12 @@ public class DataUtils {
             value = b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).doubleValue();
         }
         return value;
+    }
+
+    public static void appCheck(HttpServletRequest request){
+        if (!SecretKeyCheckUtil.appCheck(request.getHeader("sign"), request.getHeader("timestamp"))) {
+            throw new RuntimeException("md5校验失败");
+        }
     }
 
 }

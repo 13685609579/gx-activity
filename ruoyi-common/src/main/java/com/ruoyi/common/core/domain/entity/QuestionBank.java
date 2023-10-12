@@ -33,7 +33,7 @@ public class QuestionBank extends BaseEntity
     private String topicContent;
 
     /** 题目分类（1：法治思想 2：民法典 3：宪法 4：党内法规 5：行政处罚法） */
-    @Excel(name = "题目分类", readConverterExp = "1=法治思想,2=民法典,3=宪法,4=党内法规,5=行政处罚法")
+    @Excel(name = "题目分类", readConverterExp = "30=法治思想,31=民法典,32=宪法,33=党内法规,100=行政处罚法")
     private String topicSort;
 
     /** 题目类型（1：单选题 2：多选题 3：判断题） */

@@ -14,29 +14,44 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 考生考题关联表
+ * 司法考试-试卷表
  * </p>
  *
- * @author hougq
- * @since 2023-09-28
+ * @author yxp
+ * @since 2023-10-11
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-@TableName("candidate_exam_relate")
-@ApiModel(value="CandidateExamRelate对象", description="考生考题关联表")
-public class CandidateExamRelate implements Serializable {
+@TableName("exam_paper")
+@ApiModel(value="ExamPaper对象", description="司法考试-试卷表")
+public class ExamPaper implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键ID")
-    @TableId(value = "relate_id", type = IdType.AUTO)
-    private String relateId;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
+
+    @ApiModelProperty(value = "考生试卷状态ID")
+    private Long paperStateId;
+
+    @ApiModelProperty(value = "题库ID")
+    private String topicId;
+
+    @ApiModelProperty(value = "试卷题目状态（0：已答 1：未答）")
+    private String topicState;
 
     @ApiModelProperty(value = "考生ID")
     private String candidateId;
 
-    @ApiModelProperty(value = "考题ID")
-    private String examQuestionId;
+    @ApiModelProperty(value = "考试管理ID")
+    private String examId;
+
+    @ApiModelProperty(value = "试卷题目序号")
+    private Integer topicNum;
+
+    @ApiModelProperty(value = "题目提交时间")
+    private String topicSubmitTime;
 
     @ApiModelProperty(value = "数据状态（0：正常  1：删除）")
     private String delFlag;

@@ -58,7 +58,7 @@ public class LawExamServiceImpl extends ServiceImpl<LawExamMapper, LawExamVo> im
         if(null != examManage && StringUtils.equals("1", examManage.getPublishState())){
             //题目分类、学时
             CandidateInfo candidateInfo = new CandidateInfo();
-            candidateInfo.setOpenId(openId);
+            candidateInfo.setCandidateId(openId);
             candidateInfo = candidateInfoMapper.selectCandidateInfo(candidateInfo);
             ClassHourVo classHourVo = new ClassHourVo();
             classHourVo.setExamId(examManage.getExamId());

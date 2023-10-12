@@ -1,6 +1,7 @@
 package com.ruoyi.exam.controller;
 
 
+import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -9,10 +10,12 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.exam.domain.CandidateInfo;
 import com.ruoyi.exam.domain.ExamManage;
 import com.ruoyi.exam.service.CandidateInfoService;
+import com.ruoyi.exam.util.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
@@ -36,7 +39,9 @@ public class CandidateInfoController extends BaseController {
      * @return
      */
     @GetMapping("/verify")
-    public AjaxResult verifyCandidateInfo(String openId){
+    @Anonymous
+    public AjaxResult verifyCandidateInfo(HttpServletRequest request, String openId){
+//        DataUtils.appCheck(request);
         AjaxResult ajaxResult = candidateInfoService.verifyCandidateInfo(openId);
         return ajaxResult;
     }
@@ -48,8 +53,10 @@ public class CandidateInfoController extends BaseController {
      */
     @Log(title = "注册考生信息", businessType = BusinessType.INSERT)
     @PostMapping(value = "/signInCandidateInfo")
-    public AjaxResult signInCandidateInfo(@Validated @RequestBody CandidateInfo candidateInfo)
+    @Anonymous
+    public AjaxResult signInCandidateInfo(@Validated @RequestBody CandidateInfo candidateInfo, HttpServletRequest request)
     {
+        DataUtils.appCheck(request);
         //        questionBankManage.setCreateBy(getUsername());
         candidateInfo.setCreateBy("admin");
         return toAjax(candidateInfoService.signInCandidateInfo(candidateInfo));
@@ -61,8 +68,21 @@ public class CandidateInfoController extends BaseController {
      * @return
      */
     @GetMapping("/importantInformation")
-    public AjaxResult importantInformation(String openId){
+    @Anonymous
+    public AjaxResult importantInformation(HttpServletRequest request, String openId){
+        DataUtils.appCheck(request);
         return success(candidateInfoService.importantInformation(openId));
+    }
+
+    /**
+     * 修改考生信息
+     * @param candidateInfo
+     * @return
+     */
+    @Log(title = "修改考生信息", businessType = BusinessType.UPDATE)
+    @PostMapping(value = "/updateCandidateInfo")
+    public AjaxResult updateCandidateInfo(@Validated @RequestBody CandidateInfo candidateInfo){
+        return toAjax(candidateInfoService.updateCandidateInfo(candidateInfo));
     }
 
     /**
@@ -79,11 +99,11 @@ public class CandidateInfoController extends BaseController {
     }
 
     /**
-     * 修改考生状态
+     * 审核考生信息
      * @param candidateInfo
      * @return
      */
-    @Log(title = "修改考生状态", businessType = BusinessType.UPDATE)
+    @Log(title = "审核考生信息", businessType = BusinessType.UPDATE)
     @GetMapping(value = "/updatePersonState")
     public AjaxResult updatePersonState(CandidateInfo candidateInfo){
         return toAjax(candidateInfoService.updatePersonState(candidateInfo));

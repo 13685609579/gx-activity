@@ -14,28 +14,43 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 考题表
+ * 司法考试-考题表
  * </p>
  *
- * @author hougq
- * @since 2023-09-28
+ * @author yxp
+ * @since 2023-10-11
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("exam_question")
-@ApiModel(value="ExamQuestion对象", description="考题表")
+@ApiModel(value="ExamQuestion对象", description="司法考试-考题表")
 public class ExamQuestion implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键ID")
-    @TableId(value = "exam_question_id", type = IdType.AUTO)
-    private String examQuestionId;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
-    @ApiModelProperty(value = "题库ID")
+    @ApiModelProperty(value = "考生ID")
+    private String candidateId;
+
+    @ApiModelProperty(value = "考试管理ID")
+    private String examId;
+
+    @ApiModelProperty(value = "考题ID")
     private String topicId;
 
-    @ApiModelProperty(value = "数据状态（0：正常  1：删除）")
+    @ApiModelProperty(value = "考生答案")
+    private String candidateAnswer;
+
+    @ApiModelProperty(value = "答题结果是否正确（1：正确 0：错误）")
+    private String answerResult;
+
+    @ApiModelProperty(value = "考题题目序号")
+    private Integer topicNum;
+
+    @ApiModelProperty(value = "数据状态（0：正常 1：删除）")
     private String delFlag;
 
     @ApiModelProperty(value = "创建时间")

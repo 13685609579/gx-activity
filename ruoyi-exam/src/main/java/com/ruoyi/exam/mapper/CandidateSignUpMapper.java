@@ -8,7 +8,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * 考生报名表 Mapper 接口
  * </p>
  *
- * @author hougq
+ * @author yxp
  * @since 2023-10-09
  */
 public interface CandidateSignUpMapper extends BaseMapper<CandidateSignUp> {

@@ -33,6 +33,13 @@ public interface CandidateInfoService extends IService<CandidateInfo> {
     public ExamManageVo importantInformation(String openId);
 
     /**
+     * candidateInfo
+     * @param candidateInfo
+     * @return
+     */
+    public int updateCandidateInfo(CandidateInfo candidateInfo);
+
+    /**
      * 注册考生信息
      * @param candidateInfo
      * @return

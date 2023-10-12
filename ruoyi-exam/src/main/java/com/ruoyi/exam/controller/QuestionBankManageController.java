@@ -97,6 +97,17 @@ public class QuestionBankManageController extends BaseController {
     }
 
     /**
+     * 删除题目
+     * @param topicId
+     * @return
+     */
+    @Log(title = "删除题目", businessType = BusinessType.UPDATE)
+    @GetMapping(value = "/removeQuestionBank")
+    public AjaxResult removeQuestionBank(String topicId){
+        return toAjax(questionBankManageService.removeQuestionBank(topicId));
+    }
+
+    /**
      * 导入>下载模板
      * @param response
      */
