@@ -30,7 +30,7 @@ public interface TopicOptionsMapper extends BaseMapper<TopicOptions> {
     public int updateTopicOptions(TopicOptions topicOptions);
 
     /**
-     * 根据考题ID获取对应选项
+     * 根据题目ID获取对应选项
      * @param topicOptions
      * @return
      */

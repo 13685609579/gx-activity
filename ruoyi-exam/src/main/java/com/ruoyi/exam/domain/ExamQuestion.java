@@ -38,6 +38,12 @@ public class ExamQuestion implements Serializable {
     @ApiModelProperty(value = "考试管理ID")
     private String examId;
 
+    @ApiModelProperty(value = "考生答卷ID")
+    private Long paperStateId;
+
+    @ApiModelProperty(value = "题目分类（数据字典编码）")
+    private String topicSort;
+
     @ApiModelProperty(value = "考题ID")
     private String topicId;
 
@@ -71,6 +77,5 @@ public class ExamQuestion implements Serializable {
 
     @ApiModelProperty(value = "备注")
     private String remark;
-
 
 }

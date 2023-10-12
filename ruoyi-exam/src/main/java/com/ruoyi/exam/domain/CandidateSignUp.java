@@ -12,16 +12,16 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 考生报名表
+ * 考司法考试-生报名表
  * </p>
  *
- * @author hougq
+ * @author yxp
  * @since 2023-10-09
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("candidate_sign_up")
-@ApiModel(value="CandidateSignUp对象", description="考生报名表")
+@ApiModel(value="CandidateSignUp对象", description="司法考试-考生报名表")
 public class CandidateSignUp implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -44,6 +44,9 @@ public class CandidateSignUp implements Serializable {
 
     @ApiModelProperty(value = "考试管理ID")
     private String examId;
+
+    @ApiModelProperty(value = "题目分类（数据字典编码）")
+    private String topicSort;
 
     @ApiModelProperty(value = "数据状态（0：正常  1：删除）")
     private String delFlag;

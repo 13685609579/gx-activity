@@ -16,16 +16,16 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 考生信息表
+ * 司法考试-考生信息表
  * </p>
  *
- * @author hougq
+ * @author yxp
  * @since 2023-09-28
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("candidate_info")
-@ApiModel(value="CandidateInfo对象", description="考生信息表")
+@ApiModel(value="CandidateInfo对象", description="司法考试-考生信息表")
 public class CandidateInfo extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

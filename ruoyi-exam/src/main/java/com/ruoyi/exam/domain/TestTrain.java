@@ -14,16 +14,16 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 测试训练表
+ * 司法考试-测试训练表
  * </p>
  *
- * @author hougq
+ * @author yxp
  * @since 2023-09-28
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("test_train")
-@ApiModel(value="TestTrain对象", description="测试训练表")
+@ApiModel(value="TestTrain对象", description="司法考试-测试训练表")
 public class TestTrain implements Serializable {
 
     private static final long serialVersionUID = 1L;

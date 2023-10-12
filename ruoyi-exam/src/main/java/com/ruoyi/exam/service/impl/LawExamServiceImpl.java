@@ -65,7 +65,7 @@ public class LawExamServiceImpl extends ServiceImpl<LawExamMapper, LawExamVo> im
             classHourVo.setPersonType(candidateInfo.getPersonCategory());
             classHourVo.setCandidateId(openId);
             classHourVo.setExamId(examManage.getExamId());
-            List<DictLabelClassHourVo> labelClassHourVoList = dictLabelClassHourMapper.getDictCodeClassHours(classHourVo);
+            List<DictLabelClassHourVo> labelClassHourVoList = dictLabelClassHourMapper.getTopicSortClassHours(classHourVo);
             if(null != labelClassHourVoList && labelClassHourVoList.size()>0){
                 labelClassHourVoList.stream().forEach(m->{
                     m.setTargetHours(m.getTargetHours().substring(0, m.getTargetHours().indexOf(".")));

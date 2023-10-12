@@ -16,16 +16,16 @@ import java.util.Map;
 
 /**
  * <p>
- * 考试管理表
+ * 司法考试-考试管理表
  * </p>
  *
- * @author hougq
+ * @author yxp
  * @since 2023-09-28
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("exam_manage")
-@ApiModel(value="ExamManage对象", description="考试管理表")
+@ApiModel(value="ExamManage对象", description="司法考试-考试管理表")
 public class ExamManage extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

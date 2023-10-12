@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 司法考试-考生试卷状态表
+ * 司法考试-考生答卷表
  * </p>
  *
  * @author yxp
@@ -23,7 +23,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("candidate_paper_state")
-@ApiModel(value="CandidatePaperState对象", description="司法考试-考生试卷状态表")
+@ApiModel(value="CandidatePaperState对象", description="司法考试-考生答卷表")
 public class CandidatePaperState implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -38,7 +38,10 @@ public class CandidatePaperState implements Serializable {
     @ApiModelProperty(value = "考试管理ID")
     private String examId;
 
-    @ApiModelProperty(value = "考试试卷状态（0：已结束 1：未结束）")
+    @ApiModelProperty(value = "题目分类（数据字典编码）")
+    private String topicSort;
+
+    @ApiModelProperty(value = "答卷状态（0：已结束 1：未结束）")
     private String paperState;
 
     @ApiModelProperty(value = "考试开始时间")

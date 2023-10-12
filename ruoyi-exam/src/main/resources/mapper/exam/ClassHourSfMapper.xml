@@ -17,7 +17,7 @@
         insert into class_hour_sf(
         <if test="hourId != null">hour_id,</if>
         <if test="examId != null">exam_id,</if>
-        <if test="dictCode != null">dict_code,</if>
+        <if test="topicSort != null">topic_sort,</if>
         <if test="targetHours != null and targetHours != ''">target_hours,</if>
         <if test="personType != null and personType != ''">person_type,</if>
         del_flag,
@@ -27,7 +27,7 @@
         )values(
         <if test="hourId != null">#{hourId},</if>
         <if test="examId != null">#{examId},</if>
-        <if test="dictCode != null">#{dictCode},</if>
+        <if test="topicSort != null">#{topicSort},</if>
         <if test="targetHours != null and targetHours != ''">#{targetHours},</if>
         <if test="personType != null and personType != ''">#{personType},</if>
         0,
@@ -59,7 +59,7 @@
 
     <select id="getPersonLabelHour" parameterType="String" resultType="com.ruoyi.exam.domain.vo.PersonClassHourVo">
         SELECT tbl1.hour_id as hourId, tbl1.person_type as personType, tbl2.dict_label as dictLabel, sum(tbl1.target_hours) as targetHours
-        FROM class_hour_sf tbl1 LEFT JOIN sys_dict_data tbl2 on tbl1.dict_code = tbl2.dict_code
+        FROM class_hour_sf tbl1 LEFT JOIN sys_dict_data tbl2 on tbl1.topic_sort = tbl2.dict_code
         where tbl1.del_flag = 0
         <if test="examId != null and examId != ''">
             AND tbl1.exam_id = #{examId}

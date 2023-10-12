@@ -29,7 +29,7 @@ public interface QuestionBankManageMapper extends BaseMapper<QuestionBankManage>
      * @param questionBankManage
      * @return
      */
-    public List<QuestionBankManage> selectExamQuestion(QuestionBankManage questionBankManage);
+    public List<QuestionBankManage> selectCandidatePaper(QuestionBankManage questionBankManage);
 
     /**
      * 获取最新一条题目

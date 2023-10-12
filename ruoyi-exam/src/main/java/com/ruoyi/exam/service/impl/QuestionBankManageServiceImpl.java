@@ -218,8 +218,11 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
                 }
                 questionBankManage.setTopicCode(getTopicCode());
                 questionBankManage.setTopicContent(questionBank.getTopicContent());
-                questionBankManage.setTopicSort(questionBank.getTopicSort());
                 questionBankManage.setTopicType(questionBank.getTopicType());
+                SysDictData sysDictData = sysDictDataMapper.selectDictDataByLabel(questionBank.getTopicSort());
+                if(null != sysDictData){
+                    questionBankManage.setTopicSort(questionBank.getTopicSort());
+                }
                 if(StringUtils.equals("1", questionBank.getTopicType()) || StringUtils.equals("3", questionBank.getTopicType())){
                     questionBankManage.setPerScore("2");
                 }

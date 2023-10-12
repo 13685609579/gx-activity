@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.exam.mapper.DictLabelClassHourMapper">
 
-    <select id="getDictCodeClassHours" parameterType="com.ruoyi.exam.domain.vo.ClassHourVo" resultType="com.ruoyi.exam.domain.vo.DictLabelClassHourVo">
-        select tbl3.dict_label as dictLabel, tbl1.targetHours, case when tbl2.classHour is null then '0' else tbl2.classHour end classHour from
+    <select id="getTopicSortClassHours" parameterType="com.ruoyi.exam.domain.vo.ClassHourVo" resultType="com.ruoyi.exam.domain.vo.DictLabelClassHourVo">
+        select tbl3.dict_code as topicSort, tbl3.dict_label as dictLabel, tbl1.targetHours, case when tbl2.classHour is null then '0' else tbl2.classHour end classHour from
         (
-        SELECT dict_code, sum(target_hours) as targetHours FROM class_hour_sf
+        SELECT topic_sort, sum(target_hours) as targetHours FROM class_hour_sf
         where del_flag = 0
         <if test="examId != null and examId != ''">
             AND exam_id = #{examId}
@@ -13,18 +13,18 @@
         <if test="personType != null and personType != ''">
             AND person_type = #{personType}
         </if>
-        group by dict_code
+        group by topic_sort
         ) tbl1
         left join
         (
-        select dict_code,  sum(class_hour) as classHour from person_class_hour
+        select topic_sort, sum(class_hour) as classHour from person_class_hour
         where del_flag = 0
         <if test="null != candidateId and '' != candidateId">and candidate_id = #{candidateId}</if>
         <if test="examId != null and examId != ''">
             AND exam_id = #{examId}
         </if>
-        group by dict_code
-        ) tbl2 on tbl1.dict_code = tbl2.dict_code LEFT JOIN sys_dict_data tbl3 on tbl1.dict_code = tbl3.dict_code
+        group by topic_sort
+        ) tbl2 on tbl1.topic_sort = tbl2.topic_sort LEFT JOIN sys_dict_data tbl3 on tbl1.topic_sort = tbl3.dict_code
     </select>
 
 </mapper>

@@ -17,16 +17,16 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 题库管理表
+ * 司法考试-题库管理表
  * </p>
  *
- * @author hougq
+ * @author yxp
  * @since 2023-09-28
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("question_bank_manage")
-@ApiModel(value="QuestionBankManage对象", description="题库管理表")
+@ApiModel(value="QuestionBankManage对象", description="司法考试-题库管理表")
 public class QuestionBankManage extends BaseEntity {
 
     private static final long serialVersionUID = 1L;
@@ -44,7 +44,7 @@ public class QuestionBankManage extends BaseEntity {
     @ApiModelProperty(value = "题目内容")
     private String topicContent;
 
-    @ApiModelProperty(value = "题目分类（30：法治思想 31：民法典 32：宪法 33：党内法规 100：行政处罚法）")
+    @ApiModelProperty(value = "题目分类（数据字典编码）")
     private String topicSort;
     private String topicSortName;
 

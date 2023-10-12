@@ -32,23 +32,26 @@ public class ExamPaper implements Serializable {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty(value = "考生试卷状态ID")
-    private Long paperStateId;
-
-    @ApiModelProperty(value = "题库ID")
-    private String topicId;
-
-    @ApiModelProperty(value = "试卷题目状态（0：已答 1：未答）")
-    private String topicState;
-
     @ApiModelProperty(value = "考生ID")
     private String candidateId;
 
     @ApiModelProperty(value = "考试管理ID")
     private String examId;
 
+    @ApiModelProperty(value = "考生答卷ID")
+    private Long paperStateId;
+
+    @ApiModelProperty(value = "题库ID")
+    private String topicId;
+
+    @ApiModelProperty(value = "题目分类（数据字典编码）")
+    private String topicSort;
+
     @ApiModelProperty(value = "试卷题目序号")
     private Integer topicNum;
+
+    @ApiModelProperty(value = "试卷题目状态（0：已答 1：未答）")
+    private String topicState;
 
     @ApiModelProperty(value = "题目提交时间")
     private String topicSubmitTime;

@@ -99,7 +99,9 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
             classHourSf.setPersonType(candidateInfo.getPersonCategory());
             String targetHours = classHourSfMapper.getTargetHours(classHourSf);
             if(StringUtils.isNotEmpty(targetHours) && StringUtils.isNotBlank(targetHours)){
-                targetHours = targetHours.substring(0, targetHours.indexOf("."));
+                if(targetHours.contains(".")){
+                    targetHours = targetHours.substring(0, targetHours.indexOf("."));
+                }
             }else{
                 targetHours = "0";
             }
@@ -108,7 +110,9 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
             personClassHour.setExamId(examManage.getExamId());
             String acquiredHours = personClassHourMapper.getAcquiredHours(personClassHour);
             if(StringUtils.isNotEmpty(acquiredHours) && StringUtils.isNotBlank(acquiredHours)){
-                acquiredHours = acquiredHours.substring(0, acquiredHours.indexOf("."));
+                if(acquiredHours.contains(".")){
+                    acquiredHours = acquiredHours.substring(0, acquiredHours.indexOf("."));
+                }
             }else{
                 acquiredHours = "0";
             }

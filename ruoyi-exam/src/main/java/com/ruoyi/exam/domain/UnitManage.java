@@ -13,7 +13,7 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 考生单位管理表
+ * 司法考试-考生单位管理表
  * </p>
  *
  * @author yxp
@@ -22,7 +22,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("unit_manage")
-@ApiModel(value="UnitManage对象", description="考生单位管理表")
+@ApiModel(value="UnitManage对象", description="司法考试-考生单位管理表")
 public class UnitManage extends BaseEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;

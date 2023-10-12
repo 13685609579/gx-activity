@@ -7,15 +7,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * <p>
- * 考生考题关联表 前端控制器
+ * 司法考试-考生试卷状态表 前端控制器
  * </p>
  *
- * @author hougq
- * @since 2023-09-28
+ * @author yxp
+ * @since 2023-10-11
  */
 @RestController
-@RequestMapping("/candidate-exam-relate")
-public class CandidateExamRelateController {
+@RequestMapping("/candidate-paper-state")
+public class CandidatePaperStateController {
 
 }
 

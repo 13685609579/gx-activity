@@ -21,6 +21,6 @@ public interface DictLabelClassHourMapper extends BaseMapper<DictLabelClassHourV
      * @param classHourVo
      * @return
      */
-    public List<DictLabelClassHourVo> getDictCodeClassHours(ClassHourVo classHourVo);
+    public List<DictLabelClassHourVo> getTopicSortClassHours(ClassHourVo classHourVo);
 
 }

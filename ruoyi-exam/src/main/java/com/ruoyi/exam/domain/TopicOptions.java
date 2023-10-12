@@ -16,16 +16,16 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 题目选项字典表
+ * 司法考试-题目选项字典表
  * </p>
  *
- * @author hougq
+ * @author yxp
  * @since 2023-09-28
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("topic_options")
-@ApiModel(value="TopicOptions对象", description="题目选项字典表")
+@ApiModel(value="TopicOptions对象", description="司法考试-题目选项字典表")
 public class TopicOptions implements Serializable {
 
     private static final long serialVersionUID = 1L;

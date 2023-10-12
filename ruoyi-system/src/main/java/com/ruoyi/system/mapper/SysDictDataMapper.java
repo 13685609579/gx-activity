@@ -44,6 +44,8 @@ public interface SysDictDataMapper
      */
     public SysDictData selectDictDataById(Long dictCode);
 
+    public SysDictData selectDictDataByLabel(String dictLabel);
+
     /**
      * 查询字典数据
      * 

@@ -19,6 +19,11 @@ public class DictLabelClassHourVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 题目分类编码
+     */
+    private String topicSort;
+
+    /**
      * 题目分类名称
      */
     private String dictLabel;

@@ -22,4 +22,11 @@ public interface PersonClassHourMapper extends BaseMapper<PersonClassHour> {
      */
     public String getAcquiredHours(PersonClassHour personClassHour);
 
+    /**
+     * 获取当前考生当前分类考试已获学时
+     * @param personClassHour
+     * @return
+     */
+    public int getCandidateClassHours(PersonClassHour personClassHour);
+
 }

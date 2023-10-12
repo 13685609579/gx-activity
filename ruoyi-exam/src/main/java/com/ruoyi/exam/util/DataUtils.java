@@ -4,6 +4,8 @@ import com.ruoyi.common.utils.uuid.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 public class DataUtils {
 
@@ -42,6 +44,22 @@ public class DataUtils {
         if (!SecretKeyCheckUtil.appCheck(request.getHeader("sign"), request.getHeader("timestamp"))) {
             throw new RuntimeException("md5校验失败");
         }
+    }
+
+    /**
+     * 获取指定时间毫秒数
+     * @param date
+     * @return
+     */
+    public static long getTimeMillis(String date){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        long timeM = 0;
+        try {
+            timeM = sdf.parse(date).getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return timeM;
     }
 
 }

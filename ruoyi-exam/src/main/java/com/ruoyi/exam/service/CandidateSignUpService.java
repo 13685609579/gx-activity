@@ -1,9 +1,12 @@
 package com.ruoyi.exam.service;
 
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.exam.domain.CandidatePaperState;
 import com.ruoyi.exam.domain.CandidateSignUp;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.exam.domain.vo.CandidateSignUpVo;
+
+import java.util.Map;
 
 /**
  * <p>
@@ -21,5 +24,7 @@ public interface CandidateSignUpService extends IService<CandidateSignUp> {
      * @return
      */
     public AjaxResult insertCandidateSignUpData(CandidateSignUpVo candidateSignUpVo);
+
+    public Map<String, Object> getCandidatePaperList(CandidatePaperState candidatePaperState, CandidateSignUpVo candidateSignUpVo);
 
 }

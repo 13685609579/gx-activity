@@ -16,16 +16,16 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 司法人员学时管理表
+ * 司法考试-题目分类学时管理表
  * </p>
  *
- * @author hougq
+ * @author yxp
  * @since 2023-10-08
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("class_hour_sf")
-@ApiModel(value="ClassHourSf对象", description="司法人员学时管理表")
+@ApiModel(value="ClassHourSf对象", description="司法考试-题目分类学时管理表")
 public class ClassHourSf implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -37,8 +37,8 @@ public class ClassHourSf implements Serializable {
     @ApiModelProperty(value = "考试管理ID")
     private String examId;
 
-    @ApiModelProperty(value = "字典编码")
-    private Long dictCode;
+    @ApiModelProperty(value = "题目分类（数据字典编码）")
+    private String topicSort;
 
     @ApiModelProperty(value = "目标学时")
     private String targetHours;
