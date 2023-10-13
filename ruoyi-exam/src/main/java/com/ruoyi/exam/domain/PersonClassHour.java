@@ -30,7 +30,7 @@ public class PersonClassHour implements Serializable {
 
     @ApiModelProperty(value = "主键ID")
     @TableId(value = "class_hour_id", type = IdType.AUTO)
-    private String classHourId;
+    private Long classHourId;
 
     @ApiModelProperty(value = "考生ID")
     private String candidateId;

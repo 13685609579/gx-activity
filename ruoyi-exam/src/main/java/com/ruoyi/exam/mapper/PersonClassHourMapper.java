@@ -27,6 +27,6 @@ public interface PersonClassHourMapper extends BaseMapper<PersonClassHour> {
      * @param personClassHour
      * @return
      */
-    public int getCandidateClassHours(PersonClassHour personClassHour);
+    public Integer getCandidateClassHours(PersonClassHour personClassHour);
 
 }

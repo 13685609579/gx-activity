@@ -58,4 +58,7 @@ public class CandidateSignUpVo implements Serializable {
     //试卷题目总条数
     private int topicTotal;
 
+    //查看答题卡来源（1：提交试卷 2：答题卡按钮）
+    private int source;
+
 }

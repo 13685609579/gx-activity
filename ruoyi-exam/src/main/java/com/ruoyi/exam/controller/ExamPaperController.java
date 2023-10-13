@@ -47,7 +47,28 @@ public class ExamPaperController extends BaseController {
 //        DataUtils.appCheck(request);
 //        candidateSignUpVo.setUpdateBy(getUsername());
         candidateSignUpVo.setUpdateBy("admin");
-        return toAjax(examPaperService.examNextTopic(candidateSignUpVo));
+        AjaxResult ajaxResult = examPaperService.examNextTopic(candidateSignUpVo);
+        return ajaxResult;
+    }
+
+    /**
+     * 考试-提交试卷
+     * @param candidateSignUpVo
+     * @param request
+     * @return
+     */
+    @Log(title = "提交试卷", businessType = BusinessType.INSERT)
+    @PostMapping(value = "/submitTestPaper")
+    @Anonymous
+    public AjaxResult submitTestPaper(@Validated @RequestBody CandidateSignUpVo candidateSignUpVo, HttpServletRequest request)
+    {
+//        DataUtils.appCheck(request);
+        //candidateSignUpVo.setCreateBy(getUsername());
+        //candidateSignUpVo.setUpdateBy(getUsername());
+        candidateSignUpVo.setCreateBy("admin");
+        candidateSignUpVo.setUpdateBy("admin");
+        AjaxResult ajaxResult = examPaperService.submitTestPaper(candidateSignUpVo);
+        return ajaxResult;
     }
 
 

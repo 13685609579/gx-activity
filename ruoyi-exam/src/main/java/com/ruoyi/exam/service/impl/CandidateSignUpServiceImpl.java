@@ -54,6 +54,9 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
     @Autowired
     private SysDictDataMapper sysDictDataMapper;
 
+    @Autowired
+    private ExamQuestionMapper examQuestionMapper;
+
     /**
      * 添加考生报名信息
      * @param candidateSignUpVo
@@ -151,7 +154,6 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
                     .eq(ExamPaper::getExamId, paperState.getExamId())
                     .eq(ExamPaper::getTopicSort, candidateSignUpVo.getTopicSort())
                     .eq(ExamPaper::getPaperStateId, paperState.getId())
-                    .eq(ExamPaper::getTopicState, 1)
                     .eq(ExamPaper::getDelFlag, 0);
             List<ExamPaper> examPaperList = examPaperMapper.selectList(queryWrapper2);
             if(null != examPaperList && examPaperList.size()>0){
@@ -160,13 +162,26 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
                     QuestionBankManage questionBankManage = questionBankManageMapper.questionBankInfo(examPaper.getTopicId());
                     getQuestionBankManage(questionBankManage);
                     questionBankManage.setTopicNum(String.valueOf(examPaper.getTopicNum()));
+                    questionBankManage.setTopicState(examPaper.getTopicState());
+                    if(StringUtils.equals("0", examPaper.getTopicState())){
+                        LambdaQueryWrapper<ExamQuestion> wrapper = new LambdaQueryWrapper<>();
+                        wrapper.eq(ExamQuestion::getCandidateId, examPaper.getCandidateId())
+                                .eq(ExamQuestion::getExamId, examPaper.getExamId())
+                                .eq(ExamQuestion::getTopicId, examPaper.getTopicId())
+                                .eq(ExamQuestion::getPaperStateId, examPaper.getPaperStateId())
+                                .eq(ExamQuestion::getTopicSort, examPaper.getTopicSort())
+                                .eq(ExamQuestion::getTopicNum, examPaper.getTopicNum())
+                                .eq(ExamQuestion::getDelFlag, 0);
+                        ExamQuestion examQuestion = examQuestionMapper.selectOne(wrapper);
+                        if(null != examQuestion){
+                            questionBankManage.setCandidateAnswer(examQuestion.getCandidateAnswer());
+                        }
+                    }
                     list.add(questionBankManage);
                 }
             }
-            long timeM = DataUtils.getTimeMillis(paperState.getStartTime());
-            long tm = System.currentTimeMillis(); //获取当前毫秒数
-            long distance = tm - timeM;
-            if(distance<=0){
+            boolean overTimeStatus = overTimeStatus(paperState.getStartTime());
+            if(!overTimeStatus){
                 examPaperData.put("resumeExamStatus", 1);
             }
         }else{ //当前考生不存在正在进行中的试卷
@@ -194,6 +209,7 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
             if(null != list && list.size()>0){
                 for(int i=0; i<list.size(); i++){
                     QuestionBankManage bankManage = list.get(i);
+                    bankManage.setTopicState("0");
                     getQuestionBankManage(bankManage);
                     insertExamPaperData(bankManage, candidateSignUpVo, paperStateId);
                 }
@@ -202,7 +218,7 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
         }
         candidateSignUpVo.setRemainTime(remainTime);
         candidateSignUpVo.setPaperStateId(paperStateId);
-        candidateSignUpVo.setTopicTotal(34);
+        candidateSignUpVo.setTopicTotal(list.size());
         examPaperData.put("examPaperData", list);
         examPaperData.put("candidateSignUpVo", candidateSignUpVo);
         return examPaperData;
@@ -253,6 +269,39 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
         examPaper.setCreateTime(DateUtils.getNowDate());
         examPaper.setCreateBy(candidateSignUpVo.getCreateBy());
         examPaperMapper.insert(examPaper);
+    }
+
+    /**
+     * 获取数据字典剩余考试时间
+     * @return
+     */
+    public long remainTime(){
+        long remainTime = 0;
+        List<SysDictData> sysDictDataList = sysDictDataMapper.selectDictDataByType("remain_time");
+        if(null != sysDictDataList && sysDictDataList.size()>0){
+            String dictValue = sysDictDataList.get(0).getDictValue();
+            if(StringUtils.isNotEmpty(dictValue) && StringUtils.isNotBlank(dictValue)){
+                remainTime = Long.valueOf(Integer.parseInt(dictValue)*60*1000);
+            }
+        }
+        return remainTime;
+    }
+
+    /**
+     * 判断当前考生考试是否超时
+     * @param time
+     * @return
+     */
+    public boolean overTimeStatus(String time){
+        long remainTime = remainTime();
+        long timeM = DataUtils.getTimeMillis(time);
+        long tm = System.currentTimeMillis(); //获取当前毫秒数
+        long distance = tm - timeM;
+        boolean b = false;
+        if(distance>=remainTime){
+            b = true;
+        }
+        return b;
     }
 
 }

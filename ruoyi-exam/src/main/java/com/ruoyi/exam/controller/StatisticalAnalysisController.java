@@ -67,11 +67,11 @@ public class StatisticalAnalysisController extends BaseController {
     }
 
     /**
-     * 统计分析列表导出
+     * 统计分析-列表导出
      * @param response
      * @param candidateClassHourVo
      */
-    @Log(title = "统计分析导出列表", businessType = BusinessType.EXPORT)
+    @Log(title = "统计分析-导出列表", businessType = BusinessType.EXPORT)
     @PostMapping("/exportList")
     public void exportList(HttpServletResponse response, CandidateClassHourVo candidateClassHourVo)
     {
@@ -94,11 +94,11 @@ public class StatisticalAnalysisController extends BaseController {
     }
 
     /**
-     * 统计分析详情列表导出
+     * 统计分析-详情列表导出
      * @param response
      * @param detailsVo
      */
-    @Log(title = "统计分析详情列表导出", businessType = BusinessType.EXPORT)
+    @Log(title = "统计分析-详情列表导出", businessType = BusinessType.EXPORT)
     @PostMapping("/exportDetailsList")
     public void exportDetailsList(HttpServletResponse response, StatisticalAnalysisDetailsVo detailsVo)
     {

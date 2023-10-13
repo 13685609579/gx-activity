@@ -82,6 +82,12 @@ public class QuestionBankManage extends BaseEntity {
     @ApiModelProperty(value = "备注")
     private String remark;
 
+    //试卷题目状态（0：已答 1：未答）"
+    private String topicState;
+
+    //考生答案
+    private String candidateAnswer;
+
     /**
      * 题目选项
      */

@@ -20,7 +20,7 @@ public interface ExamPaperService extends IService<ExamPaper> {
      * @param candidateSignUpVo
      * @return
      */
-    public int examNextTopic(CandidateSignUpVo candidateSignUpVo);
+    public AjaxResult examNextTopic(CandidateSignUpVo candidateSignUpVo);
 
     /**
      * 提交试卷
