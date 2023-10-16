@@ -1,21 +1,131 @@
 package com.ruoyi.exam.controller;
 
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import com.ruoyi.common.annotation.Anonymous;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.exam.domain.TestTrain;
+import com.ruoyi.exam.service.TestTrainService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RestController;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * <p>
  * 测试训练表 前端控制器
  * </p>
  *
- * @author hougq
- * @since 2023-09-28
+ * @author yxp
+ * @since 2023-10-13
  */
 @RestController
 @RequestMapping("/test-train")
-public class TestTrainController {
+public class TestTrainController extends BaseController {
+
+    @Autowired
+    private TestTrainService testTrainService;
+
+    /**
+     * 测试训练
+     * @param candidateId 考生ID
+     * @param topicSort 题目分类
+     * @param dictType 字典类型（题目分类参数值topic_sort）
+     * @param request
+     * @return
+     */
+    @GetMapping(value = "/topicSortList")
+    @Anonymous
+    public AjaxResult topicSortList(String candidateId, String topicSort, String dictType, HttpServletRequest request)
+    {
+//        DataUtils.appCheck(request);
+        return success(testTrainService.topicSortList(candidateId, topicSort, dictType));
+    }
+
+    /**
+     * 测试训练-继续上次
+     * @param testTrain
+     * @param request
+     * @return
+     */
+    @GetMapping(value = "/continueLastTime")
+    @Anonymous
+    public AjaxResult continueLastTime(@Validated @RequestBody TestTrain testTrain, HttpServletRequest request)
+    {
+//        DataUtils.appCheck(request);
+        AjaxResult ajaxResult = testTrainService.continueLastTime(testTrain);
+        return ajaxResult;
+    }
+
+    /**
+     * 测试-结束答题
+     * @param testTrain
+     * @param request
+     * @return
+     */
+    @Log(title = "测试-结束答题", businessType = BusinessType.INSERT)
+    @PostMapping(value = "/endAnswer")
+    @Anonymous
+    public AjaxResult endAnswer(@Validated @RequestBody TestTrain testTrain, HttpServletRequest request)
+    {
+//        DataUtils.appCheck(request);
+        //candidateSignUpVo.setCreateBy(getUsername());
+        testTrain.setCreateBy("admin");
+        return success(testTrainService.endAnswer(testTrain));
+    }
+
+    /**
+     * 测试-提交
+     * @param testTrain
+     * @param request
+     * @return
+     */
+    @Log(title = "测试-提交", businessType = BusinessType.UPDATE)
+    @PostMapping(value = "/submitTest")
+    @Anonymous
+    public AjaxResult submitTest(@Validated @RequestBody TestTrain testTrain, HttpServletRequest request)
+    {
+//        DataUtils.appCheck(request);
+        //candidateSignUpVo.setUpdateBy(getUsername());
+        testTrain.setUpdateBy("admin");
+        AjaxResult ajaxResult = testTrainService.submitTest(testTrain);
+        return ajaxResult;
+    }
+
+    /**
+     * 测试训练-重新开始
+     * @param testTrain
+     * @param request
+     * @return
+     */
+    @GetMapping(value = "/restart")
+    @Anonymous
+    public AjaxResult restart(@Validated @RequestBody TestTrain testTrain, HttpServletRequest request)
+    {
+//        DataUtils.appCheck(request);
+        return success(testTrainService.restart(testTrain));
+    }
+
+    /**
+     * 测试训练-下一题
+     * @param testTrain
+     * @param request
+     * @return
+     */
+    @GetMapping(value = "/nextTestTopic")
+    @Anonymous
+    public AjaxResult nextTestTopic(@Validated @RequestBody TestTrain testTrain, HttpServletRequest request)
+    {
+//        DataUtils.appCheck(request);
+        AjaxResult ajaxResult = testTrainService.nextTestTopic(testTrain);
+        return ajaxResult;
+    }
+
+
+
 
 }
 
