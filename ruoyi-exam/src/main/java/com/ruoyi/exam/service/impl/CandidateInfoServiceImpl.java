@@ -1,16 +1,19 @@
 package com.ruoyi.exam.service.impl;
 
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.exam.domain.*;
 import com.ruoyi.exam.domain.vo.ExamManageVo;
+import com.ruoyi.exam.domain.vo.PersonClassHourVo;
 import com.ruoyi.exam.mapper.*;
 import com.ruoyi.exam.service.CandidateInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.system.mapper.SysDeptMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Wrapper;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,6 +41,31 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
 
     @Autowired
     private CandidateSignUpMapper candidateSignUpMapper;
+
+    @Autowired
+    private SysDeptMapper sysDeptMapper;
+
+    @Autowired
+    private CandidatePaperStateMapper candidatePaperStateMapper;
+
+    /**
+     * 当前考生信息
+     * @param openId
+     * @return
+     */
+    @Override
+    public CandidateInfo getCandidateInfo(String openId) {
+        CandidateInfo candidateInfo = new CandidateInfo();
+        candidateInfo.setCandidateId(openId);
+        candidateInfo = candidateInfoMapper.selectCandidateInfo(candidateInfo);
+        if(null != candidateInfo){
+            SysDept sysDept = sysDeptMapper.selectDeptById(Long.valueOf(candidateInfo.getUnitId()));
+            if(null != sysDept){
+                candidateInfo.setUnitName(sysDept.getDeptName());
+            }
+        }
+        return candidateInfo;
+    }
 
     /**
      * 校验考生信息
@@ -173,5 +201,51 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
     public int updatePersonState(CandidateInfo candidateInfo) {
         int row = candidateInfoMapper.updateCandidateInfo(candidateInfo);
         return row;
+    }
+
+    /**
+     * 考试记录
+     * @param cInfo
+     * @return
+     */
+    @Override
+    public List<ExamManageVo> examRecord(CandidateInfo cInfo) {
+        CandidatePaperState candidatePaperState = new CandidatePaperState();
+        candidatePaperState.setCandidateId(cInfo.getCandidateId());
+        List<CandidatePaperState> paperStateList = candidatePaperStateMapper.listCandidatePaperState(candidatePaperState);
+        List<ExamManageVo> voList = new ArrayList<ExamManageVo>();
+        if(null != paperStateList && paperStateList.size()>0){
+            for(int i=0; i<paperStateList.size(); i++){
+                ExamManageVo manageVo = new ExamManageVo();
+                CandidatePaperState paperState = paperStateList.get(i);
+                ExamManage examManage = examManageMapper.examManageInfo(paperState.getExamId());
+                manageVo.setExamId(examManage.getExamId());
+                manageVo.setExamTitle(examManage.getExamTitle());
+                manageVo.setPaperState(paperState.getPaperState());
+                manageVo.setStartTime(examManage.getStartTime());
+                manageVo.setEndTime(examManage.getEndTime());
+                manageVo.setExamYear(examManage.getExamYear());
+                CandidateInfo candidateInfo = new CandidateInfo();
+                candidateInfo.setCandidateId(cInfo.getCandidateId());
+                candidateInfo = candidateInfoMapper.selectCandidateInfo(candidateInfo);
+                ClassHourSf classHourSf = new ClassHourSf();
+                classHourSf.setExamId(examManage.getExamId());
+                classHourSf.setPersonType(candidateInfo.getPersonCategory());
+                PersonClassHourVo personClassHourVo = classHourSfMapper.getPersonTargetHour(classHourSf);
+                if(null != personClassHourVo){
+                    manageVo.setTargetHours(personClassHourVo.getTargetHours());
+                }
+                PersonClassHour personClassHour = new PersonClassHour();
+                personClassHour.setCandidateId(cInfo.getCandidateId());
+                personClassHour.setExamId(paperState.getExamId());
+                String acquiredHours = personClassHourMapper.getAcquiredHours(personClassHour);
+                if(acquiredHours.contains(".")){
+                    acquiredHours = acquiredHours.substring(0, acquiredHours.indexOf("."));
+                }
+                manageVo.setAcquiredHours(acquiredHours);
+                voList.add(manageVo);
+            }
+        }
+        return voList;
     }
 }

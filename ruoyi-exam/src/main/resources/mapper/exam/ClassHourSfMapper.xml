@@ -46,12 +46,25 @@
         where hour_id = #{hourId}
     </update>
 
-    <select id="getPersonClassHour" parameterType="String" resultType="com.ruoyi.exam.domain.vo.PersonClassHourVo">
+    <select id="getPersonClassHour" parameterType="com.ruoyi.exam.domain.ClassHourSf" resultType="com.ruoyi.exam.domain.vo.PersonClassHourVo">
         SELECT case when person_type = '1' then '执法司法人员' when person_type = '2' then '非执法司法人员' end personType,
         sum(target_hours) as targetHours FROM class_hour_sf
         where del_flag = 0
         <if test="examId != null and examId != ''">
             AND exam_id = #{examId}
+        </if>
+        group by person_type
+        order by person_type
+    </select>
+
+    <select id="getPersonTargetHour" parameterType="String" resultType="com.ruoyi.exam.domain.vo.PersonClassHourVo">
+        SELECT person_type, sum(target_hours) as targetHours FROM class_hour_sf
+        where del_flag = 0
+        <if test="examId != null and examId != ''">
+            AND exam_id = #{examId}
+        </if>
+        <if test="personType != null and personType != ''">
+            AND person_type = #{personType}
         </if>
         group by person_type
         order by person_type

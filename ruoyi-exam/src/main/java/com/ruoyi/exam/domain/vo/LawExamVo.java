@@ -22,6 +22,11 @@ public class LawExamVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 考试管理ID
+     */
+    private String examId;
+
+    /**
      * 题目分类、学时
      */
     private List<DictLabelClassHourVo> dictLabelClassHourVoList;

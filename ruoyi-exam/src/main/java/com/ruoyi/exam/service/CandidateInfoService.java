@@ -3,6 +3,7 @@ package com.ruoyi.exam.service;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.exam.domain.CandidateInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.ruoyi.exam.domain.CandidatePaperState;
 import com.ruoyi.exam.domain.ExamManage;
 import com.ruoyi.exam.domain.vo.ExamManageVo;
 
@@ -17,6 +18,13 @@ import java.util.List;
  * @since 2023-09-28
  */
 public interface CandidateInfoService extends IService<CandidateInfo> {
+
+    /**
+     * 当前考生信息
+     * @param openId
+     * @return
+     */
+    public CandidateInfo getCandidateInfo(String openId);
 
     /**
      * 校验考生信息
@@ -59,5 +67,12 @@ public interface CandidateInfoService extends IService<CandidateInfo> {
      * @return
      */
     public int updatePersonState(CandidateInfo candidateInfo);
+
+    /**
+     * 考试记录
+     * @param cInfo
+     * @return
+     */
+    public List<ExamManageVo> examRecord(CandidateInfo cInfo);
 
 }

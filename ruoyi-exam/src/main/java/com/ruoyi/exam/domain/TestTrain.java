@@ -14,23 +14,23 @@ import lombok.EqualsAndHashCode;
 
 /**
  * <p>
- * 司法考试-测试训练表
+ * 测试训练表
  * </p>
  *
  * @author yxp
- * @since 2023-09-28
+ * @since 2023-10-13
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("test_train")
-@ApiModel(value="TestTrain对象", description="司法考试-测试训练表")
+@ApiModel(value="TestTrain对象", description="测试训练表")
 public class TestTrain implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "主键ID")
-    @TableId(value = "test_id", type = IdType.AUTO)
-    private String testId;
+    @TableId(value = "id", type = IdType.AUTO)
+    private Long id;
 
     @ApiModelProperty(value = "考生ID")
     private String candidateId;
@@ -38,10 +38,25 @@ public class TestTrain implements Serializable {
     @ApiModelProperty(value = "题库ID")
     private String topicId;
 
+    @ApiModelProperty(value = "题目分类（数据字典编码）")
+    private String topicSort;
+
+    @ApiModelProperty(value = "题目类型（1：单选题 2：多选题 3：判断题）")
+    private String topicType;
+
+    @ApiModelProperty(value = "试卷题目序号")
+    private Integer topicNum;
+
+    @ApiModelProperty(value = "考生答案")
+    private String candidateAnswer;
+
     @ApiModelProperty(value = "答题结果是否正确（1：正确 0：错误）")
     private String answerResult;
 
-    @ApiModelProperty(value = "数据状态（0：正常  1：删除）")
+    @ApiModelProperty(value = "答案解析")
+    private String answerAnalysis;
+
+    @ApiModelProperty(value = "数据状态（1：正常  0：删除）")
     private String delFlag;
 
     @ApiModelProperty(value = "创建时间")

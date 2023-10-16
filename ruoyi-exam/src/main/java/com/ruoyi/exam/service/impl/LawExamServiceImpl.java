@@ -56,6 +56,7 @@ public class LawExamServiceImpl extends ServiceImpl<LawExamMapper, LawExamVo> im
         LawExamVo lawExamVo = new LawExamVo();
         ExamManage examManage = examManageMapper.latestExamManageInfo();
         if(null != examManage && StringUtils.equals("1", examManage.getPublishState())){
+            lawExamVo.setExamId(examManage.getExamId());
             //题目分类、学时
             CandidateInfo candidateInfo = new CandidateInfo();
             candidateInfo.setCandidateId(openId);
@@ -119,10 +120,10 @@ public class LawExamServiceImpl extends ServiceImpl<LawExamMapper, LawExamVo> im
                     }
                 }
                 if(!StringUtils.equals("", sfzfry) && sfzfry.length()>0){
-                    sfzfry = sfzfry.substring(0, sfzfry.lastIndexOf("、")-1);
+                    sfzfry = sfzfry.substring(0, sfzfry.lastIndexOf("、"));
                 }
                 if(!StringUtils.equals("", fsfzfry) && fsfzfry.length()>0){
-                    fsfzfry = fsfzfry.substring(0, fsfzfry.lastIndexOf("、")-1);
+                    fsfzfry = fsfzfry.substring(0, fsfzfry.lastIndexOf("、"));
                 }
                 CreditHoursDistributionVo creditHoursDistributionVo1 = new CreditHoursDistributionVo();
                 creditHoursDistributionVo1.setPersonType("执法司法人员");

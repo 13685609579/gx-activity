@@ -23,7 +23,7 @@ import java.util.List;
  * 考生信息表 前端控制器
  * </p>
  *
- * @author hougq
+ * @author yxp
  * @since 2023-09-28
  */
 @RestController
@@ -32,6 +32,18 @@ public class CandidateInfoController extends BaseController {
 
     @Autowired
     private CandidateInfoService candidateInfoService;
+
+    /**
+     * 当前考生信息
+     * @param openId
+     * @return
+     */
+    @GetMapping("/getCandidateInfo")
+    @Anonymous
+    public AjaxResult getCandidateInfo(HttpServletRequest request, String openId){
+//        DataUtils.appCheck(request);
+        return success(candidateInfoService.getCandidateInfo(openId));
+    }
 
     /**
      * 校验考生信息
@@ -70,7 +82,7 @@ public class CandidateInfoController extends BaseController {
     @GetMapping("/importantInformation")
     @Anonymous
     public AjaxResult importantInformation(HttpServletRequest request, String openId){
-        DataUtils.appCheck(request);
+//        DataUtils.appCheck(request);
         return success(candidateInfoService.importantInformation(openId));
     }
 
@@ -108,6 +120,19 @@ public class CandidateInfoController extends BaseController {
     public AjaxResult updatePersonState(CandidateInfo candidateInfo){
         return toAjax(candidateInfoService.updatePersonState(candidateInfo));
     }
+
+    /**
+     * 考试记录
+     * @param candidateInfo
+     * @return
+     */
+    @Log(title = "考试记录", businessType = BusinessType.UPDATE)
+    @GetMapping(value = "/examRecord")
+    public AjaxResult examRecord(CandidateInfo candidateInfo){
+        return success(candidateInfoService.examRecord(candidateInfo));
+    }
+
+
 
 }
 

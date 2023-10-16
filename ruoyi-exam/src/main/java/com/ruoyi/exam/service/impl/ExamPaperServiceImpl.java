@@ -104,7 +104,11 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
         if(!overTimeStatus){
             handlePaper(candidateSignUpVo, row);
             msg = "试卷提交成功！";
+            if(2 == candidateSignUpVo.getSource()){
+                msg = "获取答题卡数据成功！";
+            }
         }else{
+            code = 500;
             msg = "考试已超时！";
         }
         ExamQuestion examQuestion = new ExamQuestion();
@@ -209,15 +213,17 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
                             for(int j=0; j<topicOptionsList.size(); j++){
                                 TopicOptions to = topicOptionsList.get(j);
                                 if(StringUtils.equals("1", to.getOptionsState())){
-                                    if(i<topicOptionsList.size()-1){
-                                        correctAnswer += to.getTopicOptionsId()+"、";
-                                    }else{
-                                        correctAnswer += to.getTopicOptionsId();
-                                    }
+                                    correctAnswer += to.getTopicOptionsId()+"、";
                                 }
                             }
                         }
+                        if(!StringUtils.equals("", correctAnswer) && correctAnswer.length()>0){
+                            correctAnswer = correctAnswer.substring(0, correctAnswer.lastIndexOf("、"));
+                        }
                         asVo.setCorrectAnswer(correctAnswer);
+                    }
+                    if(null != bankInfo.getTopicType() && StringUtils.equals("3", bankInfo.getTopicType())){
+                        asVo.setTopicOptionsList(new ArrayList<TopicOptions>());
                     }
                     asVo.setAnswerAnalysis(bankInfo.getAnswerAnalysis());
                 }
@@ -266,7 +272,7 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
         String answer = candidateSignUpVo.getCandidateAnswer();
         String answerResult = "1";
         if(StringUtils.isNotBlank(answer) && StringUtils.isNotEmpty(answer)){
-            if(StringUtils.equals("1", bankManage.getTopicSort()) || StringUtils.equals("2", bankManage.getTopicSort())){
+            if(StringUtils.equals("1", bankManage.getTopicType()) || StringUtils.equals("2", bankManage.getTopicType())){
                 String[] answers = answer.split(",");
                 for(int i=0; i<answers.length; i++){
                     TopicOptions topicOptions = topicOptionsMapper.selectById(answers[i]);
@@ -276,7 +282,7 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
                     }
                 }
             }
-            if(StringUtils.equals("3", bankManage.getTopicSort()) && StringUtils.equals(answer, bankManage.getTopicAnswer())){
+            if(StringUtils.equals("3", bankManage.getTopicType()) && StringUtils.equals(answer, bankManage.getTopicAnswer())){
                 answerResult = "0";
             }
         }

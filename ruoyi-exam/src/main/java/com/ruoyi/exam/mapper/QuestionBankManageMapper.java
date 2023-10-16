@@ -69,4 +69,18 @@ public interface QuestionBankManageMapper extends BaseMapper<QuestionBankManage>
      */
     public int updateQuestionBank(QuestionBankManage questionBankManage);
 
+    /**
+     * 获取指定题型第一条题目
+     * @param questionBankManage
+     * @return
+     */
+    public QuestionBankManage getSortFirst(QuestionBankManage questionBankManage);
+
+    /**
+     * 测试训练-下一题
+     * @param questionBankManage
+     * @return
+     */
+    public QuestionBankManage nextTestTopic(QuestionBankManage questionBankManage);
+
 }

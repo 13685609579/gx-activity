@@ -30,6 +30,11 @@ public class ExamManageVo implements Serializable {
     private String examTitle;
 
     /**
+     * 考试状态（0：已结束 1：未结束）
+     */
+    private String paperState;
+
+    /**
      * 开始时间
      */
     private String startTime;

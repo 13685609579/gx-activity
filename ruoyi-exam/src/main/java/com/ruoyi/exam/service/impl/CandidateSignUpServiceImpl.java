@@ -209,7 +209,7 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
             if(null != list && list.size()>0){
                 for(int i=0; i<list.size(); i++){
                     QuestionBankManage bankManage = list.get(i);
-                    bankManage.setTopicState("0");
+                    bankManage.setTopicState("1");
                     getQuestionBankManage(bankManage);
                     insertExamPaperData(bankManage, candidateSignUpVo, paperStateId);
                 }
@@ -219,6 +219,7 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
         candidateSignUpVo.setRemainTime(remainTime);
         candidateSignUpVo.setPaperStateId(paperStateId);
         candidateSignUpVo.setTopicTotal(list.size());
+//        candidateSignUpVo.setTopicTotal(3);
         examPaperData.put("examPaperData", list);
         examPaperData.put("candidateSignUpVo", candidateSignUpVo);
         return examPaperData;
