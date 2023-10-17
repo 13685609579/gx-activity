@@ -5,7 +5,9 @@ import com.ruoyi.exam.domain.CandidateInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.exam.domain.CandidatePaperState;
 import com.ruoyi.exam.domain.ExamManage;
+import com.ruoyi.exam.domain.vo.CandidateSignUpVo;
 import com.ruoyi.exam.domain.vo.ExamManageVo;
+import com.ruoyi.exam.domain.vo.ExamResultVo;
 
 import java.util.List;
 
@@ -74,5 +76,19 @@ public interface CandidateInfoService extends IService<CandidateInfo> {
      * @return
      */
     public List<ExamManageVo> examRecord(CandidateInfo cInfo);
+
+    /**
+     * 试卷
+     * @param cInfo
+     * @return
+     */
+    public List<ExamManageVo> testPaper(CandidatePaperState cInfo);
+
+    /**
+     * 试卷查看
+     * @param candidateSignUpVo
+     * @return
+     */
+    public ExamResultVo examPaperView(CandidateSignUpVo candidateSignUpVo);
 
 }

@@ -8,6 +8,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.exam.domain.TestTrain;
 import com.ruoyi.exam.service.TestTrainService;
+import com.ruoyi.exam.util.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +42,7 @@ public class TestTrainController extends BaseController {
     @Anonymous
     public AjaxResult topicSortList(String candidateId, String topicSort, String dictType, HttpServletRequest request)
     {
-//        DataUtils.appCheck(request);
+        DataUtils.appCheck(request);
         return success(testTrainService.topicSortList(candidateId, topicSort, dictType));
     }
 
@@ -55,7 +56,7 @@ public class TestTrainController extends BaseController {
     @Anonymous
     public AjaxResult continueLastTime(@Validated @RequestBody TestTrain testTrain, HttpServletRequest request)
     {
-//        DataUtils.appCheck(request);
+        DataUtils.appCheck(request);
         AjaxResult ajaxResult = testTrainService.continueLastTime(testTrain);
         return ajaxResult;
     }
@@ -71,9 +72,8 @@ public class TestTrainController extends BaseController {
     @Anonymous
     public AjaxResult endAnswer(@Validated @RequestBody TestTrain testTrain, HttpServletRequest request)
     {
-//        DataUtils.appCheck(request);
-        //candidateSignUpVo.setCreateBy(getUsername());
-        testTrain.setCreateBy("admin");
+        DataUtils.appCheck(request);
+        testTrain.setCreateBy(getUsername());
         return success(testTrainService.endAnswer(testTrain));
     }
 
@@ -88,9 +88,8 @@ public class TestTrainController extends BaseController {
     @Anonymous
     public AjaxResult submitTest(@Validated @RequestBody TestTrain testTrain, HttpServletRequest request)
     {
-//        DataUtils.appCheck(request);
-        //candidateSignUpVo.setUpdateBy(getUsername());
-        testTrain.setUpdateBy("admin");
+        DataUtils.appCheck(request);
+        testTrain.setUpdateBy(getUsername());
         AjaxResult ajaxResult = testTrainService.submitTest(testTrain);
         return ajaxResult;
     }
@@ -105,7 +104,7 @@ public class TestTrainController extends BaseController {
     @Anonymous
     public AjaxResult restart(@Validated @RequestBody TestTrain testTrain, HttpServletRequest request)
     {
-//        DataUtils.appCheck(request);
+        DataUtils.appCheck(request);
         return success(testTrainService.restart(testTrain));
     }
 
@@ -119,7 +118,7 @@ public class TestTrainController extends BaseController {
     @Anonymous
     public AjaxResult nextTestTopic(@Validated @RequestBody TestTrain testTrain, HttpServletRequest request)
     {
-//        DataUtils.appCheck(request);
+        DataUtils.appCheck(request);
         AjaxResult ajaxResult = testTrainService.nextTestTopic(testTrain);
         return ajaxResult;
     }

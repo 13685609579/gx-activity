@@ -8,7 +8,9 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.exam.domain.CandidateInfo;
+import com.ruoyi.exam.domain.CandidatePaperState;
 import com.ruoyi.exam.domain.ExamManage;
+import com.ruoyi.exam.domain.vo.CandidateSignUpVo;
 import com.ruoyi.exam.service.CandidateInfoService;
 import com.ruoyi.exam.util.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,7 +43,7 @@ public class CandidateInfoController extends BaseController {
     @GetMapping("/getCandidateInfo")
     @Anonymous
     public AjaxResult getCandidateInfo(HttpServletRequest request, String openId){
-//        DataUtils.appCheck(request);
+        DataUtils.appCheck(request);
         return success(candidateInfoService.getCandidateInfo(openId));
     }
 
@@ -53,7 +55,7 @@ public class CandidateInfoController extends BaseController {
     @GetMapping("/verify")
     @Anonymous
     public AjaxResult verifyCandidateInfo(HttpServletRequest request, String openId){
-//        DataUtils.appCheck(request);
+        DataUtils.appCheck(request);
         AjaxResult ajaxResult = candidateInfoService.verifyCandidateInfo(openId);
         return ajaxResult;
     }
@@ -69,8 +71,7 @@ public class CandidateInfoController extends BaseController {
     public AjaxResult signInCandidateInfo(@Validated @RequestBody CandidateInfo candidateInfo, HttpServletRequest request)
     {
         DataUtils.appCheck(request);
-        //        questionBankManage.setCreateBy(getUsername());
-        candidateInfo.setCreateBy("admin");
+        candidateInfo.setCreateBy(getUsername());
         return toAjax(candidateInfoService.signInCandidateInfo(candidateInfo));
     }
 
@@ -82,7 +83,7 @@ public class CandidateInfoController extends BaseController {
     @GetMapping("/importantInformation")
     @Anonymous
     public AjaxResult importantInformation(HttpServletRequest request, String openId){
-//        DataUtils.appCheck(request);
+        DataUtils.appCheck(request);
         return success(candidateInfoService.importantInformation(openId));
     }
 
@@ -132,6 +133,31 @@ public class CandidateInfoController extends BaseController {
         return success(candidateInfoService.examRecord(candidateInfo));
     }
 
+    /**
+     * 试卷
+     * @param candidateInfo
+     * @return
+     */
+    @Log(title = "试卷")
+    @GetMapping(value = "/testPaper")
+    public AjaxResult testPaper(CandidatePaperState paperState){
+        return success(candidateInfoService.testPaper(paperState));
+    }
+
+    /**
+     * 试卷查看
+     * @param candidateSignUpVo
+     * @param request
+     * @return
+     */
+    @Log(title = "试卷查看")
+    @PostMapping(value = "/examPaperView")
+    @Anonymous
+    public AjaxResult examPaperView(@Validated @RequestBody CandidateSignUpVo candidateSignUpVo, HttpServletRequest request)
+    {
+        DataUtils.appCheck(request);
+        return success(candidateInfoService.examPaperView(candidateSignUpVo));
+    }
 
 
 }

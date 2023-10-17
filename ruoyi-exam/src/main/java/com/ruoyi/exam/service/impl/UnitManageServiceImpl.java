@@ -1,6 +1,5 @@
 package com.ruoyi.exam.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.exam.domain.UnitManage;
 import com.ruoyi.exam.mapper.UnitManageMapper;
@@ -36,6 +35,21 @@ public class UnitManageServiceImpl extends ServiceImpl<UnitManageMapper, UnitMan
     @Override
     public List<SysDept> getUnitNames() {
         SysDept dept = new SysDept();
-        return deptMapper.selectDeptList(dept);
+        List<SysDept> deptList = deptMapper.selectDeptList(dept);
+        /*List<TreeNode> treeNodeList = new ArrayList<TreeNode>();
+        if(null != deptList && deptList.size()>0){
+            for(SysDept sysDept: deptList){
+                TreeNode node = new TreeNode();
+                node.setId(sysDept.getDeptId());
+                node.setParentId(sysDept.getParentId());
+                node.setLabel(sysDept.getDeptName());
+                treeNodeList.add(node);
+            }
+            // 创建树形结构（数据集合作为参数）
+            TreeBuild treeBuild = new TreeBuild(treeNodeList);
+            // 原查询结果转换树形结构
+            treeNodeList = treeBuild.buildTree();
+        }*/
+        return deptList;
     }
 }

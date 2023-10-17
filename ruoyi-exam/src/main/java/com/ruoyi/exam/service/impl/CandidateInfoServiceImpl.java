@@ -1,14 +1,18 @@
 package com.ruoyi.exam.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.exam.domain.*;
+import com.ruoyi.exam.domain.vo.CandidateSignUpVo;
 import com.ruoyi.exam.domain.vo.ExamManageVo;
+import com.ruoyi.exam.domain.vo.ExamResultVo;
 import com.ruoyi.exam.domain.vo.PersonClassHourVo;
 import com.ruoyi.exam.mapper.*;
 import com.ruoyi.exam.service.CandidateInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.exam.service.ExamPaperService;
 import com.ruoyi.system.mapper.SysDeptMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -47,6 +51,15 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
 
     @Autowired
     private CandidatePaperStateMapper candidatePaperStateMapper;
+
+    @Autowired
+    private ExamQuestionMapper examQuestionMapper;
+
+    @Autowired
+    private QuestionBankManageMapper questionBankManageMapper;
+
+    @Autowired
+    private ExamPaperService examPaperService;
 
     /**
      * 当前考生信息
@@ -233,7 +246,7 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
                 classHourSf.setPersonType(candidateInfo.getPersonCategory());
                 PersonClassHourVo personClassHourVo = classHourSfMapper.getPersonTargetHour(classHourSf);
                 if(null != personClassHourVo){
-                    manageVo.setTargetHours(personClassHourVo.getTargetHours());
+                    manageVo.setTargetHours(personClassHourVo.getTargetHours().contains(".")?personClassHourVo.getTargetHours().substring(0, personClassHourVo.getTargetHours().indexOf(".")):personClassHourVo.getTargetHours());
                 }
                 PersonClassHour personClassHour = new PersonClassHour();
                 personClassHour.setCandidateId(cInfo.getCandidateId());
@@ -247,5 +260,67 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
             }
         }
         return voList;
+    }
+
+    /**
+     * 试卷
+     * @param cInfo
+     * @return
+     */
+    @Override
+    public List<ExamManageVo> testPaper(CandidatePaperState cInfo) {
+        LambdaQueryWrapper<CandidatePaperState> wrapper = new LambdaQueryWrapper<CandidatePaperState>();
+        wrapper.eq(CandidatePaperState::getDelFlag, 0)
+                .eq(CandidatePaperState::getCandidateId, cInfo.getCandidateId())
+                .eq(CandidatePaperState::getTopicSort, cInfo.getTopicSort())
+                .eq(CandidatePaperState::getPaperState, 0)
+                .orderByDesc(CandidatePaperState::getId);
+        List<CandidatePaperState> paperStateList = candidatePaperStateMapper.selectList(wrapper);
+        List<ExamManageVo> voList = new ArrayList<ExamManageVo>();
+        if(null != paperStateList && paperStateList.size()>0){
+            for(int i=0; i<paperStateList.size(); i++){
+                ExamManageVo manageVo = new ExamManageVo();
+                CandidatePaperState paperState = paperStateList.get(i);
+                ExamManage manage = examManageMapper.examManageInfo(paperState.getExamId());
+                manageVo.setPaperStateId(paperState.getId());
+                manageVo.setExamId(paperState.getExamId());
+                manageVo.setStartTime(manage.getStartTime());
+                manageVo.setEndTime(manage.getEndTime());
+                LambdaQueryWrapper<ExamQuestion> wrapper1 = new LambdaQueryWrapper<ExamQuestion>();
+                wrapper1.eq(ExamQuestion::getDelFlag, 0)
+                        .eq(ExamQuestion::getCandidateId, cInfo.getCandidateId())
+                        .eq(ExamQuestion::getExamId, manage.getExamId())
+                        .eq(ExamQuestion::getPaperStateId, paperState.getId())
+                        .eq(ExamQuestion::getAnswerResult, 1);
+                List<ExamQuestion> questionList = examQuestionMapper.selectList(wrapper1);
+                Integer correctScore = 0;
+                if(null != questionList && questionList.size()>0){
+                    for(int j=0; j<questionList.size(); j++){
+                        ExamQuestion question = questionList.get(j);
+                        QuestionBankManage bankManage = questionBankManageMapper.questionBankInfo(question.getTopicId());
+                        if(StringUtils.equals("1", bankManage.getTopicType()) || StringUtils.equals("3", bankManage.getTopicType())){
+                            correctScore += 2;
+                        }
+                        if(StringUtils.equals("2", bankManage.getTopicType())){
+                            correctScore += 5;
+                        }
+                    }
+                }
+                manageVo.setAcquiredHours(String.valueOf(correctScore>=60?2:0)+"学时");
+                voList.add(manageVo);
+            }
+        }
+        return voList;
+    }
+
+    /**
+     * 试卷查看
+     * @param candidateSignUpVo
+     * @return
+     */
+    @Override
+    public ExamResultVo examPaperView(CandidateSignUpVo candidateSignUpVo) {
+        ExamResultVo examResultVo = examPaperService.examResult(candidateSignUpVo);
+        return examResultVo;
     }
 }

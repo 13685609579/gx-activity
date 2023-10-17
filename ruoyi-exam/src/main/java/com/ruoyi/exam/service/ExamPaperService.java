@@ -1,9 +1,14 @@
 package com.ruoyi.exam.service;
 
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.exam.domain.AnswerSheetVo;
 import com.ruoyi.exam.domain.ExamPaper;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.exam.domain.vo.CandidateSignUpVo;
+import com.ruoyi.exam.domain.vo.ExamManageVo;
+import com.ruoyi.exam.domain.vo.ExamResultVo;
+
+import java.util.List;
 
 /**
  * <p>
@@ -28,5 +33,19 @@ public interface ExamPaperService extends IService<ExamPaper> {
      * @return
      */
     public AjaxResult submitTestPaper(CandidateSignUpVo candidateSignUpVo);
+
+    /**
+     * 考试结果
+     * @param candidateSignUpVo
+     * @return
+     */
+    public ExamResultVo examResult(CandidateSignUpVo candidateSignUpVo);
+
+    /**
+     * 答题卡
+     * @param candidateSignUpVo
+     * @return
+     */
+    public List<AnswerSheetVo> answerSheet(CandidateSignUpVo candidateSignUpVo);
 
 }

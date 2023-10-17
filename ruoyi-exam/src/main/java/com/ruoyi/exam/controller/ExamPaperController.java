@@ -6,10 +6,9 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.exam.domain.vo.CandidateSignUpVo;
 import com.ruoyi.exam.service.ExamPaperService;
-import com.sun.org.apache.xpath.internal.compiler.PsuedoNames;
+import com.ruoyi.exam.util.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -44,9 +43,8 @@ public class ExamPaperController extends BaseController {
     @PostMapping(value = "/examNextTopic")
     @Anonymous
     public AjaxResult examNextTopic(@Validated @RequestBody CandidateSignUpVo candidateSignUpVo, HttpServletRequest request){
-//        DataUtils.appCheck(request);
-//        candidateSignUpVo.setUpdateBy(getUsername());
-        candidateSignUpVo.setUpdateBy("admin");
+        DataUtils.appCheck(request);
+        candidateSignUpVo.setUpdateBy(getUsername());
         AjaxResult ajaxResult = examPaperService.examNextTopic(candidateSignUpVo);
         return ajaxResult;
     }
@@ -62,13 +60,26 @@ public class ExamPaperController extends BaseController {
     @Anonymous
     public AjaxResult submitTestPaper(@Validated @RequestBody CandidateSignUpVo candidateSignUpVo, HttpServletRequest request)
     {
-//        DataUtils.appCheck(request);
-        //candidateSignUpVo.setCreateBy(getUsername());
-        //candidateSignUpVo.setUpdateBy(getUsername());
-        candidateSignUpVo.setCreateBy("admin");
-        candidateSignUpVo.setUpdateBy("admin");
+        DataUtils.appCheck(request);
+        candidateSignUpVo.setCreateBy(getUsername());
+        candidateSignUpVo.setUpdateBy(getUsername());
         AjaxResult ajaxResult = examPaperService.submitTestPaper(candidateSignUpVo);
         return ajaxResult;
+    }
+
+    /**
+     * 考试-答题卡按钮
+     * @param candidateSignUpVo
+     * @param request
+     * @return
+     */
+    @Log(title = "答题卡按钮")
+    @PostMapping(value = "/answerSheet")
+    @Anonymous
+    public AjaxResult answerSheet(@Validated @RequestBody CandidateSignUpVo candidateSignUpVo, HttpServletRequest request)
+    {
+        DataUtils.appCheck(request);
+        return success(examPaperService.answerSheet(candidateSignUpVo));
     }
 
 

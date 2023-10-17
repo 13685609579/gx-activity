@@ -25,6 +25,11 @@ public class ExamManageVo implements Serializable {
     private String examId;
 
     /**
+     * 考生答卷ID
+     */
+    private Long paperStateId;
+
+    /**
      * 考试标题
      */
     private String examTitle;

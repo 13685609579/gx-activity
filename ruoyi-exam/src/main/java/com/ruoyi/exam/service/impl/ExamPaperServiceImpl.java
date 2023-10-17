@@ -7,6 +7,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.exam.domain.*;
 import com.ruoyi.exam.domain.vo.CandidateSignUpVo;
+import com.ruoyi.exam.domain.vo.ExamManageVo;
 import com.ruoyi.exam.domain.vo.ExamResultVo;
 import com.ruoyi.exam.mapper.*;
 import com.ruoyi.exam.service.ExamPaperService;
@@ -21,7 +22,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * <p>
@@ -54,6 +57,10 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
 
     @Autowired
     private SysDictDataMapper sysDictDataMapper;
+
+    public static List<ExamQuestion> correctList;
+    public static List<ExamQuestion> errorList;
+    public static Integer correctScore;
 
     /**
      * 考试-下一题
@@ -91,31 +98,51 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
     public AjaxResult submitTestPaper(CandidateSignUpVo candidateSignUpVo) {
         AjaxResult ajaxResult = new AjaxResult();
         CandidatePaperState paperState = candidatePaperStateMapper.selectById(candidateSignUpVo.getPaperStateId());
-        int row = 0;
-        if(1 == candidateSignUpVo.getSource()){
-            paperState.setPaperState("0");
-            paperState.setUpdateBy(candidateSignUpVo.getUpdateBy());
-            paperState.setUpdateTime(DateUtils.getNowDate());
-            row = candidatePaperStateMapper.updateById(paperState);
-        }
+        paperState.setPaperState("0");
+        paperState.setUpdateBy(candidateSignUpVo.getUpdateBy());
+        paperState.setUpdateTime(DateUtils.getNowDate());
+        int row = candidatePaperStateMapper.updateById(paperState);
         int code = 200;
         String msg = "";
         boolean overTimeStatus = overTimeStatus(paperState.getStartTime());
         if(!overTimeStatus){
             handlePaper(candidateSignUpVo, row);
             msg = "试卷提交成功！";
-            if(2 == candidateSignUpVo.getSource()){
-                msg = "获取答题卡数据成功！";
-            }
         }else{
             code = 500;
             msg = "考试已超时！";
         }
-        ExamQuestion examQuestion = new ExamQuestion();
-        examQuestion.setCandidateId(candidateSignUpVo.getCandidateId());
-        examQuestion.setExamId(candidateSignUpVo.getExamId());
-        examQuestion.setPaperStateId(Long.valueOf(candidateSignUpVo.getPaperStateId()));
-        examQuestion.setTopicSort(candidateSignUpVo.getTopicSort());
+        //考生考试结果
+        ExamResultVo examResultVo = examResult(candidateSignUpVo);
+        ajaxResult = new AjaxResult(code, msg, examResultVo);
+        PersonClassHour personClassHour = new PersonClassHour();
+        personClassHour.setCandidateId(candidateSignUpVo.getCandidateId());
+        personClassHour.setExamId(candidateSignUpVo.getExamId());
+        personClassHour.setTopicSort(candidateSignUpVo.getTopicSort());
+        Integer classHours = personClassHourMapper.getCandidateClassHours(personClassHour);
+        if(null == classHours || classHours<8){ //当前考生、考试、题目分类学时小于8j学时
+            //新增考生考试结果
+            PersonClassHour entity = new PersonClassHour();
+            entity.setCandidateId(candidateSignUpVo.getCandidateId());
+            entity.setThisScore(String.valueOf(correctScore));
+            entity.setCorrectNum(String.valueOf(correctList.size()));
+            entity.setErrorNum(String.valueOf(errorList.size()));
+            entity.setClassHour(String.valueOf(correctScore>=60?2:0));
+            entity.setExamId(candidateSignUpVo.getExamId());
+            entity.setTopicSort(candidateSignUpVo.getTopicSort());
+            entity.setDelFlag("0");
+            entity.setCreateTime(DateUtils.getNowDate());
+            entity.setCreateBy(candidateSignUpVo.getUpdateBy());
+            personClassHourMapper.insert(entity);
+        }
+
+        return ajaxResult;
+    }
+
+    public void setParam(CandidateSignUpVo candidateSignUpVo){
+        correctList = new ArrayList<ExamQuestion>();
+        errorList = new ArrayList<ExamQuestion>();
+        correctScore = 0;
         LambdaQueryWrapper<ExamQuestion> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ExamQuestion::getCandidateId, candidateSignUpVo.getCandidateId())
                 .eq(ExamQuestion::getExamId, candidateSignUpVo.getExamId())
@@ -123,9 +150,6 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
                 .eq(ExamQuestion::getTopicSort, candidateSignUpVo.getTopicSort())
                 .eq(ExamQuestion::getDelFlag, 0);
         List<ExamQuestion> examQuestionList = examQuestionMapper.selectList(wrapper);
-        List<ExamQuestion> correctList = new ArrayList<>();
-        List<ExamQuestion> errorList = new ArrayList<>();
-        Integer correctScore = 0;
         if(null != examQuestionList && examQuestionList.size()>0){
             for(int i=0; i<examQuestionList.size(); i++){
                 ExamQuestion question = examQuestionList.get(i);
@@ -144,29 +168,15 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
                 }
             }
         }
+    }
 
-        PersonClassHour personClassHour = new PersonClassHour();
-        personClassHour.setCandidateId(candidateSignUpVo.getCandidateId());
-        personClassHour.setExamId(candidateSignUpVo.getExamId());
-        personClassHour.setTopicSort(candidateSignUpVo.getTopicSort());
-        Integer classHours = personClassHourMapper.getCandidateClassHours(personClassHour);
-        if(null == classHours || classHours<8){
-            //新增考生考试结果
-            PersonClassHour entity = new PersonClassHour();
-            entity.setCandidateId(candidateSignUpVo.getCandidateId());
-            entity.setThisScore(String.valueOf(correctScore));
-            entity.setCorrectNum(String.valueOf(correctList.size()));
-            entity.setErrorNum(String.valueOf(errorList.size()));
-            entity.setClassHour("2");
-            entity.setExamId(candidateSignUpVo.getExamId());
-            entity.setTopicSort(candidateSignUpVo.getTopicSort());
-            entity.setDelFlag("0");
-            entity.setCreateTime(DateUtils.getNowDate());
-            entity.setCreateBy(candidateSignUpVo.getUpdateBy());
-            personClassHourMapper.insert(entity);
-        }
-
-        //考生考试结果
+    /**
+     * 考试结果
+     * @param candidateSignUpVo
+     * @return
+     */
+    @Override
+    public ExamResultVo examResult(CandidateSignUpVo candidateSignUpVo) {
         LambdaQueryWrapper<ExamPaper> wrapper1 = new LambdaQueryWrapper<>();
         wrapper1.eq(ExamPaper::getCandidateId, candidateSignUpVo.getCandidateId())
                 .eq(ExamPaper::getExamId, candidateSignUpVo.getExamId())
@@ -174,17 +184,36 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
                 .eq(ExamPaper::getTopicSort, candidateSignUpVo.getTopicSort())
                 .eq(ExamPaper::getDelFlag, 0);
         Integer total = examPaperMapper.selectCount(wrapper1);
+        setParam(candidateSignUpVo);
         ExamResultVo examResultVo = new ExamResultVo();
         examResultVo.setThisScore(correctScore);
         double v1 = Double.parseDouble(String.valueOf(correctList.size()));
-        double v2 = Double.parseDouble(String.valueOf(errorList.size()));
+        double v2 = Double.parseDouble(String.valueOf(total));
         double correctRate = DataUtils.division(v1, v2, 4)*100;
         examResultVo.setCorrectRate(String.valueOf(correctRate)+"%");
         examResultVo.setCorrectNum(correctList.size());
         examResultVo.setErrorNum(errorList.size());
         examResultVo.setWdNum(total-correctList.size()-errorList.size());
         examResultVo.setClassHour("+"+String.valueOf(correctScore>=60?2:0));
+        examResultVo.setAsVoList(answerSheet(candidateSignUpVo));
+        return examResultVo;
+    }
+
+    /**
+     * 答题卡
+     * @param candidateSignUpVo
+     * @return
+     */
+    @Override
+    public List<AnswerSheetVo> answerSheet(CandidateSignUpVo candidateSignUpVo){
         List<AnswerSheetVo> asVoList = new ArrayList<>();
+        LambdaQueryWrapper<ExamPaper> wrapper1 = new LambdaQueryWrapper<>();
+        wrapper1.eq(ExamPaper::getCandidateId, candidateSignUpVo.getCandidateId())
+                .eq(ExamPaper::getExamId, candidateSignUpVo.getExamId())
+                .eq(ExamPaper::getPaperStateId, candidateSignUpVo.getPaperStateId())
+                .eq(ExamPaper::getTopicSort, candidateSignUpVo.getTopicSort())
+                .eq(ExamPaper::getDelFlag, 0);
+        Integer total = examPaperMapper.selectCount(wrapper1);
         List<ExamPaper> paperList = examPaperMapper.selectList(wrapper1);
         if(null != paperList && paperList.size()>0){
             for(int i=0; i<paperList.size(); i++){
@@ -234,7 +263,7 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
                         .eq(ExamQuestion::getExamId, paper.getExamId())
                         .eq(ExamQuestion::getPaperStateId, paper.getPaperStateId())
                         .eq(ExamQuestion::getTopicSort, paper.getTopicSort())
-                        .eq(ExamQuestion::getTopicNum, paper.getTopicNum())
+                        .eq(ExamQuestion::getTopicId, paper.getTopicId())
                         .eq(ExamQuestion::getDelFlag, 0);
                 ExamQuestion question = examQuestionMapper.selectOne(wrapper2);
                 if(null != question){
@@ -246,9 +275,7 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
                 asVoList.add(asVo);
             }
         }
-        examResultVo.setAsVoList(asVoList);
-        ajaxResult = new AjaxResult(code, msg, examResultVo);
-        return ajaxResult;
+        return asVoList;
     }
 
     public void handlePaper(CandidateSignUpVo candidateSignUpVo, int row){
