@@ -85,7 +85,6 @@
             <if test="mobile != null and mobile != ''">mobile = #{mobile},</if>
             <if test="personCategory != null and personCategory != ''">person_category = #{personCategory},</if>
             <if test="unitId != null and unitId != ''">unit_id = #{unitId},</if>
-            <if test="personCategory != null and personCategory != ''">person_state = #{personCategory},</if>
             update_time = sysdate()
         </set>
         where candidate_id = #{candidateId}
