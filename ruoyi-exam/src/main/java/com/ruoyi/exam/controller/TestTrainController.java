@@ -73,7 +73,6 @@ public class TestTrainController extends BaseController {
     public AjaxResult endAnswer(@Validated @RequestBody TestTrain testTrain, HttpServletRequest request)
     {
         DataUtils.appCheck(request);
-        testTrain.setCreateBy(getUsername());
         return success(testTrainService.endAnswer(testTrain));
     }
 
@@ -89,7 +88,6 @@ public class TestTrainController extends BaseController {
     public AjaxResult submitTest(@Validated @RequestBody TestTrain testTrain, HttpServletRequest request)
     {
         DataUtils.appCheck(request);
-        testTrain.setUpdateBy(getUsername());
         AjaxResult ajaxResult = testTrainService.submitTest(testTrain);
         return ajaxResult;
     }

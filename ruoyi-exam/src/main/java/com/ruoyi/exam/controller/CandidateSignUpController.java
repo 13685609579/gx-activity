@@ -47,7 +47,6 @@ public class CandidateSignUpController extends BaseController {
     public AjaxResult insertCandidateSignUpData(@Validated @RequestBody CandidateSignUpVo candidateSignUpVo, HttpServletRequest request)
     {
         DataUtils.appCheck(request);
-        candidateSignUpVo.setCreateBy(getUsername());
         AjaxResult ajaxResult = candidateSignUpService.insertCandidateSignUpData(candidateSignUpVo);
         return ajaxResult;
     }

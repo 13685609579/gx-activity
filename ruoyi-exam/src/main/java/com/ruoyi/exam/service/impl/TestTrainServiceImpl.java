@@ -135,7 +135,7 @@ public class TestTrainServiceImpl extends ServiceImpl<TestTrainMapper, TestTrain
             if(!StringUtils.equals(train.getTopicId(), testTrain.getTopicId())){
                 testTrain.setCandidateAnswer(testTrain.getCandidateAnswer());
                 testTrain.setAnswerAnalysis(bankManage.getAnswerAnalysis());
-                testTrain.setCreateBy(testTrain.getUpdateBy());
+                testTrain.setCreateBy(testTrain.getCreateBy());
                 testTrain.setCreateTime(DateUtils.getNowDate());
                 insertTestTrain(testTrain, bankManage);
             }else{
@@ -147,7 +147,7 @@ public class TestTrainServiceImpl extends ServiceImpl<TestTrainMapper, TestTrain
         }else{
             testTrain.setCandidateAnswer(testTrain.getCandidateAnswer());
             testTrain.setAnswerAnalysis(bankManage.getAnswerAnalysis());
-            testTrain.setCreateBy(testTrain.getUpdateBy());
+            testTrain.setCreateBy(testTrain.getCreateBy());
             testTrain.setCreateTime(DateUtils.getNowDate());
             setTestTrainAnswerResult(testTrain, bankManage);
             insertTestTrain(testTrain, bankManage);

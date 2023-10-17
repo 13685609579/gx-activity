@@ -55,8 +55,6 @@ public class ExamManageController extends BaseController {
     @PostMapping(value = "/insertExamManageData")
     public AjaxResult insertExamManageData(@Validated @RequestBody ExamManage examManage)
     {
-//        questionBankManage.setCreateBy(getUsername());
-        examManage.setCreateBy("admin");
         return toAjax(examManageService.insertExamManageData(examManage));
     }
 

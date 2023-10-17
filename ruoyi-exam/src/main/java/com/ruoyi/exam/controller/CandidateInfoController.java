@@ -71,7 +71,6 @@ public class CandidateInfoController extends BaseController {
     public AjaxResult signInCandidateInfo(@Validated @RequestBody CandidateInfo candidateInfo, HttpServletRequest request)
     {
         DataUtils.appCheck(request);
-        candidateInfo.setCreateBy(getUsername());
         return toAjax(candidateInfoService.signInCandidateInfo(candidateInfo));
     }
 
@@ -88,12 +87,13 @@ public class CandidateInfoController extends BaseController {
     }
 
     /**
-     * 修改考生信息
+     * 个人信息-提交
      * @param candidateInfo
      * @return
      */
-    @Log(title = "修改考生信息", businessType = BusinessType.UPDATE)
+    @Log(title = "个人信息-提交", businessType = BusinessType.UPDATE)
     @PostMapping(value = "/updateCandidateInfo")
+    @Anonymous
     public AjaxResult updateCandidateInfo(@Validated @RequestBody CandidateInfo candidateInfo){
         return toAjax(candidateInfoService.updateCandidateInfo(candidateInfo));
     }

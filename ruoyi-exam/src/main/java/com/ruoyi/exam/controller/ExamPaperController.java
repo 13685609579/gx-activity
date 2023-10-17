@@ -44,7 +44,6 @@ public class ExamPaperController extends BaseController {
     @Anonymous
     public AjaxResult examNextTopic(@Validated @RequestBody CandidateSignUpVo candidateSignUpVo, HttpServletRequest request){
         DataUtils.appCheck(request);
-        candidateSignUpVo.setUpdateBy(getUsername());
         AjaxResult ajaxResult = examPaperService.examNextTopic(candidateSignUpVo);
         return ajaxResult;
     }
@@ -61,8 +60,6 @@ public class ExamPaperController extends BaseController {
     public AjaxResult submitTestPaper(@Validated @RequestBody CandidateSignUpVo candidateSignUpVo, HttpServletRequest request)
     {
         DataUtils.appCheck(request);
-        candidateSignUpVo.setCreateBy(getUsername());
-        candidateSignUpVo.setUpdateBy(getUsername());
         AjaxResult ajaxResult = examPaperService.submitTestPaper(candidateSignUpVo);
         return ajaxResult;
     }
