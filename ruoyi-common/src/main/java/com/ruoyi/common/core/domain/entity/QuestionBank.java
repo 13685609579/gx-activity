@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * 题库管理表 question_bank_manage（用于题库导入功能）
- * 
+ *
  * @author yxp
  */
 public class QuestionBank extends BaseEntity
@@ -33,11 +33,11 @@ public class QuestionBank extends BaseEntity
     private String topicContent;
 
     /** 题目分类（题目分类（数据字典编码）） */
-    @Excel(name = "题目分类")
+    @Excel(name = "题目分类",dictType = "topic_sort")
     private String topicSort;
 
     /** 题目类型（1：单选题 2：多选题 3：判断题） */
-    @Excel(name = "题目类型", readConverterExp = "1=单选题,2=多选题,3=判断题")
+    @Excel(name = "题目类型", readConverterExp = "1=单选题,2=多选题,3=判断题",combo = {"单选题","多选题","判断题"})
     private String topicType;
 
     /** 选项一 */
