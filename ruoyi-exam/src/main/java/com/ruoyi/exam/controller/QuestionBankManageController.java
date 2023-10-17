@@ -33,7 +33,7 @@ import java.util.List;
  * @since 2023-09-28
  */
 @RestController
-@RequestMapping("/questionBankManage")
+@RequestMapping("/question-bank-manage")
 public class QuestionBankManageController extends BaseController {
 
     @Autowired
