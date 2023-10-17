@@ -69,6 +69,11 @@ public class ClassHourSf implements Serializable {
     private String remark;
 
     /**
+     * 题目分类编码
+     */
+    private String dictCode;
+
+    /**
      * 题目分类名称
      */
     private String dictLabel;

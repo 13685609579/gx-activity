@@ -69,6 +69,7 @@ public class ExamManageServiceImpl extends ServiceImpl<ExamManageMapper, ExamMan
                 ClassHourSf classHourSf = classHourSfList.get(i);
                 classHourSf.setHourId(DataUtils.uuids());
                 classHourSf.setExamId(examId);
+                classHourSf.setTopicSort(classHourSf.getDictCode());
                 classHourSf.setCreateBy(examManage.getCreateBy());
                 classHourSf.setDelFlag("1");
                 classHourSfMapper.insertClassHourSfData(classHourSf);
