@@ -22,6 +22,9 @@
         <if test="topicId != null and topicId != ''">
             AND topic_id = #{topicId}
         </if>
+        <if test="optionsState != null and optionsState != ''">
+            AND options_state = #{optionsState}
+        </if>
     </select>
 
     <insert id="insertTopicOptionsData" parameterType="com.ruoyi.exam.domain.TopicOptions">

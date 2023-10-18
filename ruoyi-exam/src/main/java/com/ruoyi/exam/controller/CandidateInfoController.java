@@ -154,7 +154,7 @@ public class CandidateInfoController extends BaseController {
     @Anonymous
     public AjaxResult examPaperView(@Validated @RequestBody CandidateSignUpVo candidateSignUpVo, HttpServletRequest request)
     {
-        DataUtils.appCheck(request);
+//        DataUtils.appCheck(request);
         return success(candidateInfoService.examPaperView(candidateSignUpVo));
     }
 

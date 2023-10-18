@@ -303,13 +303,31 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
         String answer = candidateSignUpVo.getCandidateAnswer();
         String answerResult = "1";
         if(StringUtils.isNotBlank(answer) && StringUtils.isNotEmpty(answer)){
-            if(StringUtils.equals("1", bankManage.getTopicType()) || StringUtils.equals("2", bankManage.getTopicType())){
+            if(StringUtils.equals("1", bankManage.getTopicType())){
                 String[] answers = answer.split(",");
                 for(int i=0; i<answers.length; i++){
                     TopicOptions topicOptions = topicOptionsMapper.selectById(answers[i]);
                     if(null != topicOptions && StringUtils.equals("0", topicOptions.getOptionsState())){
                         answerResult = "0";
                         break;
+                    }
+                }
+            }
+            if(StringUtils.equals("2", bankManage.getTopicType())){
+                String[] answers = answer.split(",");
+                TopicOptions topicOptions = new TopicOptions();
+                topicOptions.setTopicId(candidateSignUpVo.getTopicId());
+                topicOptions.setOptionsState("1");
+                List<TopicOptions> optionsList = topicOptionsMapper.selectTopicOptionsList(topicOptions);
+                if(answers.length != optionsList.size()){ //多选题 如果考生选择的答案数与正确答案数不一致，则答题结果为错
+                    answerResult = "0";
+                }else{ //多选题 如果考生选择的答案数与正确答案数一致 判断考生的选择的每个答案是否正确
+                    for(int i=0; i<answers.length; i++){
+                        TopicOptions tOptions = topicOptionsMapper.selectById(answers[i]);
+                        if(null != tOptions && StringUtils.equals("0", tOptions.getOptionsState())){
+                            answerResult = "0";
+                            break;
+                        }
                     }
                 }
             }
