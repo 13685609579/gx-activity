@@ -56,9 +56,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		where dict_code = #{dictCode}
 	</select>
 
-	<select id="selectDictDataByLabel" parameterType="String" resultMap="SysDictDataResult">
+	<select id="selectDictDataByLabel" parameterType="com.ruoyi.common.core.domain.entity.SysDictData" resultMap="SysDictDataResult">
 		<include refid="selectDictDataVo"/>
-		where dict_value = #{dictValue}
+		where 1=1
+		and dict_value = #{dictValue}
+		and dict_type = #{dictType}
 	</select>
 
 	<select id="countDictDataByType" resultType="Integer">

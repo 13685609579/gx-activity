@@ -19,6 +19,7 @@ import com.ruoyi.exam.util.DataUtils;
 import com.ruoyi.system.mapper.SysDictDataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -178,6 +179,17 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
                 questionBankManage.setTopicId(topicIds[i]);
                 questionBankManage.setDelFlag("1");
                 row = questionBankManageMapper.updateQuestionBank(questionBankManage);
+                if(1 == row){
+                    LambdaQueryWrapper<TopicOptions> wrapper = new LambdaQueryWrapper<TopicOptions>();
+                    wrapper.eq(TopicOptions::getDelFlag, 0)
+                            .eq(TopicOptions::getTopicId, topicIds[i]);
+                    List<TopicOptions> topicOptionsList = topicOptionsMapper.selectList(wrapper);
+                    if(null != topicOptionsList && topicOptionsList.size()>0){
+                        TopicOptions topicOptions = topicOptionsList.get(i);
+                        topicOptions.setDelFlag("1");
+                        topicOptionsMapper.updateById(topicOptions);
+                    }
+                }
                 if(1 != row){
                     break;
                 }
@@ -195,6 +207,7 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
      * @return 结果
      */
     @Override
+    @Transactional
     public String importQuestionBank(List<QuestionBank> questionBankList, Boolean isUpdateSupport, String operName) {
         if (StringUtils.isNull(questionBankList) || questionBankList.size() == 0)
         {
@@ -219,10 +232,7 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
                 questionBankManage.setTopicCode(getTopicCode());
                 questionBankManage.setTopicContent(questionBank.getTopicContent());
                 questionBankManage.setTopicType(questionBank.getTopicType());
-                SysDictData sysDictData = sysDictDataMapper.selectDictDataByLabel(questionBank.getTopicSort());
-                if(null != sysDictData){
-                    questionBankManage.setTopicSort(questionBank.getTopicSort());
-                }
+                questionBankManage.setTopicSort(questionBank.getTopicSort());
                 if(StringUtils.equals("1", questionBank.getTopicType()) || StringUtils.equals("3", questionBank.getTopicType())){
                     questionBankManage.setPerScore("2");
                 }
@@ -231,6 +241,11 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
                 }
                 String topicAnswer = questionBank.getTopicAnswer();
                 String tAnswer = "";
+                if(StringUtils.equals("1", questionBank.getTopicType()) || StringUtils.equals("2", questionBank.getTopicType())){
+                    if(null != topicAnswer){
+                        tAnswer = questionBank.getTopicAnswer();
+                    }
+                }
                 if(StringUtils.equals("3", questionBank.getTopicType())){
                     if(null != topicAnswer){
                         if(topicAnswer.contains("选项一")){
@@ -250,6 +265,7 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
                     }
                 }
                 questionBankManage.setTopicAnswer(tAnswer);
+                questionBankManage.setAnswerAnalysis(questionBank.getAnswerAnalysis());
                 questionBankManage.setCreateBy(operName);
                 int row = questionBankManageMapper.insertQuestionBankData(questionBankManage);
                 List<TopicOptions> topicOptionsList = new ArrayList<>();
@@ -310,7 +326,7 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
             failureMsg.insert(0, "很抱歉，导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
             throw new ServiceException(failureMsg.toString());
         } else {
-            successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
+            successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条");
         }
         return successMsg.toString();
     }
