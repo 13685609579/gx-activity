@@ -86,7 +86,7 @@ public class TestTrainController extends BaseController {
     @Anonymous
     public AjaxResult submitTest(@Validated @RequestBody TestTrain testTrain, HttpServletRequest request)
     {
-//        DataUtils.appCheck(request);
+        DataUtils.appCheck(request);
         AjaxResult ajaxResult = testTrainService.submitTest(testTrain);
         return ajaxResult;
     }

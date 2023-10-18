@@ -130,7 +130,7 @@ public class TestTrainServiceImpl extends ServiceImpl<TestTrainMapper, TestTrain
         TestTrain train = getTestTrain(testTrain);
         QuestionBankManage bankManage = questionBankManageMapper.questionBankInfo(testTrain.getTopicId());
         if(null != train){
-            setTestTrainAnswerResult(train, bankManage);
+            setTestTrainAnswerResult(testTrain, bankManage);
             if(!StringUtils.equals(train.getTopicId(), testTrain.getTopicId())){
                 testTrain.setCandidateAnswer(testTrain.getCandidateAnswer());
                 testTrain.setAnswerAnalysis(bankManage.getAnswerAnalysis());

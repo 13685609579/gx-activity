@@ -139,7 +139,9 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
     public QuestionBankManage questionBankInfo(String topicId) {
         QuestionBankManage questionBankManage = questionBankManageMapper.questionBankInfo(topicId);
         LambdaQueryWrapper<TopicOptions> topicOptionsLambdaQueryWrapper = new LambdaQueryWrapper<TopicOptions>();
-        topicOptionsLambdaQueryWrapper.eq(TopicOptions::getTopicId, topicId).orderByDesc(TopicOptions::getOptionsState);
+        topicOptionsLambdaQueryWrapper.eq(TopicOptions::getTopicId, topicId)
+                .eq(TopicOptions::getDelFlag, 0)
+                .orderByDesc(TopicOptions::getOptionsState);
         List<TopicOptions> topicOptionsList = topicOptionsMapper.selectList(topicOptionsLambdaQueryWrapper);
         questionBankManage.setTopicOptionsList(topicOptionsList);
         return questionBankManage;
