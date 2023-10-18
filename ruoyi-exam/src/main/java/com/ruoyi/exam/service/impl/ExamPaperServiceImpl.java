@@ -190,7 +190,11 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
         double v1 = Double.parseDouble(String.valueOf(correctList.size()));
         double v2 = Double.parseDouble(String.valueOf(total));
         double correctRate = DataUtils.division(v1, v2, 4)*100;
-        examResultVo.setCorrectRate(String.valueOf(correctRate)+"%");
+        String cRate = String.valueOf(correctRate);
+        if(cRate.substring(cRate.indexOf(".")).length()>4){
+            cRate = cRate.substring(0, cRate.indexOf(".")+4);
+        }
+        examResultVo.setCorrectRate(cRate+"%");
         examResultVo.setCorrectNum(correctList.size());
         examResultVo.setErrorNum(errorList.size());
         examResultVo.setWdNum(total-correctList.size()-errorList.size());
