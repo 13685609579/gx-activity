@@ -17,10 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * <p>
@@ -58,6 +55,36 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
     private ExamQuestionMapper examQuestionMapper;
 
     /**
+     * 确认报名状态
+     * @param candidateSignUpVo
+     * @return
+     */
+    @Override
+    public AjaxResult confirmRegistrateStatus(CandidateSignUpVo candidateSignUpVo) {
+        LambdaQueryWrapper<CandidateSignUp> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(CandidateSignUp::getCandidateId, candidateSignUpVo.getCandidateId())
+                .eq(CandidateSignUp::getExamId, candidateSignUpVo.getExamId())
+                .eq(CandidateSignUp::getDelFlag, 0);
+        List<CandidateSignUp> signUpList = candidateSignUpMapper.selectList(wrapper);
+        Map<String, Object> paperList = new HashMap<>();
+        Integer code = 0; //0:信息填写确认过 1：未信息填写确认过
+        String msg = "当前考生，信息填写确认过，可直接答题！";
+        if(null != signUpList && signUpList.size()>0){
+            CandidatePaperState candidatePaperState = new CandidatePaperState();
+            candidatePaperState.setCandidateId(candidateSignUpVo.getCandidateId());
+            candidatePaperState.setExamId(candidateSignUpVo.getExamId());
+            candidatePaperState.setTopicSort(candidateSignUpVo.getTopicSort());
+            paperList = getCandidatePaperList(candidatePaperState, candidateSignUpVo);
+        }
+        if(signUpList.isEmpty()){
+            code = 1;
+            msg = "当前考生，未信息填写确认过，请先信息填写确认！";
+        }
+        AjaxResult ajaxResult = new AjaxResult(code, msg, paperList);
+        return ajaxResult;
+    }
+
+    /**
      * 添加考生报名信息
      * @param candidateSignUpVo
      * @return
@@ -68,55 +95,39 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
         AjaxResult ajaxResult = new AjaxResult();
         int code = 200;
         String msg = "";
-        CandidateSignUp signUp = new CandidateSignUp();
-        signUp.setCandidateId(candidateSignUpVo.getCandidateId());
-        signUp.setCandidateName(candidateSignUpVo.getCandidateName());
-        signUp.setUnitId(candidateSignUpVo.getUnitId());
-        signUp.setExamId(candidateSignUpVo.getExamId());
-        signUp.setTopicSort(candidateSignUpVo.getTopicSort());
-        signUp = candidateSignUpMapper.latestCandidateSignUp(signUp);
         Map<String, Object> examPaperData = new HashMap<>();
-        if(null == signUp){
-            CandidateInfo candidateInfo = new CandidateInfo();
-            candidateInfo.setCandidateId(candidateSignUpVo.getCandidateId());
-            candidateInfo.setCandidateName(candidateSignUpVo.getCandidateName());
-            candidateInfo.setUnitId(candidateSignUpVo.getUnitId());
-            candidateInfo = candidateInfoMapper.selectCandidateInfo(candidateInfo);
-            if(null != candidateInfo){
-                CandidateSignUp candidateSignUp = new CandidateSignUp();
-                String signUpId = DataUtils.uuids();
-                candidateSignUp.setSignUpId(signUpId);
-                candidateSignUp.setPersonCategory(candidateInfo.getPersonCategory());
-                candidateSignUp.setCreateBy(candidateSignUpVo.getCreateBy());
-                candidateSignUp.setCandidateId(candidateSignUpVo.getCandidateId());
-                candidateSignUp.setCandidateName(candidateSignUpVo.getCandidateName());
-                candidateSignUp.setUnitId(candidateSignUpVo.getUnitId());
-                candidateSignUp.setExamId(candidateSignUpVo.getExamId());
-                candidateSignUp.setTopicSort(candidateSignUpVo.getTopicSort());
-                int row = candidateSignUpMapper.insertCandidateSignUpData(candidateSignUp);
-                if(1 == row){
-                    CandidatePaperState candidatePaperState = new CandidatePaperState();
-                    candidatePaperState.setCandidateId(candidateSignUpVo.getCandidateId());
-                    candidatePaperState.setExamId(candidateSignUpVo.getExamId());
-                    candidatePaperState.setTopicSort(candidateSignUpVo.getTopicSort());
-                    //获取本场考试试卷
-                    examPaperData = getCandidatePaperList(candidatePaperState, candidateSignUpVo);
-                    msg = "考生信息正确，可直接参与考试！";
-                }else{
-                    code = 500;
-                    msg = "考生信息确认有误，请重新填写考生信息！";
-                }
+        CandidateInfo candidateInfo = new CandidateInfo();
+        candidateInfo.setCandidateId(candidateSignUpVo.getCandidateId());
+        candidateInfo.setCandidateName(candidateSignUpVo.getCandidateName());
+        candidateInfo.setUnitId(candidateSignUpVo.getUnitId());
+        candidateInfo = candidateInfoMapper.selectCandidateInfo(candidateInfo);
+        if(null != candidateInfo){
+            CandidateSignUp candidateSignUp = new CandidateSignUp();
+            String signUpId = DataUtils.uuids();
+            candidateSignUp.setSignUpId(signUpId);
+            candidateSignUp.setPersonCategory(candidateInfo.getPersonCategory());
+            candidateSignUp.setCreateBy(candidateSignUpVo.getCreateBy());
+            candidateSignUp.setCandidateId(candidateSignUpVo.getCandidateId());
+            candidateSignUp.setCandidateName(candidateSignUpVo.getCandidateName());
+            candidateSignUp.setUnitId(candidateSignUpVo.getUnitId());
+            candidateSignUp.setExamId(candidateSignUpVo.getExamId());
+            candidateSignUp.setTopicSort(candidateSignUpVo.getTopicSort());
+            int row = candidateSignUpMapper.insertCandidateSignUpData(candidateSignUp);
+            if(1 == row){
+                CandidatePaperState candidatePaperState = new CandidatePaperState();
+                candidatePaperState.setCandidateId(candidateSignUpVo.getCandidateId());
+                candidatePaperState.setExamId(candidateSignUpVo.getExamId());
+                candidatePaperState.setTopicSort(candidateSignUpVo.getTopicSort());
+                //获取本场考试试卷
+                examPaperData = getCandidatePaperList(candidatePaperState, candidateSignUpVo);
+                msg = "考生信息正确，可直接参与考试！";
             }else{
                 code = 500;
                 msg = "考生信息确认有误，请重新填写考生信息！";
             }
         }else{
-            CandidatePaperState candidatePaperState = new CandidatePaperState();
-            candidatePaperState.setCandidateId(candidateSignUpVo.getCandidateId());
-            candidatePaperState.setExamId(candidateSignUpVo.getExamId());
-            candidatePaperState.setTopicSort(candidateSignUpVo.getTopicSort());
-            examPaperData = getCandidatePaperList(candidatePaperState, candidateSignUpVo);
-            msg = "该场考试考生已报名，可直接参与考试！";
+            code = 500;
+            msg = "考生信息确认有误，请重新填写考生信息！";
         }
         ajaxResult = new AjaxResult(code, msg, examPaperData);
         return ajaxResult;
@@ -219,7 +230,6 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
         candidateSignUpVo.setRemainTime(remainTime);
         candidateSignUpVo.setPaperStateId(paperStateId);
         candidateSignUpVo.setTopicTotal(list.size());
-//        candidateSignUpVo.setTopicTotal(3);
         examPaperData.put("examPaperData", list);
         examPaperData.put("candidateSignUpVo", candidateSignUpVo);
         return examPaperData;

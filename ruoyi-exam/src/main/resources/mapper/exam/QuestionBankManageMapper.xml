@@ -33,6 +33,7 @@
         <if test="topicType != null and topicType != ''">
             AND topic_type = #{topicType}
         </if>
+        order by create_time desc
         <!-- 数据范围过滤 -->
         ${params.dataScope}
     </select>

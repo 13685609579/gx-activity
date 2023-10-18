@@ -6,18 +6,14 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.exam.domain.CandidateInfo;
-import com.ruoyi.exam.domain.CandidateSignUp;
+import com.ruoyi.exam.domain.CandidatePaperState;
 import com.ruoyi.exam.domain.vo.CandidateSignUpVo;
 import com.ruoyi.exam.service.CandidateSignUpService;
 import com.ruoyi.exam.util.DataUtils;
+import org.aspectj.weaver.loadtime.Aj;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -35,6 +31,20 @@ public class CandidateSignUpController extends BaseController {
 
     @Autowired
     private CandidateSignUpService candidateSignUpService;
+
+    /**
+     * 确认报名状态
+     * @param candidateSignUpVo
+     * @return
+     */
+    @Log(title = "确认报名状态")
+    @PostMapping(value = "/confirmRegistrateStatus")
+    @Anonymous
+    public AjaxResult confirmRegistrateStatus(@Validated @RequestBody CandidateSignUpVo candidateSignUpVo, HttpServletRequest request){
+        DataUtils.appCheck(request);
+        AjaxResult ajaxResult = candidateSignUpService.confirmRegistrateStatus(candidateSignUpVo);
+        return ajaxResult;
+    }
 
     /**
      * 信息填写确定

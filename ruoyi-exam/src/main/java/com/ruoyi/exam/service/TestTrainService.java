@@ -22,11 +22,10 @@ public interface TestTrainService extends IService<TestTrain> {
     /**
      * 测试训练
      * @param candidateId 考生ID
-     * @param topicSort 题目分类
      * @param dictType 字典类型（题目分类参数值topic_sort）
      * @return
      */
-    public List<TopicSortEntityVo> topicSortList(String candidateId, String topicSort, String dictType);
+    public List<TopicSortEntityVo> topicSortList(String candidateId, String dictType);
 
     /**
      * 测试训练-继续上次

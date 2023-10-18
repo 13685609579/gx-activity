@@ -48,12 +48,11 @@ public class TestTrainServiceImpl extends ServiceImpl<TestTrainMapper, TestTrain
     /**
      * 测试训练
      * @param candidateId 考生ID
-     * @param topicSort 题目分类
      * @param dictType 字典类型（题目分类参数值topic_sort）
      * @return
      */
     @Override
-    public List<TopicSortEntityVo> topicSortList(String candidateId, String topicSort, String dictType) {
+    public List<TopicSortEntityVo> topicSortList(String candidateId, String dictType) {
         SysDictData sysDictData = new SysDictData();
         sysDictData.setDictType(dictType);
         sysDictData.setStatus("0");
@@ -70,7 +69,7 @@ public class TestTrainServiceImpl extends ServiceImpl<TestTrainMapper, TestTrain
                 entityVo.setDictType(data.getDictType());
                 TestTrain testTrain = new TestTrain();
                 testTrain.setCandidateId(candidateId);
-                testTrain.setTopicSort(topicSort);
+                testTrain.setTopicSort(String.valueOf(data.getDictCode()));
                 TestTrainVo ttVo = null;
                 Integer maxTopicNum = getMaxTopicNum(testTrain);
                 if(null != maxTopicNum){

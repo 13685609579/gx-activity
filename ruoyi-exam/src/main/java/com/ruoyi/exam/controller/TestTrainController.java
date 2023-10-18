@@ -33,17 +33,16 @@ public class TestTrainController extends BaseController {
     /**
      * 测试训练
      * @param candidateId 考生ID
-     * @param topicSort 题目分类
      * @param dictType 字典类型（题目分类参数值topic_sort）
      * @param request
      * @return
      */
     @GetMapping(value = "/topicSortList")
     @Anonymous
-    public AjaxResult topicSortList(String candidateId, String topicSort, String dictType, HttpServletRequest request)
+    public AjaxResult topicSortList(String candidateId, String dictType, HttpServletRequest request)
     {
         DataUtils.appCheck(request);
-        return success(testTrainService.topicSortList(candidateId, topicSort, dictType));
+        return success(testTrainService.topicSortList(candidateId, dictType));
     }
 
     /**
@@ -52,7 +51,7 @@ public class TestTrainController extends BaseController {
      * @param request
      * @return
      */
-    @GetMapping(value = "/continueLastTime")
+    @PostMapping(value = "/continueLastTime")
     @Anonymous
     public AjaxResult continueLastTime(@Validated @RequestBody TestTrain testTrain, HttpServletRequest request)
     {
@@ -98,7 +97,7 @@ public class TestTrainController extends BaseController {
      * @param request
      * @return
      */
-    @GetMapping(value = "/restart")
+    @PostMapping(value = "/restart")
     @Anonymous
     public AjaxResult restart(@Validated @RequestBody TestTrain testTrain, HttpServletRequest request)
     {
@@ -112,7 +111,7 @@ public class TestTrainController extends BaseController {
      * @param request
      * @return
      */
-    @GetMapping(value = "/nextTestTopic")
+    @PostMapping(value = "/nextTestTopic")
     @Anonymous
     public AjaxResult nextTestTopic(@Validated @RequestBody TestTrain testTrain, HttpServletRequest request)
     {

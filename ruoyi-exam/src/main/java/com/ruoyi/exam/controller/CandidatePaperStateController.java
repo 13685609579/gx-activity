@@ -1,6 +1,9 @@
 package com.ruoyi.exam.controller;
 
 
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.exam.mapper.CandidatePaperStateMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.web.bind.annotation.RestController;

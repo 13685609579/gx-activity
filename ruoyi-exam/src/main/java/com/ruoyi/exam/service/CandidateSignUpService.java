@@ -19,6 +19,13 @@ import java.util.Map;
 public interface CandidateSignUpService extends IService<CandidateSignUp> {
 
     /**
+     * 确认报名状态
+     * @param candidateSignUpVo
+     * @return
+     */
+    public AjaxResult confirmRegistrateStatus(CandidateSignUpVo candidateSignUpVo);
+
+    /**
      * 添加考生报名信息
      * @param candidateSignUpVo
      * @return
