@@ -46,6 +46,9 @@
         <if test="mobile != null and mobile != ''">
             AND tbl1.mobile like concat('%', #{mobile}, '%')
         </if>
+        <if test="unitId != null and unitId != ''">
+            AND tbl1.unit_id = #{unitId}
+        </if>
         <!-- 数据范围过滤 -->
         ${params.dataScope}
     </select>

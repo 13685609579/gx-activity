@@ -3,6 +3,8 @@ package com.ruoyi.exam.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysDept;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.exam.domain.*;
 import com.ruoyi.exam.domain.vo.CandidateSignUpVo;
@@ -201,6 +203,8 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
      */
     @Override
     public List<CandidateInfo> selectCandidateInfoList(CandidateInfo candidateInfo) {
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        candidateInfo.setUnitId(String.valueOf(loginUser.getDeptId()));
         List<CandidateInfo> candidateInfoList = candidateInfoMapper.selectCandidateInfoList(candidateInfo);
         return candidateInfoList;
     }

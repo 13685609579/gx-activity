@@ -9,7 +9,6 @@ import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.exam.domain.CandidateInfo;
 import com.ruoyi.exam.domain.CandidatePaperState;
-import com.ruoyi.exam.domain.ExamManage;
 import com.ruoyi.exam.domain.vo.CandidateSignUpVo;
 import com.ruoyi.exam.service.CandidateInfoService;
 import com.ruoyi.exam.util.DataUtils;
