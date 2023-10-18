@@ -75,6 +75,9 @@ public class TestTrainServiceImpl extends ServiceImpl<TestTrainMapper, TestTrain
                 if(null != maxTopicNum){
                     testTrain.setTopicNum(maxTopicNum);
                     ttVo = getLastTimeTestTopic(testTrain);
+                    if(null != ttVo && StringUtils.isNotEmpty(ttVo.getCandidateAnswer()) && StringUtils.isNotBlank(ttVo.getCandidateAnswer())){
+                        ttVo = null;
+                    }
                 }
                 entityVo.setTrainVo(ttVo);
                 voList.add(entityVo);
