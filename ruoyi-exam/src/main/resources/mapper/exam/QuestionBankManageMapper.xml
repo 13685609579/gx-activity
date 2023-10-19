@@ -34,7 +34,7 @@
             AND topic_type = #{topicType}
         </if>
         <if test="topicContent != null and topicContent != ''">
-            AND topic_content = concat('%', #{topicContent}, '%')
+            AND topic_content like concat('%', #{topicContent}, '%')
         </if>
         order by create_time desc
         <!-- 数据范围过滤 -->
