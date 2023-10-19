@@ -75,7 +75,7 @@
         and topic_type = 2
         ) tbl
         order by RAND()
-        limit 10
+        limit 4
         )
         UNION ALL
         (
@@ -91,7 +91,7 @@
         and topic_type = 3
         ) tbl
         order by RAND()
-        limit 4
+        limit 10
         )
         ) tbl
     </select>
