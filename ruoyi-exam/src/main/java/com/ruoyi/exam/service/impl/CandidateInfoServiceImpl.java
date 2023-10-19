@@ -204,7 +204,9 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
     @Override
     public List<CandidateInfo> selectCandidateInfoList(CandidateInfo candidateInfo) {
         LoginUser loginUser = SecurityUtils.getLoginUser();
-        candidateInfo.setUnitId(String.valueOf(loginUser.getDeptId()));
+        if(100 != loginUser.getDeptId()){ //用户部门不是肥西县（deptId:100）的用户在考生审核获取本部门所有用户
+            candidateInfo.setUnitId(String.valueOf(loginUser.getDeptId()));
+        }
         List<CandidateInfo> candidateInfoList = candidateInfoMapper.selectCandidateInfoList(candidateInfo);
         return candidateInfoList;
     }

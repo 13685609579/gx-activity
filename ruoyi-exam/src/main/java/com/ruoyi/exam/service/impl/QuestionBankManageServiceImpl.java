@@ -3,12 +3,9 @@ package com.ruoyi.exam.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.common.core.domain.entity.QuestionBank;
 import com.ruoyi.common.core.domain.entity.SysDictData;
-import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DateUtils;
-import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
-import com.ruoyi.common.utils.bean.BeanValidators;
 import com.ruoyi.exam.domain.QuestionBankManage;
 import com.ruoyi.exam.domain.TopicOptions;
 import com.ruoyi.exam.mapper.QuestionBankManageMapper;
@@ -22,7 +19,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
