@@ -331,7 +331,7 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
                     }
                 }
             }
-            if(StringUtils.equals("3", bankManage.getTopicType()) && StringUtils.equals(answer, bankManage.getTopicAnswer())){
+            if(StringUtils.equals("3", bankManage.getTopicType()) && !StringUtils.equals(answer, bankManage.getTopicAnswer())){
                 answerResult = "0";
             }
         }
