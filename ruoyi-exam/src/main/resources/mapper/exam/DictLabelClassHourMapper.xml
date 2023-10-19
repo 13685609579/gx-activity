@@ -25,6 +25,13 @@
         </if>
         group by topic_sort
         ) tbl2 on tbl1.topic_sort = tbl2.topic_sort LEFT JOIN sys_dict_data tbl3 on tbl1.topic_sort = tbl3.dict_code
+        ORDER BY
+        case tbl3.dict_code when '30' then 1
+        when '33' then 2
+        when '32' then 3
+        when '31' then 4
+        when '34' then 5
+        end
     </select>
 
 </mapper>

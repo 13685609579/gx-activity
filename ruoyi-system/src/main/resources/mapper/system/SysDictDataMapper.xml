@@ -38,9 +38,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 				AND status = #{status}
 			</if>
 		</where>
-		order by dict_sort asc
+		ORDER BY
+		case dict_code when '30' then 1
+		when '33' then 2
+		when '32' then 3
+		when '31' then 4
+		when '34' then 5
+		end
 	</select>
-	
+
 	<select id="selectDictDataByType" parameterType="SysDictData" resultMap="SysDictDataResult">
 		<include refid="selectDictDataVo"/>
 		where status = '0' and dict_type = #{dictType} order by dict_sort asc
