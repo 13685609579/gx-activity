@@ -1,5 +1,6 @@
 package com.ruoyi.exam.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysDictData;
@@ -75,9 +76,6 @@ public class TestTrainServiceImpl extends ServiceImpl<TestTrainMapper, TestTrain
                 if(null != maxTopicNum){
                     testTrain.setTopicNum(maxTopicNum);
                     ttVo = getLastTimeTestTopic(testTrain);
-                    if(null != ttVo && StringUtils.isNotEmpty(ttVo.getCandidateAnswer()) && StringUtils.isNotBlank(ttVo.getCandidateAnswer())){
-                        ttVo = null;
-                    }
                 }
                 entityVo.setTrainVo(ttVo);
                 voList.add(entityVo);
@@ -98,6 +96,11 @@ public class TestTrainServiceImpl extends ServiceImpl<TestTrainMapper, TestTrain
         if(null != maxTopicNum){
             testTrain.setTopicNum(maxTopicNum);
             ttVo = getLastTimeTestTopic(testTrain);
+            if(null != ttVo && StringUtils.isNotEmpty(ttVo.getCandidateAnswer()) && StringUtils.isNotBlank(ttVo.getCandidateAnswer())){
+                ttVo.setSubmitStatus("0");
+            }else{
+                ttVo.setSubmitStatus("1");
+            }
         }
         AjaxResult ajaxResult = new AjaxResult(200, "获取当前题目成功！", ttVo);
         return ajaxResult;
@@ -294,15 +297,22 @@ public class TestTrainServiceImpl extends ServiceImpl<TestTrainMapper, TestTrain
      */
     public TestTrainVo getLastTimeTestTopic(TestTrain testTrain){
         TestTrain train = getTestTrain(testTrain);
+        TestTrainVo ttVo = entityToVo(train);
+        QuestionBankManage bankManage = questionBankManageMapper.questionBankInfo(train.getTopicId());
+        if(null != bankManage){
+            ttVo.setTopicContent(bankManage.getTopicContent());
+        }
         List<TopicOptions> topicOptionsList = new ArrayList<>();
         if(null != train && (StringUtils.equals("1", train.getTopicType()) || StringUtils.equals("2", train.getTopicType()))){
             TopicOptions topicOptions = new TopicOptions();
             topicOptions.setTopicId(train.getTopicId());
             topicOptions.setDelFlag("0");
             topicOptionsList = topicOptionsMapper.selectTopicOptionsList(topicOptions);
+            ttVo.setTopicOptionsList(topicOptionsList);
         }
-        TestTrainVo ttVo = entityToVo(train);
-        ttVo.setTopicOptionsList(topicOptionsList);
+        if(null != bankManage && StringUtils.equals("3", bankManage.getTopicType())){
+            ttVo.setCorrectAnswer(bankManage.getTopicAnswer());
+        }
         return ttVo;
     }
 

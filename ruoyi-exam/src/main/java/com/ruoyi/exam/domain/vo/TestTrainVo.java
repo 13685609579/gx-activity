@@ -49,6 +49,9 @@ public class TestTrainVo implements Serializable {
     //考生答案
     private String candidateAnswer;
 
+    //正确答案
+    private String correctAnswer;
+
     //答题结果是否正确（1：正确 0：错误）
     private String answerResult;
 
@@ -75,6 +78,9 @@ public class TestTrainVo implements Serializable {
 
     //题目选项
     private List<TopicOptions> topicOptionsList;
+
+    //测试答题是否提交 0：已提交 1：未提交
+    private String submitStatus;
 
 
 }
