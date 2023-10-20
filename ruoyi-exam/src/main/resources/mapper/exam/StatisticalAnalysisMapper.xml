@@ -3,8 +3,6 @@
 <mapper namespace="com.ruoyi.exam.mapper.StatisticalAnalysisMapper">
 
     <resultMap type="CandidateClassHourVo" id="CandidateClassHourVoResult">
-        <result property="examId"       column="exam_id"      />
-        <result property="examTitle"       column="exam_title"      />
         <result property="unitId"       column="unit_id"      />
         <result property="unitName"       column="unit_name"      />
         <result property="examYear"        column="exam_year"        />
@@ -14,7 +12,7 @@
     </resultMap>
 
     <select id="selectStatisticalAnalysisList" parameterType="com.ruoyi.exam.domain.vo.CandidateClassHourVo" resultMap="CandidateClassHourVoResult">
-        select tbl4.exam_id, tbl4.exam_title, tbl4.unit_id, tbl4.unit_name, tbl4.exam_year, tbl4.candidate_id,
+        select tbl4.unit_id, tbl4.unit_name, tbl4.exam_year, tbl4.candidate_id,
         case when sum(tbl5.class_hour) is null then '0' else sum(tbl5.class_hour) end class_hour from
         (
         select tbl1.exam_id, tbl1.exam_title, tbl3.dept_id as unit_id, tbl3.dept_name as unit_name, tbl1.exam_year, tbl2.candidate_id
@@ -29,13 +27,13 @@
         </if>
         <if test="unitIds != null">
             AND tbl3.dept_id in
-            <foreach collection="unitIds" item="item" open="(" separator="," close=")">
-                #{item.unitId}
+            <foreach collection="unitIds" item="unitId" open="(" separator="," close=")">
+                #{unitId}
             </foreach>
         </if>
         and tbl2.candidate_id is not null
         ) tbl4 LEFT JOIN person_class_hour tbl5 on tbl4.candidate_id = tbl5.candidate_id and tbl4.exam_id = tbl5.exam_id
-        GROUP BY tbl4.exam_id, tbl4.exam_title, tbl4.unit_id, tbl4.unit_name, tbl4.exam_year, tbl4.candidate_id
+        GROUP BY tbl4.unit_id, tbl4.unit_name, tbl4.exam_year, tbl4.candidate_id
         <!-- 数据范围过滤 -->
         ${params.dataScope}
     </select>
@@ -45,13 +43,11 @@
         <result property="candidateName"       column="candidate_name"      />
         <result property="unitName"       column="unit_name"      />
         <result property="mobile"       column="mobile"      />
-        <result property="examId"       column="exam_id"      />
         <result property="examYear"        column="exam_year"        />
-        <result property="examTitle"       column="exam_title"      />
     </resultMap>
 
     <select id="getStatisticalAnalysisDetails" parameterType="com.ruoyi.exam.domain.vo.StatisticalAnalysisDetailsVo" resultMap="StatisticalAnalysisDetailsResult">
-        select tbl1.candidate_id, tbl1.candidate_name, tbl4.dept_name as unit_name, tbl2.mobile, tbl3.exam_id, tbl3.exam_year, tbl3.exam_title
+        select DISTINCT tbl1.candidate_id, tbl1.candidate_name, tbl4.dept_name as unit_name, tbl2.mobile, tbl3.exam_year
         from candidate_sign_up tbl1
         LEFT JOIN candidate_info tbl2 ON tbl1.candidate_id = tbl2.candidate_id
         LEFT JOIN exam_manage tbl3 ON tbl1.exam_id = tbl3.exam_id
@@ -68,9 +64,6 @@
         </if>
         <if test="mobile != null and mobile != ''">
             AND tbl2.mobile = #{mobile}
-        </if>
-        <if test="examId != null and examId != ''">
-            AND tbl3.exam_id = #{examId}
         </if>
         <if test="examYear != null and examYear != ''">
             AND tbl3.exam_year = #{examYear}

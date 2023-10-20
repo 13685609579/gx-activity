@@ -11,7 +11,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * 
  * @author yxp
  */
-public class StatisticalAnalysisEntity extends BaseEntity
+public class StatisticalAnalysisEntity
 {
     private static final long serialVersionUID = 1L;
 
@@ -34,10 +34,6 @@ public class StatisticalAnalysisEntity extends BaseEntity
     /** 考试年份 */
     @Excel(name = "考试年份")
     private String examYear;
-
-    /** 考试名称 */
-    @Excel(name = "考试名称")
-    private String examTitle;
 
     public String getUnitName() {
         return unitName;
@@ -79,14 +75,6 @@ public class StatisticalAnalysisEntity extends BaseEntity
         this.examYear = examYear;
     }
 
-    public String getExamTitle() {
-        return examTitle;
-    }
-
-    public void setExamTitle(String examTitle) {
-        this.examTitle = examTitle;
-    }
-
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -95,7 +83,6 @@ public class StatisticalAnalysisEntity extends BaseEntity
                 .append("completeRate", getCompleteRate())
                 .append("uncompletedCount", getUncompletedCount())
                 .append("examYear", getExamYear())
-                .append("examTitle", getExamTitle())
                 .toString();
     }
 

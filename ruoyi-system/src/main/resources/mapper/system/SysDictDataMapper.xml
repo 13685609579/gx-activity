@@ -34,6 +34,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 			<if test="dictLabel != null and dictLabel != ''">
 				AND dict_label like concat('%', #{dictLabel}, '%')
 			</if>
+			<if test="cssClass != null and cssClass != ''">
+				AND css_class = #{cssClass}
+			</if>
 			<if test="status != null and status != ''">
 				AND status = #{status}
 			</if>

@@ -23,7 +23,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 @TableName("unit_manage")
 @ApiModel(value="UnitManage对象", description="司法考试-考生单位管理表")
-public class UnitManage extends BaseEntity implements Serializable {
+public class UnitManage implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

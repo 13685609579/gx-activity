@@ -27,6 +27,9 @@
         <if test="unitName != null and unitName != ''">
             AND dept_name like concat('%', #{unitName}, '%')
         </if>
+        <if test="unitId != null and unitId != ''">
+            AND dept_id = #{unitId}
+        </if>
         <!-- 数据范围过滤 -->
         ${params.dataScope}
     </select>

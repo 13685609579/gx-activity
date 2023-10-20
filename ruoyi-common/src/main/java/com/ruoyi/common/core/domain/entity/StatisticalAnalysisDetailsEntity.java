@@ -13,7 +13,7 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  * @author yxp
  * @since 2023-10-10
  */
-public class StatisticalAnalysisDetailsEntity extends BaseEntity {
+public class StatisticalAnalysisDetailsEntity {
 
     private static final long serialVersionUID = 1L;
 

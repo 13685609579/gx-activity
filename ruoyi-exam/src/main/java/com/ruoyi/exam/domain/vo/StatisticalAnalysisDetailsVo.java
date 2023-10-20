@@ -39,12 +39,6 @@ public class StatisticalAnalysisDetailsVo extends BaseEntity implements Serializ
     @ApiModelProperty(value = "单位名称")
     private String unitName;
 
-    @ApiModelProperty(value = "考试管理ID")
-    private String examId;
-
-    @ApiModelProperty(value = "考试标题")
-    private String examTitle;
-
     /**
      * 已完成学时
      */

@@ -1,5 +1,6 @@
 package com.ruoyi.exam.controller;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.entity.StatisticalAnalysisDetailsEntity;
@@ -77,7 +78,7 @@ public class StatisticalAnalysisController extends BaseController {
     {
         List<StatisticalAnalysisVo> analysisVoList = statisticalAnalysisService.selectStatisticalAnalysisList(candidateClassHourVo);
         List<StatisticalAnalysisEntity> analysisEntityList = new ArrayList<StatisticalAnalysisEntity>();
-        if(null != analysisVoList && analysisVoList.size()>0){
+        if(CollectionUtil.isNotEmpty(analysisVoList)){
             analysisVoList.stream().forEach(m->{
                 StatisticalAnalysisEntity entity = new StatisticalAnalysisEntity();
                 entity.setUnitName(m.getUnitName());
@@ -85,7 +86,6 @@ public class StatisticalAnalysisController extends BaseController {
                 entity.setCompleteRate(m.getCompleteRate());
                 entity.setUncompletedCount(m.getUncompletedCount());
                 entity.setExamYear(m.getExamYear());
-                entity.setExamTitle(m.getExamTitle());
                 analysisEntityList.add(entity);
             });
         }
@@ -104,8 +104,8 @@ public class StatisticalAnalysisController extends BaseController {
     {
         List<StatisticalAnalysisDetailsVo> analysisDetailsVoList = statisticalAnalysisService.getStatisticalAnalysisDetails(detailsVo);
         List<StatisticalAnalysisDetailsEntity> analysisDetailsEntityList = new ArrayList<StatisticalAnalysisDetailsEntity>();
-        if(null != analysisDetailsVoList && analysisDetailsVoList.size()>0){
-            analysisDetailsEntityList.stream().forEach(m->{
+        if(CollectionUtil.isNotEmpty(analysisDetailsVoList)){
+            analysisDetailsVoList.stream().forEach(m->{
                 StatisticalAnalysisDetailsEntity entity = new StatisticalAnalysisDetailsEntity();
                 entity.setCandidateName(m.getCandidateName());
                 entity.setUnitName(m.getUnitName());

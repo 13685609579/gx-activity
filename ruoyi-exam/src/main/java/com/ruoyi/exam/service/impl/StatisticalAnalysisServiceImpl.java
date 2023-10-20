@@ -1,6 +1,9 @@
 package com.ruoyi.exam.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.ruoyi.common.core.domain.entity.SysDictData;
+import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.exam.domain.CandidateInfo;
 import com.ruoyi.exam.domain.ClassHourSf;
@@ -12,9 +15,12 @@ import com.ruoyi.exam.domain.vo.StatisticalAnalysisVo;
 import com.ruoyi.exam.mapper.*;
 import com.ruoyi.exam.service.StatisticalAnalysisService;
 import com.ruoyi.exam.util.DataUtils;
+import com.ruoyi.system.mapper.SysDictDataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.*;
 
 /**
@@ -43,6 +49,9 @@ public class StatisticalAnalysisServiceImpl extends ServiceImpl<StatisticalAnaly
     @Autowired
     private PersonClassHourMapper personClassHourMapper;
 
+    @Autowired
+    private SysDictDataMapper sysDictDataMapper;
+
     /**
      * 统计分析列表
      * @param candidateClassHourVo
@@ -50,6 +59,10 @@ public class StatisticalAnalysisServiceImpl extends ServiceImpl<StatisticalAnaly
      */
     @Override
     public List<StatisticalAnalysisVo> selectStatisticalAnalysisList(CandidateClassHourVo candidateClassHourVo) {
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        if(100 != loginUser.getDeptId()){ //用户部门不是肥西县（deptId:100）的用户在考生审核获取本部门所有用户
+            candidateClassHourVo.setUnitId(String.valueOf(loginUser.getDeptId()));
+        }
         List<UnitManage> unitManageList = unitManageMapper.selectUnitList(candidateClassHourVo);
         List<StatisticalAnalysisVo> list = new ArrayList<>();
         Set<StatisticalAnalysisVo> sets = new HashSet<>();
@@ -60,6 +73,7 @@ public class StatisticalAnalysisServiceImpl extends ServiceImpl<StatisticalAnaly
                 unitNames.add(m.getUnitName());
                 unitIds.add(m.getUnitId());
             });
+            candidateClassHourVo.setUnitIds(unitIds);
             List<CandidateClassHourVo> candidateClassHourVoList = statisticalAnalysisMapper.selectStatisticalAnalysisList(candidateClassHourVo);
             Map<String, List<CandidateClassHourVo>> stringListMap = new HashMap<>();
             if(null != candidateClassHourVoList && candidateClassHourVoList.size()>0){
@@ -69,15 +83,17 @@ public class StatisticalAnalysisServiceImpl extends ServiceImpl<StatisticalAnaly
                         if(StringUtils.equals(n, o.getUnitName())){
                             CandidateInfo candidateInfo = new CandidateInfo();
                             candidateInfo.setCandidateId(o.getCandidateId());
-                            CandidateInfo candidateInfo1 = candidateInfoMapper.selectCandidateInfo(candidateInfo);
-                            ClassHourSf classHourSf = new ClassHourSf();
-                            classHourSf.setExamId(o.getExamId());
-                            classHourSf.setPersonType(candidateInfo1.getPersonCategory());
-                            String targetHours = classHourSfMapper.getTargetHours(classHourSf);
-                            if(Integer.parseInt(o.getClassHour()) == Integer.parseInt(targetHours)){
+                            candidateInfo = candidateInfoMapper.selectCandidateInfo(candidateInfo);
+                            SysDictData sysDictData = new SysDictData();
+                            sysDictData.setDictType("annual_class_hours");
+                            sysDictData.setCssClass(o.getExamYear()+"0"+candidateInfo.getPersonCategory());
+                            sysDictData.setStatus("0");
+                            List<SysDictData> sysDictDataList = sysDictDataMapper.selectDictDataList(sysDictData);
+                            Integer annualClassHours = Integer.valueOf(sysDictDataList.get(0).getDictValue());
+                            if(Integer.parseInt(o.getClassHour()) == annualClassHours){
                                 o.setCompleteState("1");
                             }
-                            if(Integer.parseInt(o.getClassHour()) < Integer.parseInt(targetHours)){
+                            if(Integer.parseInt(o.getClassHour()) < annualClassHours){
                                 o.setCompleteState("0");
                             }
                             list1.add(o);
@@ -110,8 +126,6 @@ public class StatisticalAnalysisServiceImpl extends ServiceImpl<StatisticalAnaly
                         });
                         voList1.stream().forEach(g->{
                             StatisticalAnalysisVo analysisVo = new StatisticalAnalysisVo();
-                            analysisVo.setExamId(g.getExamId());
-                            analysisVo.setExamTitle(g.getExamTitle());
                             analysisVo.setUnitId(g.getUnitId());
                             analysisVo.setUnitName(g.getUnitName());
                             analysisVo.setExamYear(g.getExamYear());
@@ -145,7 +159,6 @@ public class StatisticalAnalysisServiceImpl extends ServiceImpl<StatisticalAnaly
             list.stream().forEach(m->{
                 PersonClassHour personClassHour = new PersonClassHour();
                 personClassHour.setCandidateId(m.getCandidateId());
-                personClassHour.setExamId(m.getExamId());
                 String acquiredHours = personClassHourMapper.getAcquiredHours(personClassHour);
                 if(acquiredHours.contains(".")){
                     acquiredHours = acquiredHours.substring(0, acquiredHours.indexOf("."));

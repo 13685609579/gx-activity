@@ -17,19 +17,9 @@ import java.io.Serializable;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class StatisticalAnalysisVo extends BaseEntity implements Serializable {
+public class StatisticalAnalysisVo implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 考试管理ID
-     */
-    private String examId;
-
-    /**
-     * 考试名称
-     */
-    private String examTitle;
 
     /**
      * 单位ID
