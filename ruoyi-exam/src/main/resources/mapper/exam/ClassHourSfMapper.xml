@@ -85,7 +85,7 @@
         select hour_id, exam_id, topic_sort, target_hours, person_type, del_flag, create_time, update_time, create_by, update_by, remark from class_hour_sf
         where del_flag = 0
         <if test="examId != null and examId != ''">
-            AND tbl1.exam_id = #{examId}
+            AND exam_id = #{examId}
         </if>
         <if test="topicSort != null and topicSort != ''">
             AND topic_sort = #{topicSort}
