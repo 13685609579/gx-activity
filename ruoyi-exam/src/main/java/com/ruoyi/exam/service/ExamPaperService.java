@@ -48,4 +48,10 @@ public interface ExamPaperService extends IService<ExamPaper> {
      */
     public List<AnswerSheetVo> answerSheet(CandidateSignUpVo candidateSignUpVo);
 
+    /**
+     * 获取司法考试人员及格分数
+     * @return
+     */
+    public Integer markLine();
+
 }

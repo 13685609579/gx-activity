@@ -336,7 +336,8 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
                         }
                     }
                 }
-                manageVo.setAcquiredHours(String.valueOf(correctScore>=60?2:0)+"学时");
+                Integer markLine = examPaperService.markLine();
+                manageVo.setAcquiredHours(String.valueOf(correctScore>=markLine?2:0)+"学时");
                 voList.add(manageVo);
             }
         }

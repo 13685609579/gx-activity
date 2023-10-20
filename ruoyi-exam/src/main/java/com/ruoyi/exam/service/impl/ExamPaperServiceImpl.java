@@ -141,7 +141,7 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
             entity.setThisScore(String.valueOf(correctScore));
             entity.setCorrectNum(String.valueOf(correctList.size()));
             entity.setErrorNum(String.valueOf(errorList.size()));
-            entity.setClassHour(String.valueOf(correctScore>=60?2:0));
+            entity.setClassHour(String.valueOf(correctScore>=markLine()?2:0));
             entity.setExamId(candidateSignUpVo.getExamId());
             entity.setTopicSort(candidateSignUpVo.getTopicSort());
             entity.setDelFlag("0");
@@ -212,7 +212,7 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
         examResultVo.setCorrectNum(correctList.size());
         examResultVo.setErrorNum(errorList.size());
         examResultVo.setWdNum(total-correctList.size()-errorList.size());
-        examResultVo.setClassHour("+"+String.valueOf(correctScore>=60?2:0));
+        examResultVo.setClassHour("+"+String.valueOf(correctScore>=markLine()?2:0));
         examResultVo.setAsVoList(answerSheet(candidateSignUpVo));
         return examResultVo;
     }
@@ -294,6 +294,20 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
             }
         }
         return asVoList;
+    }
+
+    /**
+     * 获取司法考试人员及格分数
+     * @return
+     */
+    @Override
+    public Integer markLine(){
+        List<SysDictData> sysDictData = sysDictDataMapper.selectDictDataByType("mark_line");
+        Integer markLine = 0;
+        if(null != sysDictData){
+            markLine = Integer.valueOf(sysDictData.get(0).getDictValue());
+        }
+        return markLine;
     }
 
     public void handlePaper(CandidateSignUpVo candidateSignUpVo, int row){
