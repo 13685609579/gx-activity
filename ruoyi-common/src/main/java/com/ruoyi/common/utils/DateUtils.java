@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import org.apache.commons.lang3.time.DateFormatUtils;
 
@@ -188,4 +189,26 @@ public class DateUtils extends org.apache.commons.lang3.time.DateUtils
         ZonedDateTime zdt = localDateTime.atZone(ZoneId.systemDefault());
         return Date.from(zdt.toInstant());
     }
+
+    /**
+     * 字符串日期转LocalDate
+     * @param date
+     * @return
+     */
+    public static LocalDate strToLocalDate(String date){
+        LocalDate localDate = LocalDate.parse(date, DateTimeFormatter.ofPattern(YYYY_MM_DD));
+        return localDate;
+    }
+
+    /**
+     * 判断指定日期是否在指定日期范围内
+     * @param startDate
+     * @param endDate
+     * @param date
+     * @return
+     */
+    public static boolean contains(LocalDate startDate, LocalDate endDate, LocalDate date){
+        return !date.isBefore(startDate) && !date.isAfter(endDate);
+    }
+
 }

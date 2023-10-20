@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.common.core.domain.model.LoginUser;
+import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.exam.domain.*;
@@ -19,6 +20,7 @@ import com.ruoyi.system.mapper.SysDeptMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -169,6 +171,28 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
             examManageVo.setAcquiredHours(acquiredHours);
         }
         return examManageVo;
+    }
+
+    /**
+     * 校验能否参加考试（当前时间是否在考试日期范围内）
+     * @param openId
+     * @return
+     */
+    @Override
+    public boolean verifyTakeTestStatus(String openId) {
+        CandidateSignUp candidateSignUp = new CandidateSignUp();
+        candidateSignUp.setCandidateId(openId);
+        candidateSignUp = candidateSignUpMapper.latestCandidateSignUp(candidateSignUp);
+        ExamManage examManage = new ExamManage();
+        if(null != candidateSignUp){
+            examManage = examManageMapper.examManageInfo(candidateSignUp.getExamId());
+        }else{
+            examManage = examManageMapper.latestExamManageInfo();
+        }
+        LocalDate startDate = DateUtils.strToLocalDate(examManage.getStartTime());
+        LocalDate endDate = DateUtils.strToLocalDate(examManage.getEndTime());
+        boolean contains = DateUtils.contains(startDate, endDate, LocalDate.now());
+        return contains;
     }
 
     /**

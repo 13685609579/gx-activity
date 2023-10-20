@@ -43,6 +43,13 @@ public interface CandidateInfoService extends IService<CandidateInfo> {
     public ExamManageVo importantInformation(String openId);
 
     /**
+     * 校验能否参加考试（当前时间是否在考试日期范围内）
+     * @param openId
+     * @return
+     */
+    public boolean verifyTakeTestStatus(String openId);
+
+    /**
      * candidateInfo
      * @param candidateInfo
      * @return

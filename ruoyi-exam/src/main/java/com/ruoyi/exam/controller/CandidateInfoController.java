@@ -86,6 +86,18 @@ public class CandidateInfoController extends BaseController {
     }
 
     /**
+     * 校验能否参加考试（当前时间是否在考试日期范围内）
+     * @param openId
+     * @return
+     */
+    @GetMapping("/verifyTakeTestStatus")
+    @Anonymous
+    public AjaxResult verifyTakeTestStatus(HttpServletRequest request, String openId){
+        DataUtils.appCheck(request);
+        return success(candidateInfoService.verifyTakeTestStatus(openId));
+    }
+
+    /**
      * 个人信息-提交
      * @param candidateInfo
      * @return

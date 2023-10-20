@@ -53,4 +53,11 @@ public interface ClassHourSfMapper extends BaseMapper<ClassHourSf> {
      */
     public List<PersonClassHourVo> getPersonLabelHour(String examId);
 
+    /**
+     * 获取题目分类学时详情
+     * @param classHourSf
+     * @return
+     */
+    public ClassHourSf getClassHourSfInfo(ClassHourSf classHourSf);
+
 }

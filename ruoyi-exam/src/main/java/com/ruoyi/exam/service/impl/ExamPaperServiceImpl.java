@@ -58,6 +58,12 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
     @Autowired
     private SysDictDataMapper sysDictDataMapper;
 
+    @Autowired
+    private ClassHourSfMapper classHourSfMapper;
+
+    @Autowired
+    private CandidateInfoMapper candidateInfoMapper;
+
     public static List<ExamQuestion> correctList;
     public static List<ExamQuestion> errorList;
     public static Integer correctScore;
@@ -120,7 +126,15 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
         personClassHour.setExamId(candidateSignUpVo.getExamId());
         personClassHour.setTopicSort(candidateSignUpVo.getTopicSort());
         Integer classHours = personClassHourMapper.getCandidateClassHours(personClassHour);
-        if(null == classHours || classHours<8){ //当前考生、考试、题目分类学时小于8j学时
+        CandidateInfo candidateInfo = new CandidateInfo();
+        candidateInfo.setCandidateId(candidateSignUpVo.getCandidateId());
+        candidateInfo = candidateInfoMapper.selectCandidateInfo(candidateInfo);
+        ClassHourSf classHourSf = new ClassHourSf();
+        classHourSf.setExamId(candidateSignUpVo.getExamId());
+        classHourSf.setTopicSort(candidateSignUpVo.getTopicSort());
+        classHourSf.setPersonType(candidateInfo.getPersonCategory());
+        classHourSf = classHourSfMapper.getClassHourSfInfo(classHourSf);
+        if(null == classHours || classHours<Integer.valueOf(classHourSf.getTargetHours())){ //当前考生、考试、题目分类学时小于当前学时
             //新增考生考试结果
             PersonClassHour entity = new PersonClassHour();
             entity.setCandidateId(candidateSignUpVo.getCandidateId());
