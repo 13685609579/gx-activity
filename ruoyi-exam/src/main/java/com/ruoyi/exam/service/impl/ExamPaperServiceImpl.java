@@ -134,7 +134,7 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
         classHourSf.setTopicSort(candidateSignUpVo.getTopicSort());
         classHourSf.setPersonType(candidateInfo.getPersonCategory());
         classHourSf = classHourSfMapper.getClassHourSfInfo(classHourSf);
-        if(null == classHours || classHours<Integer.valueOf(classHourSf.getTargetHours())){ //当前考生、考试、题目分类学时小于当前学时
+        if((null == classHours && Integer.valueOf(classHourSf.getTargetHours())>0) || (null != classHours && classHours<Integer.valueOf(classHourSf.getTargetHours()))){ //当前考生、考试、题目分类学时小于当前学时
             //新增考生考试结果
             PersonClassHour entity = new PersonClassHour();
             entity.setCandidateId(candidateSignUpVo.getCandidateId());
