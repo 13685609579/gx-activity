@@ -42,7 +42,7 @@
     </select>
 
     <select id="selectCandidatePaper" parameterType="com.ruoyi.exam.domain.QuestionBankManage" resultMap="QuestionBankManageResult">
-        select ROW_NUMBER() OVER (ORDER BY tbl.create_time) AS topic_num, tbl.topic_id, tbl.topic_code, tbl.topic_content, tbl.topic_sort,
+        select tbl.topic_id, tbl.topic_code, tbl.topic_content, tbl.topic_sort,
         tbl.topic_type, tbl.topic_answer, tbl.answer_analysis, tbl.per_score, tbl.del_flag, tbl.create_time, tbl.update_time, tbl.create_by,
         tbl.update_by, tbl.remark from
         (

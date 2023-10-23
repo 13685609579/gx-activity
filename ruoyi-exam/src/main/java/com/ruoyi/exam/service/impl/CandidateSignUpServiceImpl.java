@@ -1,5 +1,6 @@
 package com.ruoyi.exam.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -165,9 +166,10 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
                     .eq(ExamPaper::getExamId, paperState.getExamId())
                     .eq(ExamPaper::getTopicSort, candidateSignUpVo.getTopicSort())
                     .eq(ExamPaper::getPaperStateId, paperState.getId())
-                    .eq(ExamPaper::getDelFlag, 0);
+                    .eq(ExamPaper::getDelFlag, 0)
+                    .orderByAsc(ExamPaper::getTopicNum);
             List<ExamPaper> examPaperList = examPaperMapper.selectList(queryWrapper2);
-            if(null != examPaperList && examPaperList.size()>0){
+            if(CollectionUtil.isNotEmpty(examPaperList)){
                 for(int i = 0; i<examPaperList.size(); i++){
                     ExamPaper examPaper = examPaperList.get(i);
                     QuestionBankManage questionBankManage = questionBankManageMapper.questionBankInfo(examPaper.getTopicId());
@@ -217,9 +219,10 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
             QuestionBankManage questionBankManage = new QuestionBankManage();
             questionBankManage.setTopicSort(candidateSignUpVo.getTopicSort());
             list = questionBankManageMapper.selectCandidatePaper(questionBankManage);
-            if(null != list && list.size()>0){
+            if(CollectionUtil.isNotEmpty(list)){
                 for(int i=0; i<list.size(); i++){
                     QuestionBankManage bankManage = list.get(i);
+                    bankManage.setTopicNum(String.valueOf(i+1));
                     bankManage.setTopicState("1");
                     getQuestionBankManage(bankManage);
                     insertExamPaperData(bankManage, candidateSignUpVo, paperStateId);

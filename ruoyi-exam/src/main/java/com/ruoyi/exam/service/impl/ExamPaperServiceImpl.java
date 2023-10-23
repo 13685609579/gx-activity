@@ -230,7 +230,8 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
                 .eq(ExamPaper::getExamId, candidateSignUpVo.getExamId())
                 .eq(ExamPaper::getPaperStateId, candidateSignUpVo.getPaperStateId())
                 .eq(ExamPaper::getTopicSort, candidateSignUpVo.getTopicSort())
-                .eq(ExamPaper::getDelFlag, 0);
+                .eq(ExamPaper::getDelFlag, 0)
+                .orderByAsc(ExamPaper::getTopicNum);
         Integer total = examPaperMapper.selectCount(wrapper1);
         List<ExamPaper> paperList = examPaperMapper.selectList(wrapper1);
         if(null != paperList && paperList.size()>0){

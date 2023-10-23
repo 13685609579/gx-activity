@@ -129,7 +129,9 @@ public class CandidateInfoController extends BaseController {
      */
     @Log(title = "审核考生信息", businessType = BusinessType.UPDATE)
     @GetMapping(value = "/updatePersonState")
-    public AjaxResult updatePersonState(CandidateInfo candidateInfo){
+    @Anonymous
+    public AjaxResult updatePersonState(HttpServletRequest request, CandidateInfo candidateInfo){
+        DataUtils.appCheck(request);
         return toAjax(candidateInfoService.updatePersonState(candidateInfo));
     }
 
@@ -138,20 +140,24 @@ public class CandidateInfoController extends BaseController {
      * @param candidateInfo
      * @return
      */
-    @Log(title = "考试记录", businessType = BusinessType.UPDATE)
+    @Log(title = "考试记录")
     @GetMapping(value = "/examRecord")
-    public AjaxResult examRecord(CandidateInfo candidateInfo){
+    @Anonymous
+    public AjaxResult examRecord(HttpServletRequest request, CandidateInfo candidateInfo){
+        DataUtils.appCheck(request);
         return success(candidateInfoService.examRecord(candidateInfo));
     }
 
     /**
      * 试卷
-     * @param candidateInfo
+     * @param paperState
      * @return
      */
     @Log(title = "试卷")
     @GetMapping(value = "/testPaper")
-    public AjaxResult testPaper(CandidatePaperState paperState){
+    @Anonymous
+    public AjaxResult testPaper(HttpServletRequest request, CandidatePaperState paperState){
+        DataUtils.appCheck(request);
         return success(candidateInfoService.testPaper(paperState));
     }
 
