@@ -6,7 +6,6 @@
         <result property="unitId"       column="unit_id"      />
         <result property="unitName"       column="unit_name"      />
         <result property="examYear"        column="exam_year"        />
-        <result property="classHour"       column="class_hour"      />
         <result property="candidateId"     column="candidate_id"    />
         <result property="classHour"     column="class_hour"    />
     </resultMap>
