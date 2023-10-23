@@ -33,7 +33,7 @@ public class GenerateCode {
         String tablePrefix = "";//前缀
         //映射的表名
         List<String> tables = new ArrayList<>();
-        tables.add("unit_manage");
+        tables.add("test_train");
 
         String[] tableNames = tables.toArray(new String[1]);
 
@@ -47,7 +47,7 @@ public class GenerateCode {
         String projectPath = System.getProperty("user.dir");
         gc.setOutputDir(projectPath + moduleName + "/src/main/java");
         gc.setFileOverride(override); // 是否覆盖,false:不覆盖如果已经有文件则不再生产,true覆盖重新生成
-        gc.setAuthor("hougq");//作者名称
+        gc.setAuthor("yxp");//作者名称
         gc.setOpen(false);
         gc.setIdType(IdType.AUTO);
         gc.setDateType(DateType.ONLY_DATE);
