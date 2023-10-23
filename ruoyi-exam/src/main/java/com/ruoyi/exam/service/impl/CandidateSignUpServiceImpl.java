@@ -70,14 +70,14 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
         Map<String, Object> paperList = new HashMap<>();
         Integer code = 0; //0:信息填写确认过 1：未信息填写确认过
         String msg = "当前考生，信息填写确认过，可直接答题！";
-        if(null != signUpList && signUpList.size()>0){
+        if(CollectionUtil.isNotEmpty(signUpList)){
             CandidatePaperState candidatePaperState = new CandidatePaperState();
             candidatePaperState.setCandidateId(candidateSignUpVo.getCandidateId());
             candidatePaperState.setExamId(candidateSignUpVo.getExamId());
             candidatePaperState.setTopicSort(candidateSignUpVo.getTopicSort());
             paperList = getCandidatePaperList(candidatePaperState, candidateSignUpVo);
         }
-        if(signUpList.isEmpty()){
+        if(CollectionUtil.isEmpty(signUpList)){
             code = 1;
             msg = "当前考生，未信息填写确认过，请先信息填写确认！";
         }
