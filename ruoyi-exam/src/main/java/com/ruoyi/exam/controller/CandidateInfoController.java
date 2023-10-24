@@ -129,9 +129,7 @@ public class CandidateInfoController extends BaseController {
      */
     @Log(title = "审核考生信息", businessType = BusinessType.UPDATE)
     @GetMapping(value = "/updatePersonState")
-    @Anonymous
-    public AjaxResult updatePersonState(HttpServletRequest request, CandidateInfo candidateInfo){
-        DataUtils.appCheck(request);
+    public AjaxResult updatePersonState(CandidateInfo candidateInfo){
         return toAjax(candidateInfoService.updatePersonState(candidateInfo));
     }
 
