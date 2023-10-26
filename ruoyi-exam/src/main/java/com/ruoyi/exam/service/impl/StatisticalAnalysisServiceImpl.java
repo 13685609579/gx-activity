@@ -2,11 +2,8 @@ package com.ruoyi.exam.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.common.core.domain.entity.SysDictData;
-import com.ruoyi.common.core.domain.model.LoginUser;
-import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.exam.domain.CandidateInfo;
-import com.ruoyi.exam.domain.ClassHourSf;
 import com.ruoyi.exam.domain.PersonClassHour;
 import com.ruoyi.exam.domain.UnitManage;
 import com.ruoyi.exam.domain.vo.CandidateClassHourVo;
@@ -19,8 +16,6 @@ import com.ruoyi.system.mapper.SysDictDataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import java.util.*;
 
 /**
@@ -41,12 +36,6 @@ public class StatisticalAnalysisServiceImpl extends ServiceImpl<StatisticalAnaly
     private CandidateInfoMapper candidateInfoMapper;
 
     @Autowired
-    private ClassHourSfMapper classHourSfMapper;
-
-    @Autowired
-    private UnitManageMapper unitManageMapper;
-
-    @Autowired
     private PersonClassHourMapper personClassHourMapper;
 
     @Autowired
@@ -59,11 +48,7 @@ public class StatisticalAnalysisServiceImpl extends ServiceImpl<StatisticalAnaly
      */
     @Override
     public List<StatisticalAnalysisVo> selectStatisticalAnalysisList(CandidateClassHourVo candidateClassHourVo) {
-        LoginUser loginUser = SecurityUtils.getLoginUser();
-        if(100 != loginUser.getDeptId()){ //用户部门不是肥西县（deptId:100）的用户在考生审核获取本部门所有用户
-            candidateClassHourVo.setUnitId(String.valueOf(loginUser.getDeptId()));
-        }
-        List<UnitManage> unitManageList = unitManageMapper.selectUnitList(candidateClassHourVo);
+        List<UnitManage> unitManageList = candidateClassHourVo.getUnitManageList();
         List<StatisticalAnalysisVo> list = new ArrayList<>();
         Set<StatisticalAnalysisVo> sets = new HashSet<>();
         if(null != unitManageList && unitManageList.size()>0){

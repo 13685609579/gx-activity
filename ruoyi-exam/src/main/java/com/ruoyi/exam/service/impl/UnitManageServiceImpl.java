@@ -2,6 +2,7 @@ package com.ruoyi.exam.service.impl;
 
 import com.ruoyi.common.core.domain.entity.SysDept;
 import com.ruoyi.exam.domain.UnitManage;
+import com.ruoyi.exam.domain.vo.CandidateClassHourVo;
 import com.ruoyi.exam.mapper.UnitManageMapper;
 import com.ruoyi.exam.service.UnitManageService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -51,5 +52,16 @@ public class UnitManageServiceImpl extends ServiceImpl<UnitManageMapper, UnitMan
             treeNodeList = treeBuild.buildTree();
         }*/
         return deptList;
+    }
+
+    /**
+     * 根据分页获取所有单位
+     * @param candidateClassHourVo
+     * @return
+     */
+    @Override
+    public List<UnitManage> selectUnitList(CandidateClassHourVo candidateClassHourVo) {
+        List<UnitManage> unitManageList = unitManageMapper.selectUnitList(candidateClassHourVo);
+        return unitManageList;
     }
 }

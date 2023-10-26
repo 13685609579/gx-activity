@@ -18,7 +18,7 @@ public interface UnitManageMapper extends BaseMapper<UnitManage> {
 
     /**
      * 根据分页获取所有单位
-     * @param unitManage
+     * @param candidateClassHourVo
      * @return
      */
     public List<UnitManage> selectUnitList(CandidateClassHourVo candidateClassHourVo);

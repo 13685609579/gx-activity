@@ -1,6 +1,7 @@
 package com.ruoyi.exam.domain.vo;
 
 import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.exam.domain.UnitManage;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -49,5 +50,8 @@ public class CandidateClassHourVo extends BaseEntity implements Serializable {
     private String completeState;
 
     private List<String> unitIds;
+
+    private List<UnitManage> unitManageList;
+
 
 }

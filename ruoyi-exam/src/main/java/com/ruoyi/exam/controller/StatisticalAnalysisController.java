@@ -1,18 +1,23 @@
 package com.ruoyi.exam.controller;
 
 import cn.hutool.core.collection.CollectionUtil;
+import com.github.pagehelper.PageInfo;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.entity.StatisticalAnalysisDetailsEntity;
 import com.ruoyi.common.core.domain.entity.StatisticalAnalysisEntity;
 import com.ruoyi.common.core.domain.entity.SysUser;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.exam.domain.UnitManage;
 import com.ruoyi.exam.domain.vo.CandidateClassHourVo;
 import com.ruoyi.exam.domain.vo.StatisticalAnalysisDetailsVo;
 import com.ruoyi.exam.domain.vo.StatisticalAnalysisVo;
 import com.ruoyi.exam.service.StatisticalAnalysisService;
+import com.ruoyi.exam.service.UnitManageService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +46,10 @@ public class StatisticalAnalysisController extends BaseController {
     @Autowired
     private StatisticalAnalysisService statisticalAnalysisService;
 
+    @Autowired
+    private UnitManageService unitManageService;
+
+
     /**
      * 统计分析列表
      * @param candidateClassHourVo
@@ -50,8 +59,16 @@ public class StatisticalAnalysisController extends BaseController {
     public TableDataInfo list(CandidateClassHourVo candidateClassHourVo)
     {
         startPage();
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        if(100 != loginUser.getDeptId()){ //用户部门不是肥西县（deptId:100）的用户在考生审核获取本部门所有用户
+            candidateClassHourVo.setUnitId(String.valueOf(loginUser.getDeptId()));
+        }
+        List<UnitManage> unitManageList = unitManageService.selectUnitList(candidateClassHourVo);
+        candidateClassHourVo.setUnitManageList(unitManageList);
         List<StatisticalAnalysisVo> list = statisticalAnalysisService.selectStatisticalAnalysisList(candidateClassHourVo);
-        return getDataTable(list);
+        TableDataInfo tableDataInfo = getDataTable(list);
+        tableDataInfo.setTotal(new PageInfo(unitManageList).getTotal());
+        return tableDataInfo;
     }
 
     /**

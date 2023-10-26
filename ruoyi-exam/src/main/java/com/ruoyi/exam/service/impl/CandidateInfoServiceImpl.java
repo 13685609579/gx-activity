@@ -238,7 +238,7 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
     /**
      * 修改考生状态
      * @param candidateInfo
-     * @return
+     * @return row
      */
     @Override
     public int updatePersonState(CandidateInfo candidateInfo) {
