@@ -61,7 +61,7 @@ public interface CandidateInfoService extends IService<CandidateInfo> {
      * @param candidateInfo
      * @return
      */
-    public int signInCandidateInfo(CandidateInfo candidateInfo);
+    public AjaxResult signInCandidateInfo(CandidateInfo candidateInfo);
 
     /**
      * 获取考生信息列表

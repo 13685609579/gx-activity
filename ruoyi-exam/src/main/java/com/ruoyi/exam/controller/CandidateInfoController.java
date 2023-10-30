@@ -70,7 +70,7 @@ public class CandidateInfoController extends BaseController {
     public AjaxResult signInCandidateInfo(@Validated @RequestBody CandidateInfo candidateInfo, HttpServletRequest request)
     {
         DataUtils.appCheck(request);
-        return toAjax(candidateInfoService.signInCandidateInfo(candidateInfo));
+        return candidateInfoService.signInCandidateInfo(candidateInfo);
     }
 
     /**

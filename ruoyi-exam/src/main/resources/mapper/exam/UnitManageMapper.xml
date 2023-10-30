@@ -23,12 +23,15 @@
         </if>
         and publish_state = 1
         )
+        <if test="unitIds != null">
+            AND unit_id in
+            <foreach collection="unitIds" item="unitId" open="(" separator="," close=")">
+                #{unitId}
+            </foreach>
+        </if>
         )
         <if test="unitName != null and unitName != ''">
             AND dept_name like concat('%', #{unitName}, '%')
-        </if>
-        <if test="unitId != null and unitId != ''">
-            AND dept_id = #{unitId}
         </if>
         <!-- 数据范围过滤 -->
         ${params.dataScope}

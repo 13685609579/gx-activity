@@ -1,6 +1,8 @@
 package com.ruoyi.exam.service.impl;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.ruoyi.common.core.domain.entity.SysDept;
+import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.exam.domain.UnitManage;
 import com.ruoyi.exam.domain.vo.CandidateClassHourVo;
 import com.ruoyi.exam.mapper.UnitManageMapper;
@@ -10,6 +12,7 @@ import com.ruoyi.system.mapper.SysDeptMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,6 +57,19 @@ public class UnitManageServiceImpl extends ServiceImpl<UnitManageMapper, UnitMan
         return deptList;
     }
 
+    @Override
+    public List<String> getUnitIds(CandidateClassHourVo candidateClassHourVo) {
+        List<String> unitIds = new ArrayList<>();
+        List<SysDept> sysDeptList = deptMapper.selectChildrenDeptById(Long.valueOf(candidateClassHourVo.getUnitId()));
+        unitIds.add(candidateClassHourVo.getUnitId());
+        if(CollectionUtil.isNotEmpty(sysDeptList)){
+            sysDeptList.stream().forEach(m->{
+                unitIds.add(String.valueOf(m.getDeptId()));
+            });
+        }
+        return unitIds;
+    }
+
     /**
      * 根据分页获取所有单位
      * @param candidateClassHourVo
@@ -61,7 +77,7 @@ public class UnitManageServiceImpl extends ServiceImpl<UnitManageMapper, UnitMan
      */
     @Override
     public List<UnitManage> selectUnitList(CandidateClassHourVo candidateClassHourVo) {
-        List<UnitManage> unitManageList = unitManageMapper.selectUnitList(candidateClassHourVo);
-        return unitManageList;
+        List<UnitManage> list = unitManageMapper.selectUnitList(candidateClassHourVo);
+        return list;
     }
 }

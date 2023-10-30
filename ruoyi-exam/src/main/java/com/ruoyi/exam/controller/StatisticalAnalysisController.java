@@ -62,6 +62,7 @@ public class StatisticalAnalysisController extends BaseController {
         LoginUser loginUser = SecurityUtils.getLoginUser();
         if(100 != loginUser.getDeptId()){ //用户部门不是肥西县（deptId:100）的用户在考生审核获取本部门所有用户
             candidateClassHourVo.setUnitId(String.valueOf(loginUser.getDeptId()));
+            candidateClassHourVo.setUnitIds(unitManageService.getUnitIds(candidateClassHourVo));
         }
         List<UnitManage> unitManageList = unitManageService.selectUnitList(candidateClassHourVo);
         candidateClassHourVo.setUnitManageList(unitManageList);
@@ -93,6 +94,13 @@ public class StatisticalAnalysisController extends BaseController {
     @PostMapping("/exportList")
     public void exportList(HttpServletResponse response, CandidateClassHourVo candidateClassHourVo)
     {
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        if(100 != loginUser.getDeptId()){ //用户部门不是肥西县（deptId:100）的用户在考生审核获取本部门所有用户
+            candidateClassHourVo.setUnitId(String.valueOf(loginUser.getDeptId()));
+            candidateClassHourVo.setUnitIds(unitManageService.getUnitIds(candidateClassHourVo));
+        }
+        List<UnitManage> unitManageList = unitManageService.selectUnitList(candidateClassHourVo);
+        candidateClassHourVo.setUnitManageList(unitManageList);
         List<StatisticalAnalysisVo> analysisVoList = statisticalAnalysisService.selectStatisticalAnalysisList(candidateClassHourVo);
         List<StatisticalAnalysisEntity> analysisEntityList = new ArrayList<StatisticalAnalysisEntity>();
         if(CollectionUtil.isNotEmpty(analysisVoList)){

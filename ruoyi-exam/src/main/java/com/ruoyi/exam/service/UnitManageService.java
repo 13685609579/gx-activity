@@ -23,6 +23,8 @@ public interface UnitManageService extends IService<UnitManage> {
      */
     public List<SysDept> getUnitNames();
 
+    public List<String> getUnitIds(CandidateClassHourVo candidateClassHourVo);
+
     /**
      * 根据分页获取所有单位
      * @param candidateClassHourVo

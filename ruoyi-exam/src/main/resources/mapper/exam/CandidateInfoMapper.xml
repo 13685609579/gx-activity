@@ -31,6 +31,9 @@
         <if test="unitId != null and unitId != ''">
             AND unit_id = #{unitId}
         </if>
+        <if test="mobile != null and mobile != ''">
+            AND mobile = #{mobile}
+        </if>
     </select>
 
     <select id="selectCandidateInfoList" parameterType="com.ruoyi.exam.domain.CandidateInfo" resultMap="CandidateInfoResult">
@@ -92,5 +95,10 @@
         </set>
         where candidate_id = #{candidateId}
     </update>
+
+    <delete id="removeCandidateInfo" parameterType="com.ruoyi.exam.domain.CandidateInfo">
+        delete from candidate_info where 1=1
+        <if test="mobile != null and mobile != ''">and mobile = #{mobile}</if>
+    </delete>
 
 </mapper>

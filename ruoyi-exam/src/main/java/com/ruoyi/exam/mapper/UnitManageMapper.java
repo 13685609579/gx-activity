@@ -17,7 +17,7 @@ import java.util.List;
 public interface UnitManageMapper extends BaseMapper<UnitManage> {
 
     /**
-     * 根据分页获取所有单位
+     * 获取所有单位
      * @param candidateClassHourVo
      * @return
      */

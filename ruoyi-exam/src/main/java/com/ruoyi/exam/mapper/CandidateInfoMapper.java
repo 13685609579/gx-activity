@@ -43,4 +43,11 @@ public interface CandidateInfoMapper extends BaseMapper<CandidateInfo> {
      */
     public int updateCandidateInfo(CandidateInfo candidateInfo);
 
+    /**
+     * 删除考生信息
+     * @param candidateInfo
+     * @return
+     */
+    public int removeCandidateInfo(CandidateInfo candidateInfo);
+
 }

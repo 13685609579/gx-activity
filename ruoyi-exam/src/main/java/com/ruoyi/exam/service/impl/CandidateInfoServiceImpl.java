@@ -214,10 +214,24 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
      * @return
      */
     @Override
-    public int signInCandidateInfo(CandidateInfo candidateInfo) {
+    public AjaxResult signInCandidateInfo(CandidateInfo candidateInfo) {
+        CandidateInfo cInfo = new CandidateInfo();
+        cInfo.setMobile(candidateInfo.getMobile());
+        cInfo = candidateInfoMapper.selectCandidateInfo(cInfo);
+        if(null != cInfo){
+            if(StringUtils.equals("0", cInfo.getPersonState())){
+                candidateInfoMapper.removeCandidateInfo(cInfo);
+            }
+            if(StringUtils.equals("2", cInfo.getPersonState())){
+                return new AjaxResult(500, "当前账号待管理员审核，请审核通过后再尝试！");
+            }
+            if(StringUtils.equals("1", cInfo.getPersonState())){
+                return new AjaxResult(500, "当前账号已被注册且审核通过，无法重新注册！");
+            }
+        }
         candidateInfo.setCandidateId(candidateInfo.getOpenId());
-        int row = candidateInfoMapper.insertCandidateInfoData(candidateInfo);
-        return row;
+        candidateInfoMapper.insertCandidateInfoData(candidateInfo);
+        return new AjaxResult(200, "考生信息注册成功！");
     }
 
     /**
