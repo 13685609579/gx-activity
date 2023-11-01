@@ -52,6 +52,9 @@
         <if test="unitId != null and unitId != ''">
             AND tbl1.unit_id = #{unitId}
         </if>
+        <if test="personState != null and personState != ''">
+            AND tbl1.person_state = #{personState}
+        </if>
         <!-- 数据范围过滤 -->
         ${params.dataScope}
     </select>

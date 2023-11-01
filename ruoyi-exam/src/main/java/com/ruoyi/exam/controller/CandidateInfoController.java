@@ -1,15 +1,24 @@
 package com.ruoyi.exam.controller;
 
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.ruoyi.common.annotation.Anonymous;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.domain.entity.CandidateInfoEntity;
+import com.ruoyi.common.core.domain.entity.StatisticalAnalysisEntity;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.SecurityUtils;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.exam.domain.CandidateInfo;
 import com.ruoyi.exam.domain.CandidatePaperState;
+import com.ruoyi.exam.domain.UnitManage;
+import com.ruoyi.exam.domain.vo.CandidateClassHourVo;
 import com.ruoyi.exam.domain.vo.CandidateSignUpVo;
+import com.ruoyi.exam.domain.vo.StatisticalAnalysisVo;
 import com.ruoyi.exam.service.CandidateInfoService;
 import com.ruoyi.exam.util.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +26,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -120,6 +131,36 @@ public class CandidateInfoController extends BaseController {
         startPage();
         List<CandidateInfo> list = candidateInfoService.selectCandidateInfoList(candidateInfo);
         return getDataTable(list);
+    }
+
+    /**
+     * 考生审核-列表导出
+     * @param response
+     * @param candidateInfoEntity
+     */
+    @Log(title = "考生审核-列表导出", businessType = BusinessType.EXPORT)
+    @PostMapping("/exportList")
+    public void exportList(HttpServletResponse response, CandidateInfoEntity candidateInfoEntity)
+    {
+        CandidateInfo candidateInfo = new CandidateInfo();
+        candidateInfo.setCandidateName(candidateInfoEntity.getCandidateName());
+        candidateInfo.setMobile(candidateInfoEntity.getMobile());
+        candidateInfo.setPersonState("1");
+        List<CandidateInfo> list = candidateInfoService.selectCandidateInfoList(candidateInfo);
+        List<CandidateInfoEntity> candidateInfoEntityList = new ArrayList<CandidateInfoEntity>();
+        if(CollectionUtil.isNotEmpty(list)){
+            list.stream().forEach(m->{
+                CandidateInfoEntity entity = new CandidateInfoEntity();
+                entity.setCandidateName(m.getCandidateName());
+                entity.setMobile(m.getMobile());
+                entity.setPersonCategory(m.getPersonCategory());
+                entity.setUnitName(m.getUnitName());
+                entity.setPersonState(m.getPersonState());
+                candidateInfoEntityList.add(entity);
+            });
+        }
+        ExcelUtil<CandidateInfoEntity> util = new ExcelUtil<CandidateInfoEntity>(CandidateInfoEntity.class);
+        util.exportExcel(response, candidateInfoEntityList, "考生数据");
     }
 
     /**
