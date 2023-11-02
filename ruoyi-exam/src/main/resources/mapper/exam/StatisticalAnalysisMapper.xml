@@ -22,6 +22,7 @@
         and tbl3.del_flag = 0
         and tbl4.del_flag = 0
         and tbl5.del_flag = 0
+        and tbl4.publish_state = 1
         <if test="examYear != null and examYear != ''">
             AND tbl4.exam_year = #{examYear}
         </if>

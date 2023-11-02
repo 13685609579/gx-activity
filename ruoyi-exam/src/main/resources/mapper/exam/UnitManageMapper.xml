@@ -13,25 +13,28 @@
     </select>
 
     <select id="selectUnitList" parameterType="com.ruoyi.exam.domain.vo.CandidateClassHourVo" resultMap="UnitManageResult">
-        select dept_id as unit_id, dept_name as unit_name, del_flag from sys_dept where del_flag = 0 and dept_id in
-        (
-        select distinct unit_id from candidate_sign_up where del_flag = 0 and exam_id in
-        (
-        select distinct exam_id from exam_manage where del_flag = 0
+        select DISTINCT tbl1.dept_id as unit_id, tbl1.dept_name as unit_name
+        from sys_dept tbl1 LEFT JOIN candidate_info tbl2 ON tbl1.dept_id = tbl2.unit_id
+        LEFT JOIN candidate_sign_up tbl3 ON tbl2.candidate_id = tbl3.candidate_id AND tbl2.unit_id = tbl3.unit_id
+        LEFT JOIN exam_manage tbl4 ON tbl3.exam_id = tbl4.exam_id
+        LEFT JOIN person_class_hour tbl5 ON tbl2.candidate_id = tbl5.candidate_id and tbl3.exam_id = tbl5.exam_id
+        where tbl1.del_flag = 0
+        and tbl2.del_flag = 0
+        and tbl3.del_flag = 0
+        and tbl4.del_flag = 0
+        and tbl5.del_flag = 0
+        and tbl4.publish_state = 1
         <if test="examYear != null and examYear != ''">
-            AND exam_year = #{examYear}
+            AND tbl4.exam_year = #{examYear}
         </if>
-        and publish_state = 1
-        )
         <if test="unitIds != null">
-            AND unit_id in
+            AND tbl1.dept_id in
             <foreach collection="unitIds" item="unitId" open="(" separator="," close=")">
                 #{unitId}
             </foreach>
         </if>
-        )
         <if test="unitName != null and unitName != ''">
-            AND dept_name like concat('%', #{unitName}, '%')
+            AND tbl1.dept_name like concat('%', #{unitName}, '%')
         </if>
         <!-- 数据范围过滤 -->
         ${params.dataScope}
