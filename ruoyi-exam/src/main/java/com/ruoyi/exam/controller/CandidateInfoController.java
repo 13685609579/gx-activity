@@ -7,19 +7,14 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.CandidateInfoEntity;
-import com.ruoyi.common.core.domain.entity.StatisticalAnalysisEntity;
-import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
-import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.exam.domain.CandidateInfo;
 import com.ruoyi.exam.domain.CandidatePaperState;
-import com.ruoyi.exam.domain.UnitManage;
-import com.ruoyi.exam.domain.vo.CandidateClassHourVo;
 import com.ruoyi.exam.domain.vo.CandidateSignUpVo;
-import com.ruoyi.exam.domain.vo.StatisticalAnalysisVo;
 import com.ruoyi.exam.service.CandidateInfoService;
+import com.ruoyi.exam.service.UnitManageService;
 import com.ruoyi.exam.util.DataUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -44,6 +39,9 @@ public class CandidateInfoController extends BaseController {
 
     @Autowired
     private CandidateInfoService candidateInfoService;
+
+    @Autowired
+    private UnitManageService unitManageService;
 
     /**
      * 当前考生信息
@@ -145,7 +143,7 @@ public class CandidateInfoController extends BaseController {
         CandidateInfo candidateInfo = new CandidateInfo();
         candidateInfo.setCandidateName(candidateInfoEntity.getCandidateName());
         candidateInfo.setMobile(candidateInfoEntity.getMobile());
-        candidateInfo.setPersonState("1");
+        candidateInfo.setPersonState(candidateInfoEntity.getPersonState());
         List<CandidateInfo> list = candidateInfoService.selectCandidateInfoList(candidateInfo);
         List<CandidateInfoEntity> candidateInfoEntityList = new ArrayList<CandidateInfoEntity>();
         if(CollectionUtil.isNotEmpty(list)){
@@ -215,6 +213,37 @@ public class CandidateInfoController extends BaseController {
         return success(candidateInfoService.examPaperView(candidateSignUpVo));
     }
 
+    /**
+     * 考生审核--当前考生信息
+     * @param candidateId
+     * @return
+     */
+    @GetMapping(value = "/getCurrentCandidateInformation")
+    public AjaxResult getCurrentCandidateInformation(String candidateId){
+        return success(candidateInfoService.getCandidateInfo(candidateId));
+    }
+
+    /**
+     * 考生审核--所属单位
+     * @param request
+     * @return
+     */
+    @GetMapping("/getUnitNames")
+    public AjaxResult getUnitNames(HttpServletRequest request)
+    {
+        return success(unitManageService.getUnitNames());
+    }
+
+    /**
+     * 考生审核--修改确定
+     * @param candidateInfo
+     * @return
+     */
+    @Log(title = "考生审核--修改确定", businessType = BusinessType.UPDATE)
+    @PostMapping(value = "/updateCurrentCandidateInformation")
+    public AjaxResult updateCurrentCandidateInformation(@Validated @RequestBody CandidateInfo candidateInfo){
+        return toAjax(candidateInfoService.updateCurrentCandidateInformation(candidateInfo));
+    }
 
 }
 

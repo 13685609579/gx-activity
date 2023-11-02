@@ -209,6 +209,17 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
     }
 
     /**
+     * 考生审核--修改确定
+     * @param candidateInfo
+     * @return
+     */
+    @Override
+    public int updateCurrentCandidateInformation(CandidateInfo candidateInfo) {
+        int row = candidateInfoMapper.updateCandidateInfo(candidateInfo);
+        return row;
+    }
+
+    /**
      * 注册考生信息
      * @param candidateInfo
      * @return

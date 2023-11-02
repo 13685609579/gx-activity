@@ -68,18 +68,27 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
                 .eq(CandidateSignUp::getDelFlag, 0);
         List<CandidateSignUp> signUpList = candidateSignUpMapper.selectList(wrapper);
         Map<String, Object> paperList = new HashMap<>();
-        Integer code = 0; //0:信息填写确认过 1：未信息填写确认过
-        String msg = "当前考生，信息填写确认过，可直接答题！";
+        Integer code = 0; //0:已信息填写确认 1：未信息填写确认
+        String msg = "当前考生已信息填写确认，可直接答题！";
         if(CollectionUtil.isNotEmpty(signUpList)){
-            CandidatePaperState candidatePaperState = new CandidatePaperState();
-            candidatePaperState.setCandidateId(candidateSignUpVo.getCandidateId());
-            candidatePaperState.setExamId(candidateSignUpVo.getExamId());
-            candidatePaperState.setTopicSort(candidateSignUpVo.getTopicSort());
-            paperList = getCandidatePaperList(candidatePaperState, candidateSignUpVo);
+            CandidateInfo candidateInfo = new CandidateInfo();
+            candidateInfo.setCandidateId(candidateSignUpVo.getCandidateId());
+            candidateInfo = candidateInfoMapper.selectCandidateInfo(candidateInfo);
+            CandidateSignUp candidateSignUp = signUpList.get(signUpList.size() - 1);
+            if(StringUtils.equals(candidateInfo.getUnitId(), candidateSignUp.getUnitId())){
+                CandidatePaperState candidatePaperState = new CandidatePaperState();
+                candidatePaperState.setCandidateId(candidateSignUpVo.getCandidateId());
+                candidatePaperState.setExamId(candidateSignUpVo.getExamId());
+                candidatePaperState.setTopicSort(candidateSignUpVo.getTopicSort());
+                paperList = getCandidatePaperList(candidatePaperState, candidateSignUpVo);
+            }else{
+                code = 1;
+                msg = "当前考生已更换单位，请重新信息填写确认！";
+            }
         }
         if(CollectionUtil.isEmpty(signUpList)){
             code = 1;
-            msg = "当前考生，未信息填写确认过，请先信息填写确认！";
+            msg = "当前考生未信息填写确认，请先信息填写确认！";
         }
         AjaxResult ajaxResult = new AjaxResult(code, msg, paperList);
         return ajaxResult;

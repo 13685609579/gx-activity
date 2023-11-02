@@ -57,6 +57,13 @@ public interface CandidateInfoService extends IService<CandidateInfo> {
     public int updateCandidateInfo(CandidateInfo candidateInfo);
 
     /**
+     * 考生审核--修改确定
+     * @param candidateInfo
+     * @return
+     */
+    public int updateCurrentCandidateInformation(CandidateInfo candidateInfo);
+
+    /**
      * 注册考生信息
      * @param candidateInfo
      * @return
