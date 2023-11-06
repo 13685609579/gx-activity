@@ -151,7 +151,7 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
     @Override
     public int updateQuestionBank(QuestionBankManage questionBankManage) {
         int row = questionBankManageMapper.updateQuestionBank(questionBankManage);
-        if(StringUtils.equals("1", questionBankManage.getTopicType()) || StringUtils.equals("3", questionBankManage.getTopicType())){
+        if(StringUtils.equals("1", questionBankManage.getTopicType()) || StringUtils.equals("2", questionBankManage.getTopicType())){
             List<TopicOptions> topicOptionsList = questionBankManage.getTopicOptionsList();
             if(null != topicOptionsList && topicOptionsList.size()>0){
                 topicOptionsList.stream().forEach(m->{
