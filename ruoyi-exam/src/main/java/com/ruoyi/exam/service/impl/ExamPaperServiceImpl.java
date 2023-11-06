@@ -64,10 +64,6 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
     @Autowired
     private CandidateInfoMapper candidateInfoMapper;
 
-    public static List<ExamQuestion> correctList;
-    public static List<ExamQuestion> errorList;
-    public static Integer correctScore;
-
     /**
      * 考试-下一题
      * @param candidateSignUpVo
@@ -138,10 +134,10 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
             //新增考生考试结果
             PersonClassHour entity = new PersonClassHour();
             entity.setCandidateId(candidateSignUpVo.getCandidateId());
-            entity.setThisScore(String.valueOf(correctScore));
-            entity.setCorrectNum(String.valueOf(correctList.size()));
-            entity.setErrorNum(String.valueOf(errorList.size()));
-            entity.setClassHour(String.valueOf(correctScore>=markLine()?2:0));
+            entity.setThisScore(String.valueOf(examResultVo.getThisScore()));
+            entity.setCorrectNum(String.valueOf(examResultVo.getCorrectNum()));
+            entity.setErrorNum(String.valueOf(examResultVo.getErrorNum()));
+            entity.setClassHour(examResultVo.getClassHour().substring(1));
             entity.setExamId(candidateSignUpVo.getExamId());
             entity.setTopicSort(candidateSignUpVo.getTopicSort());
             entity.setDelFlag("0");
@@ -153,10 +149,23 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
         return ajaxResult;
     }
 
-    public void setParam(CandidateSignUpVo candidateSignUpVo){
-        correctList = new ArrayList<ExamQuestion>();
-        errorList = new ArrayList<ExamQuestion>();
-        correctScore = 0;
+    /**
+     * 考试结果
+     * @param candidateSignUpVo
+     * @return
+     */
+    @Override
+    public ExamResultVo examResult(CandidateSignUpVo candidateSignUpVo) {
+        LambdaQueryWrapper<ExamPaper> wrapper1 = new LambdaQueryWrapper<>();
+        wrapper1.eq(ExamPaper::getCandidateId, candidateSignUpVo.getCandidateId())
+                .eq(ExamPaper::getExamId, candidateSignUpVo.getExamId())
+                .eq(ExamPaper::getPaperStateId, candidateSignUpVo.getPaperStateId())
+                .eq(ExamPaper::getTopicSort, candidateSignUpVo.getTopicSort())
+                .eq(ExamPaper::getDelFlag, 0);
+        Integer total = examPaperMapper.selectCount(wrapper1);
+        List<ExamQuestion> correctList = new ArrayList<ExamQuestion>();
+        List<ExamQuestion> errorList = new ArrayList<ExamQuestion>();
+        Integer correctScore = 0;
         LambdaQueryWrapper<ExamQuestion> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(ExamQuestion::getCandidateId, candidateSignUpVo.getCandidateId())
                 .eq(ExamQuestion::getExamId, candidateSignUpVo.getExamId())
@@ -182,23 +191,6 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
                 }
             }
         }
-    }
-
-    /**
-     * 考试结果
-     * @param candidateSignUpVo
-     * @return
-     */
-    @Override
-    public ExamResultVo examResult(CandidateSignUpVo candidateSignUpVo) {
-        LambdaQueryWrapper<ExamPaper> wrapper1 = new LambdaQueryWrapper<>();
-        wrapper1.eq(ExamPaper::getCandidateId, candidateSignUpVo.getCandidateId())
-                .eq(ExamPaper::getExamId, candidateSignUpVo.getExamId())
-                .eq(ExamPaper::getPaperStateId, candidateSignUpVo.getPaperStateId())
-                .eq(ExamPaper::getTopicSort, candidateSignUpVo.getTopicSort())
-                .eq(ExamPaper::getDelFlag, 0);
-        Integer total = examPaperMapper.selectCount(wrapper1);
-        setParam(candidateSignUpVo);
         ExamResultVo examResultVo = new ExamResultVo();
         examResultVo.setThisScore(correctScore);
         double v1 = Double.parseDouble(String.valueOf(correctList.size()));
@@ -215,6 +207,34 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
         examResultVo.setClassHour("+"+String.valueOf(correctScore>=markLine()?2:0));
         examResultVo.setAsVoList(answerSheet(candidateSignUpVo));
         return examResultVo;
+    }
+
+    public void setParam(List<ExamQuestion> correctList, List<ExamQuestion> errorList, Integer correctScore, CandidateSignUpVo candidateSignUpVo){
+        LambdaQueryWrapper<ExamQuestion> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(ExamQuestion::getCandidateId, candidateSignUpVo.getCandidateId())
+                .eq(ExamQuestion::getExamId, candidateSignUpVo.getExamId())
+                .eq(ExamQuestion::getPaperStateId, candidateSignUpVo.getPaperStateId())
+                .eq(ExamQuestion::getTopicSort, candidateSignUpVo.getTopicSort())
+                .eq(ExamQuestion::getDelFlag, 0);
+        List<ExamQuestion> examQuestionList = examQuestionMapper.selectList(wrapper);
+        if(null != examQuestionList && examQuestionList.size()>0){
+            for(int i=0; i<examQuestionList.size(); i++){
+                ExamQuestion question = examQuestionList.get(i);
+                if(StringUtils.equals("1", question.getAnswerResult())){
+                    correctList.add(question);
+                    QuestionBankManage bankInfo = questionBankManageMapper.questionBankInfo(question.getTopicId());
+                    if(StringUtils.equals("1", bankInfo.getTopicType()) || StringUtils.equals("3", bankInfo.getTopicType())){
+                        correctScore += 2;
+                    }
+                    if(StringUtils.equals("2", bankInfo.getTopicType())){
+                        correctScore += 5;
+                    }
+                }
+                if(StringUtils.equals("0", question.getAnswerResult())){
+                    errorList.add(question);
+                }
+            }
+        }
     }
 
     /**
