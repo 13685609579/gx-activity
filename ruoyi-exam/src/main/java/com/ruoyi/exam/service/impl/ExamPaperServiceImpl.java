@@ -7,7 +7,6 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.exam.domain.*;
 import com.ruoyi.exam.domain.vo.CandidateSignUpVo;
-import com.ruoyi.exam.domain.vo.ExamManageVo;
 import com.ruoyi.exam.domain.vo.ExamResultVo;
 import com.ruoyi.exam.mapper.*;
 import com.ruoyi.exam.service.ExamPaperService;
@@ -15,16 +14,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ruoyi.exam.util.DataUtils;
 import com.ruoyi.system.mapper.SysDictDataMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * <p>
@@ -145,7 +139,6 @@ public class ExamPaperServiceImpl extends ServiceImpl<ExamPaperMapper, ExamPaper
             entity.setCreateBy(candidateSignUpVo.getUpdateBy());
             personClassHourMapper.insert(entity);
         }
-
         return ajaxResult;
     }
 

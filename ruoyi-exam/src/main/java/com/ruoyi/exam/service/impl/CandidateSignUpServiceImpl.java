@@ -81,6 +81,28 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
                 candidatePaperState.setExamId(candidateSignUpVo.getExamId());
                 candidatePaperState.setTopicSort(candidateSignUpVo.getTopicSort());
                 paperList = getCandidatePaperList(candidatePaperState, candidateSignUpVo);
+
+                LambdaQueryWrapper<CandidateSignUp> wrapper1 = new LambdaQueryWrapper<>();
+                wrapper1.eq(CandidateSignUp::getCandidateId, candidateSignUpVo.getCandidateId())
+                        .eq(CandidateSignUp::getExamId, candidateSignUpVo.getExamId())
+                        .eq(CandidateSignUp::getUnitId, candidateInfo.getUnitId())
+                        .eq(CandidateSignUp::getTopicSort, candidateSignUpVo.getTopicSort())
+                        .eq(CandidateSignUp::getDelFlag, 0);
+                List<CandidateSignUp> signUpList1 = candidateSignUpMapper.selectList(wrapper1);
+                if(CollectionUtil.isEmpty(signUpList1)){
+                    CandidateSignUp csUp = new CandidateSignUp();
+                    String signUpId = DataUtils.uuids();
+                    csUp.setSignUpId(signUpId);
+                    csUp.setCandidateId(candidateInfo.getCandidateId());
+                    csUp.setCandidateName(candidateInfo.getCandidateName());
+                    csUp.setPersonCategory(candidateInfo.getPersonCategory());
+                    csUp.setUnitId(candidateInfo.getUnitId());
+                    csUp.setExamId(candidateSignUpVo.getExamId());
+                    csUp.setTopicSort(candidateSignUpVo.getTopicSort());
+                    csUp.setCreateBy(candidateSignUpVo.getCreateBy());
+                    csUp.setCreateTime(new Date());
+                    candidateSignUpMapper.insertCandidateSignUpData(csUp);
+                }
             }else{
                 code = 1;
                 msg = "当前考生已更换单位，请重新信息填写确认！";
@@ -112,29 +134,43 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
         candidateInfo.setUnitId(candidateSignUpVo.getUnitId());
         candidateInfo = candidateInfoMapper.selectCandidateInfo(candidateInfo);
         if(null != candidateInfo){
-            CandidateSignUp candidateSignUp = new CandidateSignUp();
-            String signUpId = DataUtils.uuids();
-            candidateSignUp.setSignUpId(signUpId);
-            candidateSignUp.setPersonCategory(candidateInfo.getPersonCategory());
-            candidateSignUp.setCreateBy(candidateSignUpVo.getCreateBy());
-            candidateSignUp.setCandidateId(candidateSignUpVo.getCandidateId());
-            candidateSignUp.setCandidateName(candidateSignUpVo.getCandidateName());
-            candidateSignUp.setUnitId(candidateSignUpVo.getUnitId());
-            candidateSignUp.setExamId(candidateSignUpVo.getExamId());
-            candidateSignUp.setTopicSort(candidateSignUpVo.getTopicSort());
-            int row = candidateSignUpMapper.insertCandidateSignUpData(candidateSignUp);
-            if(1 == row){
-                CandidatePaperState candidatePaperState = new CandidatePaperState();
-                candidatePaperState.setCandidateId(candidateSignUpVo.getCandidateId());
-                candidatePaperState.setExamId(candidateSignUpVo.getExamId());
-                candidatePaperState.setTopicSort(candidateSignUpVo.getTopicSort());
-                //获取本场考试试卷
-                examPaperData = getCandidatePaperList(candidatePaperState, candidateSignUpVo);
-                msg = "考生信息正确，可直接参与考试！";
-            }else{
-                code = 500;
-                msg = "考生信息确认有误，请重新填写考生信息！";
+            if(StringUtils.isEmpty(candidateSignUpVo.getUnitId()) || StringUtils.isBlank(candidateSignUpVo.getUnitId())){
+                candidateSignUpVo.setUnitId(candidateInfo.getUnitId());
             }
+            //校验当前考生是否报名过当前考试活动、题目分类的考试
+            LambdaQueryWrapper<CandidateSignUp> wrapper1 = new LambdaQueryWrapper<>();
+            wrapper1.eq(CandidateSignUp::getCandidateId, candidateSignUpVo.getCandidateId())
+                    .eq(CandidateSignUp::getExamId, candidateSignUpVo.getExamId())
+                    .eq(CandidateSignUp::getUnitId, candidateSignUpVo.getUnitId())
+                    .eq(CandidateSignUp::getTopicSort, candidateSignUpVo.getTopicSort())
+                    .eq(CandidateSignUp::getDelFlag, 0);
+            List<CandidateSignUp> signUpList = candidateSignUpMapper.selectList(wrapper1);
+            if(CollectionUtil.isEmpty(signUpList)){ //如果未参加新增报名信息
+                CandidateSignUp candidateSignUp = new CandidateSignUp();
+                String signUpId = DataUtils.uuids();
+                candidateSignUp.setSignUpId(signUpId);
+                candidateSignUp.setPersonCategory(candidateInfo.getPersonCategory());
+                candidateSignUp.setCreateBy(candidateSignUpVo.getCreateBy());
+                candidateSignUp.setCandidateId(candidateSignUpVo.getCandidateId());
+                candidateSignUp.setCandidateName(candidateSignUpVo.getCandidateName());
+                candidateSignUp.setUnitId(candidateSignUpVo.getUnitId());
+                candidateSignUp.setExamId(candidateSignUpVo.getExamId());
+                candidateSignUp.setTopicSort(candidateSignUpVo.getTopicSort());
+                int row = candidateSignUpMapper.insertCandidateSignUpData(candidateSignUp);
+                if(1 == row){
+                    msg = "考生信息正确，可直接参与考试！";
+                }else{
+                    code = 500;
+                    msg = "考生信息确认有误，请重新填写考生信息！";
+                }
+            }
+            CandidatePaperState candidatePaperState = new CandidatePaperState();
+            candidatePaperState.setCandidateId(candidateSignUpVo.getCandidateId());
+            candidatePaperState.setExamId(candidateSignUpVo.getExamId());
+            candidatePaperState.setTopicSort(candidateSignUpVo.getTopicSort());
+            //获取本场考试试卷
+            examPaperData = getCandidatePaperList(candidatePaperState, candidateSignUpVo);
+
         }else{
             code = 500;
             msg = "考生信息确认有误，请重新填写考生信息！";

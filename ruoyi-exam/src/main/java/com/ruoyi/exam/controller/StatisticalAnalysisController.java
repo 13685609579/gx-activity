@@ -6,7 +6,6 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.entity.StatisticalAnalysisDetailsEntity;
 import com.ruoyi.common.core.domain.entity.StatisticalAnalysisEntity;
-import com.ruoyi.common.core.domain.entity.SysUser;
 import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
@@ -58,12 +57,12 @@ public class StatisticalAnalysisController extends BaseController {
     @GetMapping("/list")
     public TableDataInfo list(CandidateClassHourVo candidateClassHourVo)
     {
-        startPage();
         LoginUser loginUser = SecurityUtils.getLoginUser();
         if(100 != loginUser.getDeptId()){ //用户部门不是肥西县（deptId:100）的用户在考生审核获取本部门所有用户
             candidateClassHourVo.setUnitId(String.valueOf(loginUser.getDeptId()));
             candidateClassHourVo.setUnitIds(unitManageService.getUnitIds(candidateClassHourVo));
         }
+        startPage();
         List<UnitManage> unitManageList = unitManageService.selectUnitList(candidateClassHourVo);
         candidateClassHourVo.setUnitManageList(unitManageList);
         List<StatisticalAnalysisVo> list = statisticalAnalysisService.selectStatisticalAnalysisList(candidateClassHourVo);
