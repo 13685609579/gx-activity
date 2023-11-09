@@ -194,7 +194,7 @@ public class CandidateInfoController extends BaseController {
     @GetMapping(value = "/testPaper")
     @Anonymous
     public AjaxResult testPaper(HttpServletRequest request, CandidatePaperState paperState){
-//        DataUtils.appCheck(request);
+        DataUtils.appCheck(request);
         return success(candidateInfoService.testPaper(paperState));
     }
 
@@ -209,7 +209,7 @@ public class CandidateInfoController extends BaseController {
     @Anonymous
     public AjaxResult examPaperView(@Validated @RequestBody CandidateSignUpVo candidateSignUpVo, HttpServletRequest request)
     {
-//        DataUtils.appCheck(request);
+        DataUtils.appCheck(request);
         return success(candidateInfoService.examPaperView(candidateSignUpVo));
     }
 

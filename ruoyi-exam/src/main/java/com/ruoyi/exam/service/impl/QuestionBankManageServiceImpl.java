@@ -49,7 +49,7 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
     @Override
     public List<QuestionBankManage> selectQuestionBankList(QuestionBankManage questionBankManage) {
         List<QuestionBankManage> list = questionBankManageMapper.selectQuestionBankList(questionBankManage);
-        if(null != list && list.size()>0){
+        /*if(null != list && list.size()>0){
             list.stream().forEach(m->{
                 SysDictData sysDictData = sysDictDataMapper.selectDictDataById(Long.valueOf(m.getTopicSort()));
                 m.setTopicSortName(sysDictData.getDictLabel());
@@ -69,7 +69,7 @@ public class QuestionBankManageServiceImpl extends ServiceImpl<QuestionBankManag
                     m.setTopicOptions(topicOptions1);
                 }
             });
-        }
+        }*/
         return list;
     }
 

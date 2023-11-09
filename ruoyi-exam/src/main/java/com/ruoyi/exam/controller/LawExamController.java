@@ -35,7 +35,7 @@ public class LawExamController extends BaseController {
     @GetMapping(value = "/getFinalExam")
     @Anonymous
     public AjaxResult getFinalExam(HttpServletRequest request, String openId){
-//        DataUtils.appCheck(request);
+        DataUtils.appCheck(request);
         return success(lawExamService.getFinalExam(openId));
     }
 }
