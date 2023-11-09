@@ -5,6 +5,7 @@ import com.ruoyi.exam.domain.CandidateInfo;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.ruoyi.exam.domain.CandidatePaperState;
 import com.ruoyi.exam.domain.ExamManage;
+import com.ruoyi.exam.domain.vo.CandidateExamRecordVo;
 import com.ruoyi.exam.domain.vo.CandidateSignUpVo;
 import com.ruoyi.exam.domain.vo.ExamManageVo;
 import com.ruoyi.exam.domain.vo.ExamResultVo;
@@ -90,6 +91,13 @@ public interface CandidateInfoService extends IService<CandidateInfo> {
      * @return
      */
     public List<ExamManageVo> examRecord(CandidateInfo cInfo);
+
+    /**
+     * 获取考生考试记录（后台管理系统）
+     * @param candidateExamRecordVo
+     * @return
+     */
+    public List<CandidateExamRecordVo> selectCandidateExamRecord(CandidateExamRecordVo candidateExamRecordVo);
 
     /**
      * 试卷

@@ -7,11 +7,15 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.domain.entity.CandidateInfoEntity;
+import com.ruoyi.common.core.domain.model.LoginUser;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.exam.domain.CandidateInfo;
 import com.ruoyi.exam.domain.CandidatePaperState;
+import com.ruoyi.exam.domain.vo.CandidateClassHourVo;
+import com.ruoyi.exam.domain.vo.CandidateExamRecordVo;
 import com.ruoyi.exam.domain.vo.CandidateSignUpVo;
 import com.ruoyi.exam.service.CandidateInfoService;
 import com.ruoyi.exam.service.UnitManageService;
@@ -183,6 +187,25 @@ public class CandidateInfoController extends BaseController {
     public AjaxResult examRecord(HttpServletRequest request, CandidateInfo candidateInfo){
         DataUtils.appCheck(request);
         return success(candidateInfoService.examRecord(candidateInfo));
+    }
+
+    /**
+     * 获取考生考试记录（后台管理系统）
+     * @param candidateExamRecordVo
+     * @return
+     */
+    @GetMapping("/selectCandidateExamRecord")
+    public TableDataInfo selectCandidateExamRecord(CandidateExamRecordVo candidateExamRecordVo)
+    {
+        LoginUser loginUser = SecurityUtils.getLoginUser();
+        if(100 != loginUser.getDeptId()){ //用户部门不是肥西县（deptId:100）的用户在考生审核获取本部门所有用户
+            CandidateClassHourVo candidateClassHourVo = new CandidateClassHourVo();
+            candidateClassHourVo.setUnitId(String.valueOf(loginUser.getDeptId()));
+            candidateExamRecordVo.setUnitIds(unitManageService.getUnitIds(candidateClassHourVo));
+        }
+        startPage();
+        List<CandidateExamRecordVo> list = candidateInfoService.selectCandidateExamRecord(candidateExamRecordVo);
+        return getDataTable(list);
     }
 
     /**

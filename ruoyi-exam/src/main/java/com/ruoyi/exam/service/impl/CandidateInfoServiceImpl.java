@@ -8,10 +8,7 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.exam.domain.*;
-import com.ruoyi.exam.domain.vo.CandidateSignUpVo;
-import com.ruoyi.exam.domain.vo.ExamManageVo;
-import com.ruoyi.exam.domain.vo.ExamResultVo;
-import com.ruoyi.exam.domain.vo.PersonClassHourVo;
+import com.ruoyi.exam.domain.vo.*;
 import com.ruoyi.exam.mapper.*;
 import com.ruoyi.exam.service.CandidateInfoService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -315,6 +312,17 @@ public class CandidateInfoServiceImpl extends ServiceImpl<CandidateInfoMapper, C
             }
         }
         return voList;
+    }
+
+    /**
+     * 获取考生考试记录（后台管理系统）
+     * @param candidateExamRecordVo
+     * @return
+     */
+    @Override
+    public List<CandidateExamRecordVo> selectCandidateExamRecord(CandidateExamRecordVo candidateExamRecordVo) {
+        List<CandidateExamRecordVo> list = candidateInfoMapper.selectCandidateExamRecord(candidateExamRecordVo);
+        return list;
     }
 
     /**

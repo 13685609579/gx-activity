@@ -2,6 +2,7 @@ package com.ruoyi.exam.mapper;
 
 import com.ruoyi.exam.domain.CandidateInfo;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.ruoyi.exam.domain.vo.CandidateExamRecordVo;
 
 import java.util.List;
 
@@ -49,5 +50,12 @@ public interface CandidateInfoMapper extends BaseMapper<CandidateInfo> {
      * @return
      */
     public int removeCandidateInfo(CandidateInfo candidateInfo);
+
+    /**
+     * 获取考生考试记录（后台管理系统）
+     * @param candidateExamRecordVo
+     * @return
+     */
+    public List<CandidateExamRecordVo> selectCandidateExamRecord(CandidateExamRecordVo candidateExamRecordVo);
 
 }
