@@ -118,12 +118,13 @@
     </resultMap>
 
     <select id="selectCandidateExamRecord" parameterType="com.ruoyi.exam.domain.vo.CandidateExamRecordVo" resultMap="CandidateExamRecordResult">
-        select distinct tbl1.candidate_id, tbl2.candidate_name, tbl3.dept_name, tbl4.exam_year, tbl4.exam_title, tbl7.dict_label, tbl4.start_time, tbl4.end_time, tbl5.target_hours, tbl6.class_hour
+        select distinct tbl1.candidate_id, tbl2.candidate_name, tbl3.dept_name, tbl4.exam_year, tbl4.exam_title, tbl7.dict_label, tbl4.start_time, tbl4.end_time, tbl5.target_hours,
+        CASE WHEN tbl6.class_hour > tbl5.target_hours THEN tbl5.target_hours ELSE tbl6.class_hour END class_hour
         from candidate_paper_state tbl1 left join candidate_info tbl2 on tbl1.candidate_id = tbl2.candidate_id
         left join sys_dept tbl3 on tbl2.unit_id = tbl3.dept_id
         left join exam_manage tbl4 on tbl1.exam_id = tbl4.exam_id
         left join (select exam_id, person_type, topic_sort, sum(target_hours) target_hours from class_hour_sf where del_flag = 0 group by exam_id, person_type, topic_sort) tbl5 on tbl2.person_category = tbl5.person_type and tbl4.exam_id = tbl5.exam_id
-        left join (select candidate_id, exam_id, topic_sort, CASE WHEN sum(class_hour) is null THEN 0 WHEN sum(class_hour) > 8 THEN 0 ELSE sum(class_hour) END class_hour from person_class_hour where del_flag = 0 GROUP BY candidate_id, exam_id, topic_sort) tbl6 on tbl2.candidate_id = tbl6.candidate_id and tbl4.exam_id = tbl6.exam_id and tbl5.topic_sort = tbl6.topic_sort
+        left join (select candidate_id, exam_id, topic_sort, CASE WHEN sum(class_hour) is null THEN 0 ELSE sum(class_hour) END class_hour from person_class_hour where del_flag = 0 GROUP BY candidate_id, exam_id, topic_sort) tbl6 on tbl2.candidate_id = tbl6.candidate_id and tbl4.exam_id = tbl6.exam_id and tbl5.topic_sort = tbl6.topic_sort
         left join sys_dict_data tbl7 on tbl6.topic_sort = tbl7.dict_code
         where tbl1.del_flag = 0
         and tbl1.paper_state = 0

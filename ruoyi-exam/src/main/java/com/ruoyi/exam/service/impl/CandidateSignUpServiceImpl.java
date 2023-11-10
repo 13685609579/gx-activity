@@ -104,6 +104,31 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
                     candidateSignUpMapper.insertCandidateSignUpData(csUp);
                 }
             }else{
+                //根据考生ID、考试管理ID、题目分类查看当前考生是否存在正在进行中的试卷
+                LambdaQueryWrapper<CandidatePaperState> wrapper1 = new LambdaQueryWrapper<>();
+                wrapper1.eq(CandidatePaperState::getCandidateId, candidateSignUpVo.getCandidateId())
+                        .eq(CandidatePaperState::getExamId, candidateSignUpVo.getExamId())
+                        .eq(CandidatePaperState::getTopicSort, candidateSignUpVo.getTopicSort())
+                        .eq(CandidatePaperState::getPaperState, 1)
+                        .eq(CandidatePaperState::getDelFlag, 0);
+                CandidatePaperState paperState = candidatePaperStateMapper.selectOne(wrapper1);
+                paperState.setPaperState("0");
+                candidatePaperStateMapper.updateById(paperState);
+                LambdaQueryWrapper<ExamPaper> wrapper2 = new LambdaQueryWrapper<>();
+                wrapper2.eq(ExamPaper::getCandidateId, candidateSignUpVo.getCandidateId())
+                        .eq(ExamPaper::getExamId, candidateSignUpVo.getExamId())
+                        .eq(ExamPaper::getTopicSort, candidateSignUpVo.getTopicSort())
+                        .eq(ExamPaper::getPaperStateId, paperState.getId())
+                        .eq(ExamPaper::getTopicState, 1)
+                        .eq(ExamPaper::getDelFlag, 0);
+                List<ExamPaper> examPaperList = examPaperMapper.selectList(wrapper2);
+                if(CollectionUtil.isNotEmpty(examPaperList)){
+                    for(int i=0; i<examPaperList.size(); i++){
+                        ExamPaper examPaper = examPaperList.get(i);
+                        examPaper.setTopicState("0");
+                        examPaperMapper.updateById(examPaper);
+                    }
+                }
                 code = 1;
                 msg = "当前考生已更换单位，请重新信息填写确认！";
             }
@@ -170,7 +195,6 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
             candidatePaperState.setTopicSort(candidateSignUpVo.getTopicSort());
             //获取本场考试试卷
             examPaperData = getCandidatePaperList(candidatePaperState, candidateSignUpVo);
-
         }else{
             code = 500;
             msg = "考生信息确认有误，请重新填写考生信息！";
