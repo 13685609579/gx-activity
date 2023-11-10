@@ -45,11 +45,20 @@ public class CandidateExamRecordVo extends BaseEntity implements Serializable {
     //结束时间
     private String endTime;
 
-    //目标学时
-    private String targetHours;
+    //本次作答分数
+    private Integer thisScore;
+
+    //正确数
+    private Integer correctNum;
+
+    //错题数
+    private Integer errorNum;
+
+    //未答数
+    private Integer wdNum;
 
     //已获学时
-    private String acquiredHours;
+    private String classHour;
 
     private List<String> unitIds;
 
