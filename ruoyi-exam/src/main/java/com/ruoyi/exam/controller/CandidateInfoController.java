@@ -137,7 +137,7 @@ public class CandidateInfoController extends BaseController {
 
     /**
      * 考生审核-列表导出
-     * @param response
+     * @param responseconfirmRegistrateStatus
      * @param candidateInfoEntity
      */
     @Log(title = "考生审核-列表导出", businessType = BusinessType.EXPORT)
