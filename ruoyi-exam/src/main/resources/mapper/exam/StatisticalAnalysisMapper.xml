@@ -36,6 +36,7 @@
             </foreach>
         </if>
         ) tbl5 LEFT JOIN person_class_hour tbl6 ON tbl5.candidate_id = tbl6.candidate_id AND tbl5.exam_id = tbl6.exam_id
+        where tbl6.del_flag = 0
         GROUP BY tbl5.candidate_id, tbl5.unit_id, tbl5.unit_name, tbl5.exam_year
         <!-- 数据范围过滤 -->
         ${params.dataScope}
