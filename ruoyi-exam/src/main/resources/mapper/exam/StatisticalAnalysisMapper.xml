@@ -12,7 +12,7 @@
 
     <select id="selectStatisticalAnalysisList" parameterType="com.ruoyi.exam.domain.vo.CandidateClassHourVo" resultMap="CandidateClassHourVoResult">
         select tbl5.candidate_id, tbl5.unit_id, tbl5.unit_name, tbl5.exam_year,
-        case when sum(tbl6.class_hour) is null then '0' else sum(tbl6.class_hour) end class_hour FROM
+        case when class_hour is null then '0' else class_hour end class_hour FROM
         (
         select distinct tbl2.candidate_id, tbl1.dept_id as unit_id, tbl1.dept_name as unit_name, tbl4.exam_id, tbl4.exam_year
         from sys_dept tbl1 LEFT JOIN candidate_info tbl2 ON tbl1.dept_id = tbl2.unit_id
@@ -35,8 +35,13 @@
                 #{unitId}
             </foreach>
         </if>
-        ) tbl5 LEFT JOIN person_class_hour tbl6 ON tbl5.candidate_id = tbl6.candidate_id AND tbl5.exam_id = tbl6.exam_id
-        where tbl6.del_flag = 0
+        ) tbl5 LEFT JOIN
+        (
+        select candidate_id, exam_id, case when sum(class_hour) is null then '0' else sum(class_hour) end class_hour from person_class_hour
+        where del_flag = 0
+        GROUP BY candidate_id, exam_id
+        )
+        tbl6 ON tbl5.candidate_id = tbl6.candidate_id AND tbl5.exam_id = tbl6.exam_id
         GROUP BY tbl5.candidate_id, tbl5.unit_id, tbl5.unit_name, tbl5.exam_year
         <!-- 数据范围过滤 -->
         ${params.dataScope}
