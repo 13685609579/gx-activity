@@ -117,9 +117,13 @@ public class StatisticalAnalysisServiceImpl extends ServiceImpl<StatisticalAnaly
                             analysisVo.setCompleteCount(String.valueOf(listComplete.size()));
                             analysisVo.setUncompletedCount(String.valueOf(listUncompleted.size()));
                             double v1 = Double.parseDouble(String.valueOf(listComplete.size()));
-                            double v2 = Double.parseDouble(String.valueOf(listUncompleted.size()));
+                            double v2 = Double.parseDouble(String.valueOf(listUncompleted.size()))+v1;
                             double completeRate = DataUtils.division(v1, v2, 4)*100;
-                            analysisVo.setCompleteRate(String.valueOf(completeRate)+"%");
+                            String cRate = String.valueOf(completeRate);
+                            if(cRate.contains(".")){
+                                cRate = cRate.substring(0, cRate.indexOf(".")+2);
+                            }
+                            analysisVo.setCompleteRate(cRate+"%");
                             sets.add(analysisVo);
                         });
                     });
