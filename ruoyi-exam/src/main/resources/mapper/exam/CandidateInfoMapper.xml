@@ -127,7 +127,9 @@
         from candidate_paper_state tbl1 left join candidate_info tbl2 on tbl1.candidate_id = tbl2.candidate_id
         left join sys_dept tbl3 on tbl2.unit_id = tbl3.dept_id
         left join exam_manage tbl4 on tbl1.exam_id = tbl4.exam_id
-        left join (select distinct candidate_id, this_score, correct_num, error_num, exam_id, topic_sort, CASE WHEN class_hour is null THEN 0 ELSE class_hour END class_hour from person_class_hour where del_flag = 0 GROUP BY candidate_id, exam_id, topic_sort) tbl5 on tbl2.candidate_id = tbl5.candidate_id and tbl4.exam_id = tbl5.exam_id and tbl1.topic_sort = tbl5.topic_sort
+        left join (select candidate_id, this_score, correct_num, error_num, exam_id, topic_sort, class_hour
+        from person_class_hour where del_flag = 0) tbl5
+        on tbl2.candidate_id = tbl5.candidate_id and tbl4.exam_id = tbl5.exam_id and tbl1.topic_sort = tbl5.topic_sort
         left join sys_dict_data tbl6 on tbl5.topic_sort = tbl6.dict_code
         where tbl1.del_flag = 0
         and tbl1.paper_state = 0
