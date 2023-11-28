@@ -112,21 +112,23 @@ public class CandidateSignUpServiceImpl extends ServiceImpl<CandidateSignUpMappe
                         .eq(CandidatePaperState::getPaperState, 1)
                         .eq(CandidatePaperState::getDelFlag, 0);
                 CandidatePaperState paperState = candidatePaperStateMapper.selectOne(wrapper1);
-                paperState.setPaperState("0");
-                candidatePaperStateMapper.updateById(paperState);
-                LambdaQueryWrapper<ExamPaper> wrapper2 = new LambdaQueryWrapper<>();
-                wrapper2.eq(ExamPaper::getCandidateId, candidateSignUpVo.getCandidateId())
-                        .eq(ExamPaper::getExamId, candidateSignUpVo.getExamId())
-                        .eq(ExamPaper::getTopicSort, candidateSignUpVo.getTopicSort())
-                        .eq(ExamPaper::getPaperStateId, paperState.getId())
-                        .eq(ExamPaper::getTopicState, 1)
-                        .eq(ExamPaper::getDelFlag, 0);
-                List<ExamPaper> examPaperList = examPaperMapper.selectList(wrapper2);
-                if(CollectionUtil.isNotEmpty(examPaperList)){
-                    for(int i=0; i<examPaperList.size(); i++){
-                        ExamPaper examPaper = examPaperList.get(i);
-                        examPaper.setTopicState("0");
-                        examPaperMapper.updateById(examPaper);
+                if(null != paperState){
+                    paperState.setPaperState("0");
+                    candidatePaperStateMapper.updateById(paperState);
+                    LambdaQueryWrapper<ExamPaper> wrapper2 = new LambdaQueryWrapper<>();
+                    wrapper2.eq(ExamPaper::getCandidateId, candidateSignUpVo.getCandidateId())
+                            .eq(ExamPaper::getExamId, candidateSignUpVo.getExamId())
+                            .eq(ExamPaper::getTopicSort, candidateSignUpVo.getTopicSort())
+                            .eq(ExamPaper::getPaperStateId, paperState.getId())
+                            .eq(ExamPaper::getTopicState, 1)
+                            .eq(ExamPaper::getDelFlag, 0);
+                    List<ExamPaper> examPaperList = examPaperMapper.selectList(wrapper2);
+                    if(CollectionUtil.isNotEmpty(examPaperList)){
+                        for(int i=0; i<examPaperList.size(); i++){
+                            ExamPaper examPaper = examPaperList.get(i);
+                            examPaper.setTopicState("0");
+                            examPaperMapper.updateById(examPaper);
+                        }
                     }
                 }
                 code = 1;
