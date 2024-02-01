@@ -18,10 +18,10 @@ ruoyi:
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080
-  port: 8012
+  port: 8082
   servlet:
     # 应用的访问路径
-    context-path: /exam
+    context-path: /gx-activity
   tomcat:
     # tomcat的URI编码
     uri-encoding: UTF-8
@@ -70,13 +70,13 @@ spring:
   # redis 配置
   redis:
     # 地址
-    host: 183.162.219.15
+    host: localhost
     # 端口，默认为6379
-    port: 7379
+    port: 6379
     # 数据库索引
     database: 9
     # 密码
-    password: Jsgs@redis123.
+    password:
     # 连接超时时间
     timeout: 10s
     lettuce:

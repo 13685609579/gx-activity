@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.meap.mapper.MadsAcsMapper">
+    
+    <resultMap type="MadsAcs" id="MadsAcsResult">
+        <result property="id"    column="id"    />
+        <result property="abhsDate"    column="abhs_date"    />
+        <result property="city"    column="city"    />
+        <result property="channel"    column="channel"    />
+        <result property="contactPoint"    column="contact_point"    />
+        <result property="pv"    column="pv"    />
+        <result property="uv"    column="uv"    />
+        <result property="ljUv"    column="lj_uv"    />
+        <result property="xzysUv"    column="xzys_uv"    />
+    </resultMap>
+
+    <sql id="selectMadsAcsVo">
+        select id, abhs_date, city, channel, contact_point, pv, uv, lj_uv, xzys_uv from mads_acs
+    </sql>
+
+    <select id="selectMadsAcsList" parameterType="MadsAcs" resultMap="MadsAcsResult">
+        <include refid="selectMadsAcsVo"/>
+        <where>  
+            <if test="abhsDate != null "> and abhs_date = #{abhsDate}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="channel != null  and channel != ''"> and channel = #{channel}</if>
+            <if test="contactPoint != null  and contactPoint != ''"> and contact_point = #{contactPoint}</if>
+        </where>
+    </select>
+    
+    <select id="selectMadsAcsById" parameterType="Long" resultMap="MadsAcsResult">
+        <include refid="selectMadsAcsVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMadsAcs" parameterType="MadsAcs" useGeneratedKeys="true" keyProperty="id">
+        insert into mads_acs
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="abhsDate != null">abhs_date,</if>
+            <if test="city != null">city,</if>
+            <if test="channel != null">channel,</if>
+            <if test="contactPoint != null">contact_point,</if>
+            <if test="pv != null">pv,</if>
+            <if test="uv != null">uv,</if>
+            <if test="ljUv != null">lj_uv,</if>
+            <if test="xzysUv != null">xzys_uv,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="abhsDate != null">#{abhsDate},</if>
+            <if test="city != null">#{city},</if>
+            <if test="channel != null">#{channel},</if>
+            <if test="contactPoint != null">#{contactPoint},</if>
+            <if test="pv != null">#{pv},</if>
+            <if test="uv != null">#{uv},</if>
+            <if test="ljUv != null">#{ljUv},</if>
+            <if test="xzysUv != null">#{xzysUv},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMadsAcs" parameterType="MadsAcs">
+        update mads_acs
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="abhsDate != null">abhs_date = #{abhsDate},</if>
+            <if test="city != null">city = #{city},</if>
+            <if test="channel != null">channel = #{channel},</if>
+            <if test="contactPoint != null">contact_point = #{contactPoint},</if>
+            <if test="pv != null">pv = #{pv},</if>
+            <if test="uv != null">uv = #{uv},</if>
+            <if test="ljUv != null">lj_uv = #{ljUv},</if>
+            <if test="xzysUv != null">xzys_uv = #{xzysUv},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMadsAcsById" parameterType="Long">
+        delete from mads_acs where id = #{id}
+    </delete>
+
+    <delete id="deleteMadsAcsByIds" parameterType="String">
+        delete from mads_acs where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

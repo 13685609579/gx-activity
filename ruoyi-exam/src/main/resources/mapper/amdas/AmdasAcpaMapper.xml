@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.meap.mapper.AmdasAcpaMapper">
+    
+    <resultMap type="AmdasAcpa" id="AmdasAcpaResult">
+        <result property="id"    column="id"    />
+        <result property="month"    column="month"    />
+        <result property="activityName"    column="activity_name"    />
+        <result property="periodical"    column="periodical"    />
+        <result property="amount"    column="amount"    />
+    </resultMap>
+
+    <sql id="selectAmdasAcpaVo">
+        select id, month, activity_name, periodical, amount from amdas_acpa
+    </sql>
+
+    <select id="getPeriodicals" resultType="java.lang.String">
+        select distinct periodical from amdas_acpa order by periodical
+    </select>
+
+    <select id="selectAmdasAcpaList" parameterType="AmdasAcpa" resultMap="AmdasAcpaResult">
+        <include refid="selectAmdasAcpaVo"/>
+        <where>
+            <if test="month != null  and month != ''"> and month like concat('%', #{month}, '%')</if>
+            <if test="activityName != null  and activityName != ''"> and activity_name like concat('%', #{activityName}, '%')</if>
+            <if test="periodical != null  and periodical != ''"> and periodical = #{periodical}</if>
+        </where>
+        order by month desc, activity_name asc
+    </select>
+    
+    <select id="selectAmdasAcpaById" parameterType="Long" resultMap="AmdasAcpaResult">
+        <include refid="selectAmdasAcpaVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAmdasAcpa" parameterType="AmdasAcpa" useGeneratedKeys="true" keyProperty="id">
+        insert into amdas_acpa
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="month != null">month,</if>
+            <if test="activityName != null">activity_name,</if>
+            <if test="periodical != null">periodical,</if>
+            <if test="amount != null">amount,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="month != null">#{month},</if>
+            <if test="activityName != null">#{activityName},</if>
+            <if test="periodical != null">#{periodical},</if>
+            <if test="amount != null">#{amount},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAmdasAcpa" parameterType="AmdasAcpa">
+        update amdas_acpa
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="month != null">month = #{month},</if>
+            <if test="activityName != null">activity_name = #{activityName},</if>
+            <if test="periodical != null">periodical = #{periodical},</if>
+            <if test="amount != null">amount = #{amount},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAmdasAcpaById" parameterType="Long">
+        delete from amdas_acpa where id = #{id}
+    </delete>
+
+    <delete id="deleteAmdasAcpaByIds" parameterType="String">
+        delete from amdas_acpa where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

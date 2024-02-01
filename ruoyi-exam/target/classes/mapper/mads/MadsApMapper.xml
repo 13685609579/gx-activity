@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.meap.mapper.MadsApMapper">
+    
+    <resultMap type="MadsAp" id="MadsApResult">
+        <result property="id"    column="id"    />
+        <result property="city"    column="city"    />
+        <result property="hdcyDate"    column="hdcy_date"    />
+        <result property="channel"    column="channel"    />
+        <result property="pv"    column="pv"    />
+        <result property="uv"    column="uv"    />
+        <result property="ljUv"    column="lj_uv"    />
+        <result property="xzysUv"    column="xzys_uv"    />
+        <result property="xzysRatio"    column="xzys_ratio"    />
+        <result property="xzyhUv"    column="xzyh_uv"    />
+        <result property="xzyhRatio"    column="xzyh_ratio"    />
+        <result property="oneMonthValue"    column="one_month_value"    />
+        <result property="oneMonthRatio"    column="one_month_ratio"    />
+        <result property="twoMonthValue"    column="two_month_value"    />
+        <result property="twoMonthRatio"    column="two_month_ratio"    />
+        <result property="threeMonthValue"    column="three_month_value"    />
+        <result property="threeMonthRatio"    column="three_month_ratio"    />
+        <result property="fourMonthValue"    column="four_month_value"    />
+        <result property="fourMonthRatio"    column="four_month_ratio"    />
+        <result property="fiveMonthValue"    column="five_month_value"    />
+        <result property="fiveMonthRatio"    column="five_month_ratio"    />
+        <result property="sixMonthValue"    column="six_month_value"    />
+        <result property="sixMonthRatio"    column="six_month_ratio"    />
+        <result property="yywblxwVv"    column="yywblxw_vv"    />
+        <result property="yywblxwRatio"    column="yywblxw_ratio"    />
+        <result property="ywblcgVv"    column="ywblcg_vv"    />
+        <result property="ywblcgRatio"    column="ywblcg_ratio"    />
+        <result property="fxUv"    column="fx_uv"    />
+        <result property="fxRatio"    column="fx_ratio"    />
+        <result property="sywcyhdUv"    column="sywcyhd_uv"    />
+        <result property="sywcyhdRatio"    column="sywcyhd_ratio"    />
+        <result property="rwycyVv"    column="rwycy_vv"    />
+        <result property="rwywcVv"    column="rwywc_vv"    />
+        <result property="rwecyVv"    column="rwecy_vv"    />
+        <result property="rwewcVv"    column="rwewc_vv"    />
+    </resultMap>
+
+    <sql id="selectMadsApVo">
+        select id, city, hdcy_date, channel, pv, uv, lj_uv, xzys_uv, xzys_ratio, xzyh_uv, xzyh_ratio, one_month_value, one_month_ratio, two_month_value, two_month_ratio, three_month_value, three_month_ratio, four_month_value, four_month_ratio, five_month_value, five_month_ratio, six_month_value, six_month_ratio, yywblxw_vv, yywblxw_ratio, ywblcg_vv, ywblcg_ratio, fx_uv, fx_ratio, sywcyhd_uv, sywcyhd_ratio, rwycy_vv, rwywc_vv, rwecy_vv, rwewc_vv from mads_ap
+    </sql>
+
+    <select id="selectMadsApList" parameterType="MadsAp" resultMap="MadsApResult">
+        select id, city, hdcy_date, channel, pv, uv, lj_uv, xzys_uv,
+        concat(cast(xzys_ratio as CHAR), '%') as xzys_ratio,
+        xzyh_uv,
+        concat(cast(xzyh_ratio as CHAR), '%') as xzyh_ratio,
+        one_month_value,
+        concat(cast(one_month_ratio as CHAR), '%') as one_month_ratio,
+        two_month_value,
+        concat(cast(two_month_ratio as CHAR), '%') as two_month_ratio,
+        three_month_value,
+        concat(cast(three_month_ratio as CHAR), '%') as three_month_ratio,
+        four_month_value,
+        concat(cast(four_month_ratio as CHAR), '%') as four_month_ratio,
+        five_month_value,
+        concat(cast(five_month_ratio as CHAR), '%') as five_month_ratio,
+        six_month_value,
+        concat(cast(six_month_ratio as CHAR), '%') as six_month_ratio,
+        yywblxw_vv,
+        concat(cast(yywblxw_ratio as CHAR), '%') as yywblxw_ratio,
+        ywblcg_vv,
+        concat(cast(ywblcg_ratio as CHAR), '%') as ywblcg_ratio,
+        fx_uv,
+        concat(cast(fx_ratio as CHAR), '%') as fx_ratio,
+        sywcyhd_uv,
+        concat(cast(sywcyhd_ratio as CHAR), '%') as sywcyhd_ratio,
+        rwycy_vv, rwywc_vv, rwecy_vv, rwewc_vv
+        from (
+        select id, city, hdcy_date, channel, pv, uv, lj_uv, xzys_uv,
+        case when xzys_ratio is not null then xzys_ratio * 100 else '0' end xzys_ratio,
+        xzyh_uv,
+        case when xzyh_ratio is not null then xzyh_ratio * 100 else 0 end xzyh_ratio,
+        one_month_value,
+        case when one_month_ratio is not null then one_month_ratio * 100 else '0' end one_month_ratio,
+        two_month_value,
+        case when two_month_ratio is not null then two_month_ratio * 100 else '0' end two_month_ratio,
+        three_month_value,
+        case when three_month_ratio is not null then three_month_ratio * 100 else '0' end three_month_ratio,
+        four_month_value,
+        case when four_month_ratio is not null then four_month_ratio * 100 else '0' end four_month_ratio,
+        five_month_value,
+        case when five_month_ratio is not null then five_month_ratio * 100 else '0' end five_month_ratio,
+        six_month_value,
+        case when six_month_ratio is not null then six_month_ratio * 100 else '0' end six_month_ratio,
+        yywblxw_vv,
+        case when yywblxw_ratio is not null then yywblxw_ratio * 100 else '0' end yywblxw_ratio,
+        ywblcg_vv,
+        case when ywblcg_ratio is not null then ywblcg_ratio * 100 else '0' end ywblcg_ratio,
+        fx_uv,
+        case when fx_ratio is not null then fx_ratio * 100 else '0' end fx_ratio,
+        sywcyhd_uv,
+        case when sywcyhd_ratio is not null then sywcyhd_ratio * 100 else '0' end sywcyhd_ratio,
+        rwycy_vv, rwywc_vv, rwecy_vv, rwewc_vv from mads_ap
+        <where>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="hdcyDate != null "> and hdcy_date = #{hdcyDate}</if>
+            <if test="channel != null  and channel != ''"> and channel = #{channel}</if>
+        </where>
+        ) tbl
+    </select>
+
+    <select id="yxhdfxList" parameterType="MadsAp" resultMap="MadsApResult">
+        SELECT city, sum(pv) as pv FROM mads_ap
+        <where>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="hdcyDate != null "> and hdcy_date = #{hdcyDate}</if>
+            <if test="channel != null  and channel != ''"> and channel = #{channel}</if>
+        </where>
+        GROUP BY city
+    </select>
+
+    <select id="yxhdcyList" parameterType="MadsAp" resultMap="MadsApResult">
+        SELECT city, sum(uv) as uv FROM mads_ap
+        <where>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="hdcyDate != null "> and hdcy_date = #{hdcyDate}</if>
+            <if test="channel != null  and channel != ''"> and channel = #{channel}</if>
+        </where>
+        GROUP BY city
+    </select>
+
+    <select id="yxhdymfxList" parameterType="MadsAp" resultMap="MadsApResult">
+        SELECT city, sum(pv) as pv, sum(uv) as uv FROM mads_ap
+        <where>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="hdcyDate != null "> and hdcy_date = #{hdcyDate}</if>
+            <if test="channel != null  and channel != ''"> and channel = #{channel}</if>
+        </where>
+        GROUP BY city
+    </select>
+
+    <select id="cyhdyhhyqkList" parameterType="MadsAp" resultType="com.ruoyi.meap.domain.vo.CyhdyhhyqkVo">
+        SELECT '一个月' as ljMonth, sum(one_month_value) as uv FROM mads_ap
+        <where>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="hdcyDate != null "> and hdcy_date = #{hdcyDate}</if>
+            <if test="channel != null  and channel != ''"> and channel = #{channel}</if>
+        </where>
+        UNION ALL
+        SELECT '两个月' as ljMonth, sum(two_month_value) as uv FROM mads_ap
+        <where>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="hdcyDate != null "> and hdcy_date = #{hdcyDate}</if>
+            <if test="channel != null  and channel != ''"> and channel = #{channel}</if>
+        </where>
+        UNION ALL
+        SELECT '三个月' as ljMonth, sum(three_month_value) as uv FROM mads_ap
+        <where>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="hdcyDate != null "> and hdcy_date = #{hdcyDate}</if>
+            <if test="channel != null  and channel != ''"> and channel = #{channel}</if>
+        </where>
+        UNION ALL
+        SELECT '四个月' as ljMonth, sum(four_month_value) as uv FROM mads_ap
+        <where>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="hdcyDate != null "> and hdcy_date = #{hdcyDate}</if>
+            <if test="channel != null  and channel != ''"> and channel = #{channel}</if>
+        </where>
+        UNION ALL
+        SELECT '五个月' as ljMonth, sum(five_month_value) as uv FROM mads_ap
+        <where>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="hdcyDate != null "> and hdcy_date = #{hdcyDate}</if>
+            <if test="channel != null  and channel != ''"> and channel = #{channel}</if>
+        </where>
+        UNION ALL
+        SELECT '六个月' as ljMonth, sum(six_month_value) as uv FROM mads_ap
+        <where>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="hdcyDate != null "> and hdcy_date = #{hdcyDate}</if>
+            <if test="channel != null  and channel != ''"> and channel = #{channel}</if>
+        </where>
+    </select>
+
+    <select id="cyPvUv" parameterType="MadsAp" resultType="com.ruoyi.meap.domain.vo.CyPvUvVo">
+        SELECT sum(pv) as pv, sum(uv) as uv, sum(lj_uv) as ljuv, sum(xzys_uv) as xzysuv, sum(xzyh_uv) as xzyhuv FROM mads_ap
+        <where>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="hdcyDate != null "> and hdcy_date = #{hdcyDate}</if>
+            <if test="channel != null  and channel != ''"> and channel = #{channel}</if>
+        </where>
+    </select>
+    
+    <select id="selectMadsApById" parameterType="Long" resultMap="MadsApResult">
+        <include refid="selectMadsApVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertMadsAp" parameterType="MadsAp" useGeneratedKeys="true" keyProperty="id">
+        insert into mads_ap
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="city != null">city,</if>
+            <if test="hdcyDate != null">hdcy_date,</if>
+            <if test="channel != null">channel,</if>
+            <if test="pv != null">pv,</if>
+            <if test="uv != null">uv,</if>
+            <if test="ljUv != null">lj_uv,</if>
+            <if test="xzysUv != null">xzys_uv,</if>
+            <if test="xzysRatio != null">xzys_ratio,</if>
+            <if test="xzyhUv != null">xzyh_uv,</if>
+            <if test="xzyhRatio != null">xzyh_ratio,</if>
+            <if test="oneMonthValue != null">one_month_value,</if>
+            <if test="oneMonthRatio != null">one_month_ratio,</if>
+            <if test="twoMonthValue != null">two_month_value,</if>
+            <if test="twoMonthRatio != null">two_month_ratio,</if>
+            <if test="threeMonthValue != null">three_month_value,</if>
+            <if test="threeMonthRatio != null">three_month_ratio,</if>
+            <if test="fourMonthValue != null">four_month_value,</if>
+            <if test="fourMonthRatio != null">four_month_ratio,</if>
+            <if test="fiveMonthValue != null">five_month_value,</if>
+            <if test="fiveMonthRatio != null">five_month_ratio,</if>
+            <if test="sixMonthValue != null">six_month_value,</if>
+            <if test="sixMonthRatio != null">six_month_ratio,</if>
+            <if test="yywblxwVv != null">yywblxw_vv,</if>
+            <if test="yywblxwRatio != null">yywblxw_ratio,</if>
+            <if test="ywblcgVv != null">ywblcg_vv,</if>
+            <if test="ywblcgRatio != null">ywblcg_ratio,</if>
+            <if test="fxUv != null">fx_uv,</if>
+            <if test="fxRatio != null">fx_ratio,</if>
+            <if test="sywcyhdUv != null">sywcyhd_uv,</if>
+            <if test="sywcyhdRatio != null">sywcyhd_ratio,</if>
+            <if test="rwycyVv != null">rwycy_vv,</if>
+            <if test="rwywcVv != null">rwywc_vv,</if>
+            <if test="rwecyVv != null">rwecy_vv,</if>
+            <if test="rwewcVv != null">rwewc_vv,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="city != null">#{city},</if>
+            <if test="hdcyDate != null">#{hdcyDate},</if>
+            <if test="channel != null">#{channel},</if>
+            <if test="pv != null">#{pv},</if>
+            <if test="uv != null">#{uv},</if>
+            <if test="ljUv != null">#{ljUv},</if>
+            <if test="xzysUv != null">#{xzysUv},</if>
+            <if test="xzysRatio != null">#{xzysRatio},</if>
+            <if test="xzyhUv != null">#{xzyhUv},</if>
+            <if test="xzyhRatio != null">#{xzyhRatio},</if>
+            <if test="oneMonthValue != null">#{oneMonthValue},</if>
+            <if test="oneMonthRatio != null">#{oneMonthRatio},</if>
+            <if test="twoMonthValue != null">#{twoMonthValue},</if>
+            <if test="twoMonthRatio != null">#{twoMonthRatio},</if>
+            <if test="threeMonthValue != null">#{threeMonthValue},</if>
+            <if test="threeMonthRatio != null">#{threeMonthRatio},</if>
+            <if test="fourMonthValue != null">#{fourMonthValue},</if>
+            <if test="fourMonthRatio != null">#{fourMonthRatio},</if>
+            <if test="fiveMonthValue != null">#{fiveMonthValue},</if>
+            <if test="fiveMonthRatio != null">#{fiveMonthRatio},</if>
+            <if test="sixMonthValue != null">#{sixMonthValue},</if>
+            <if test="sixMonthRatio != null">#{sixMonthRatio},</if>
+            <if test="yywblxwVv != null">#{yywblxwVv},</if>
+            <if test="yywblxwRatio != null">#{yywblxwRatio},</if>
+            <if test="ywblcgVv != null">#{ywblcgVv},</if>
+            <if test="ywblcgRatio != null">#{ywblcgRatio},</if>
+            <if test="fxUv != null">#{fxUv},</if>
+            <if test="fxRatio != null">#{fxRatio},</if>
+            <if test="sywcyhdUv != null">#{sywcyhdUv},</if>
+            <if test="sywcyhdRatio != null">#{sywcyhdRatio},</if>
+            <if test="rwycyVv != null">#{rwycyVv},</if>
+            <if test="rwywcVv != null">#{rwywcVv},</if>
+            <if test="rwecyVv != null">#{rwecyVv},</if>
+            <if test="rwewcVv != null">#{rwewcVv},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMadsAp" parameterType="MadsAp">
+        update mads_ap
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="city != null">city = #{city},</if>
+            <if test="hdcyDate != null">hdcy_date = #{hdcyDate},</if>
+            <if test="channel != null">channel = #{channel},</if>
+            <if test="pv != null">pv = #{pv},</if>
+            <if test="uv != null">uv = #{uv},</if>
+            <if test="ljUv != null">lj_uv = #{ljUv},</if>
+            <if test="xzysUv != null">xzys_uv = #{xzysUv},</if>
+            <if test="xzysRatio != null">xzys_ratio = #{xzysRatio},</if>
+            <if test="xzyhUv != null">xzyh_uv = #{xzyhUv},</if>
+            <if test="xzyhRatio != null">xzyh_ratio = #{xzyhRatio},</if>
+            <if test="oneMonthValue != null">one_month_value = #{oneMonthValue},</if>
+            <if test="oneMonthRatio != null">one_month_ratio = #{oneMonthRatio},</if>
+            <if test="twoMonthValue != null">two_month_value = #{twoMonthValue},</if>
+            <if test="twoMonthRatio != null">two_month_ratio = #{twoMonthRatio},</if>
+            <if test="threeMonthValue != null">three_month_value = #{threeMonthValue},</if>
+            <if test="threeMonthRatio != null">three_month_ratio = #{threeMonthRatio},</if>
+            <if test="fourMonthValue != null">four_month_value = #{fourMonthValue},</if>
+            <if test="fourMonthRatio != null">four_month_ratio = #{fourMonthRatio},</if>
+            <if test="fiveMonthValue != null">five_month_value = #{fiveMonthValue},</if>
+            <if test="fiveMonthRatio != null">five_month_ratio = #{fiveMonthRatio},</if>
+            <if test="sixMonthValue != null">six_month_value = #{sixMonthValue},</if>
+            <if test="sixMonthRatio != null">six_month_ratio = #{sixMonthRatio},</if>
+            <if test="yywblxwVv != null">yywblxw_vv = #{yywblxwVv},</if>
+            <if test="yywblxwRatio != null">yywblxw_ratio = #{yywblxwRatio},</if>
+            <if test="ywblcgVv != null">ywblcg_vv = #{ywblcgVv},</if>
+            <if test="ywblcgRatio != null">ywblcg_ratio = #{ywblcgRatio},</if>
+            <if test="fxUv != null">fx_uv = #{fxUv},</if>
+            <if test="fxRatio != null">fx_ratio = #{fxRatio},</if>
+            <if test="sywcyhdUv != null">sywcyhd_uv = #{sywcyhdUv},</if>
+            <if test="sywcyhdRatio != null">sywcyhd_ratio = #{sywcyhdRatio},</if>
+            <if test="rwycyVv != null">rwycy_vv = #{rwycyVv},</if>
+            <if test="rwywcVv != null">rwywc_vv = #{rwywcVv},</if>
+            <if test="rwecyVv != null">rwecy_vv = #{rwecyVv},</if>
+            <if test="rwewcVv != null">rwewc_vv = #{rwewcVv},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMadsApById" parameterType="Long">
+        delete from mads_ap where id = #{id}
+    </delete>
+
+    <delete id="deleteMadsApByIds" parameterType="String">
+        delete from mads_ap where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

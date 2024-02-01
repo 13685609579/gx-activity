@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.meap.mapper.AmdasCollectMapper">
+    
+    <resultMap type="AmdasCollect" id="AmdasCollectResult">
+        <result property="id"    column="id"    />
+        <result property="month"    column="month"    />
+        <result property="activityNum"    column="activity_num"    />
+        <result property="participantsNum"    column="participants_num"    />
+        <result property="hzgClientNum"    column="hzg_client_num"    />
+        <result property="wtClientNum"    column="wt_client_num"    />
+        <result property="wapClientNum"    column="wap_client_num"    />
+        <result property="stClientNum"    column="st_client_num"    />
+        <result property="oneMonthValue"    column="one_month_value"    />
+        <result property="oneMonthRatio"    column="one_month_ratio"    />
+        <result property="twoMonthValue"    column="two_month_value"    />
+        <result property="twoMonthRatio"    column="two_month_ratio"    />
+        <result property="threeMonthValue"    column="three_month_value"    />
+        <result property="threeMonthRatio"    column="three_month_ratio"    />
+        <result property="fourMonthValue"    column="four_month_value"    />
+        <result property="fourMonthRatio"    column="four_month_ratio"    />
+        <result property="fiveMonthValue"    column="five_month_value"    />
+        <result property="fiveMonthRatio"    column="five_month_ratio"    />
+        <result property="sixMonthValue"    column="six_month_value"    />
+        <result property="sixMonthRatio"    column="six_month_ratio"    />
+        <result property="ccbClientNum"    column="ccb_client_num"    />
+        <result property="ccbClientRatio"    column="ccb_client_ratio"    />
+        <result property="dyxzClientNum"    column="dyxz_client_num"    />
+        <result property="dyxzClientRatio"    column="dyxz_client_ratio"    />
+        <result property="trafficResourceUsage"    column="traffic_resource_usage"    />
+        <result property="phoneResourceUsage"    column="phone_resource_usage"    />
+        <result property="crResourceUsage"    column="cr_resource_usage"    />
+        <result property="otherResourceUsage"    column="other_resource_usage"    />
+        <result property="yxlClientNum"    column="yxl_client_num"    />
+        <result property="yxlClientRatio"    column="yxl_client_ratio"    />
+        <result property="cyhdyhywzxl"    column="cyhdyhywzxl"    />
+        <result property="salesContribution"    column="sales_contribution"    />
+    </resultMap>
+
+    <sql id="selectAmdasCollectVo">
+        select id, month, activity_num, participants_num, hzg_client_num, wt_client_num, wap_client_num, st_client_num, one_month_value, one_month_ratio, two_month_value, two_month_ratio, three_month_value, three_month_ratio, four_month_value, four_month_ratio, five_month_value, five_month_ratio, six_month_value, six_month_ratio, ccb_client_num, ccb_client_ratio, dyxz_client_num, dyxz_client_ratio, traffic_resource_usage, phone_resource_usage, cr_resource_usage, other_resource_usage, yxl_client_num, yxl_client_ratio, cyhdyhywzxl, sales_contribution from amdas_collect
+    </sql>
+
+    <select id="selectAmdasCollectList" parameterType="AmdasCollect" resultMap="AmdasCollectResult">
+        <include refid="selectAmdasCollectVo"/>
+        <where>  
+            <if test="month != null  and month != ''"> and month like concat('%', #{month}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectAmdasCollectById" parameterType="Long" resultMap="AmdasCollectResult">
+        <include refid="selectAmdasCollectVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAmdasCollect" parameterType="AmdasCollect" useGeneratedKeys="true" keyProperty="id">
+        insert into amdas_collect
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="month != null">month,</if>
+            <if test="activityNum != null">activity_num,</if>
+            <if test="participantsNum != null">participants_num,</if>
+            <if test="hzgClientNum != null">hzg_client_num,</if>
+            <if test="wtClientNum != null">wt_client_num,</if>
+            <if test="wapClientNum != null">wap_client_num,</if>
+            <if test="stClientNum != null">st_client_num,</if>
+            <if test="oneMonthValue != null">one_month_value,</if>
+            <if test="oneMonthRatio != null">one_month_ratio,</if>
+            <if test="twoMonthValue != null">two_month_value,</if>
+            <if test="twoMonthRatio != null">two_month_ratio,</if>
+            <if test="threeMonthValue != null">three_month_value,</if>
+            <if test="threeMonthRatio != null">three_month_ratio,</if>
+            <if test="fourMonthValue != null">four_month_value,</if>
+            <if test="fourMonthRatio != null">four_month_ratio,</if>
+            <if test="fiveMonthValue != null">five_month_value,</if>
+            <if test="fiveMonthRatio != null">five_month_ratio,</if>
+            <if test="sixMonthValue != null">six_month_value,</if>
+            <if test="sixMonthRatio != null">six_month_ratio,</if>
+            <if test="ccbClientNum != null">ccb_client_num,</if>
+            <if test="ccbClientRatio != null">ccb_client_ratio,</if>
+            <if test="dyxzClientNum != null">dyxz_client_num,</if>
+            <if test="dyxzClientRatio != null">dyxz_client_ratio,</if>
+            <if test="trafficResourceUsage != null">traffic_resource_usage,</if>
+            <if test="phoneResourceUsage != null">phone_resource_usage,</if>
+            <if test="crResourceUsage != null">cr_resource_usage,</if>
+            <if test="otherResourceUsage != null">other_resource_usage,</if>
+            <if test="yxlClientNum != null">yxl_client_num,</if>
+            <if test="yxlClientRatio != null">yxl_client_ratio,</if>
+            <if test="cyhdyhywzxl != null">cyhdyhywzxl,</if>
+            <if test="salesContribution != null">sales_contribution,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="month != null">#{month},</if>
+            <if test="activityNum != null">#{activityNum},</if>
+            <if test="participantsNum != null">#{participantsNum},</if>
+            <if test="hzgClientNum != null">#{hzgClientNum},</if>
+            <if test="wtClientNum != null">#{wtClientNum},</if>
+            <if test="wapClientNum != null">#{wapClientNum},</if>
+            <if test="stClientNum != null">#{stClientNum},</if>
+            <if test="oneMonthValue != null">#{oneMonthValue},</if>
+            <if test="oneMonthRatio != null">#{oneMonthRatio},</if>
+            <if test="twoMonthValue != null">#{twoMonthValue},</if>
+            <if test="twoMonthRatio != null">#{twoMonthRatio},</if>
+            <if test="threeMonthValue != null">#{threeMonthValue},</if>
+            <if test="threeMonthRatio != null">#{threeMonthRatio},</if>
+            <if test="fourMonthValue != null">#{fourMonthValue},</if>
+            <if test="fourMonthRatio != null">#{fourMonthRatio},</if>
+            <if test="fiveMonthValue != null">#{fiveMonthValue},</if>
+            <if test="fiveMonthRatio != null">#{fiveMonthRatio},</if>
+            <if test="sixMonthValue != null">#{sixMonthValue},</if>
+            <if test="sixMonthRatio != null">#{sixMonthRatio},</if>
+            <if test="ccbClientNum != null">#{ccbClientNum},</if>
+            <if test="ccbClientRatio != null">#{ccbClientRatio},</if>
+            <if test="dyxzClientNum != null">#{dyxzClientNum},</if>
+            <if test="dyxzClientRatio != null">#{dyxzClientRatio},</if>
+            <if test="trafficResourceUsage != null">#{trafficResourceUsage},</if>
+            <if test="phoneResourceUsage != null">#{phoneResourceUsage},</if>
+            <if test="crResourceUsage != null">#{crResourceUsage},</if>
+            <if test="otherResourceUsage != null">#{otherResourceUsage},</if>
+            <if test="yxlClientNum != null">#{yxlClientNum},</if>
+            <if test="yxlClientRatio != null">#{yxlClientRatio},</if>
+            <if test="cyhdyhywzxl != null">#{cyhdyhywzxl},</if>
+            <if test="salesContribution != null">#{salesContribution},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAmdasCollect" parameterType="AmdasCollect">
+        update amdas_collect
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="month != null">month = #{month},</if>
+            <if test="activityNum != null">activity_num = #{activityNum},</if>
+            <if test="participantsNum != null">participants_num = #{participantsNum},</if>
+            <if test="hzgClientNum != null">hzg_client_num = #{hzgClientNum},</if>
+            <if test="wtClientNum != null">wt_client_num = #{wtClientNum},</if>
+            <if test="wapClientNum != null">wap_client_num = #{wapClientNum},</if>
+            <if test="stClientNum != null">st_client_num = #{stClientNum},</if>
+            <if test="oneMonthValue != null">one_month_value = #{oneMonthValue},</if>
+            <if test="oneMonthRatio != null">one_month_ratio = #{oneMonthRatio},</if>
+            <if test="twoMonthValue != null">two_month_value = #{twoMonthValue},</if>
+            <if test="twoMonthRatio != null">two_month_ratio = #{twoMonthRatio},</if>
+            <if test="threeMonthValue != null">three_month_value = #{threeMonthValue},</if>
+            <if test="threeMonthRatio != null">three_month_ratio = #{threeMonthRatio},</if>
+            <if test="fourMonthValue != null">four_month_value = #{fourMonthValue},</if>
+            <if test="fourMonthRatio != null">four_month_ratio = #{fourMonthRatio},</if>
+            <if test="fiveMonthValue != null">five_month_value = #{fiveMonthValue},</if>
+            <if test="fiveMonthRatio != null">five_month_ratio = #{fiveMonthRatio},</if>
+            <if test="sixMonthValue != null">six_month_value = #{sixMonthValue},</if>
+            <if test="sixMonthRatio != null">six_month_ratio = #{sixMonthRatio},</if>
+            <if test="ccbClientNum != null">ccb_client_num = #{ccbClientNum},</if>
+            <if test="ccbClientRatio != null">ccb_client_ratio = #{ccbClientRatio},</if>
+            <if test="dyxzClientNum != null">dyxz_client_num = #{dyxzClientNum},</if>
+            <if test="dyxzClientRatio != null">dyxz_client_ratio = #{dyxzClientRatio},</if>
+            <if test="trafficResourceUsage != null">traffic_resource_usage = #{trafficResourceUsage},</if>
+            <if test="phoneResourceUsage != null">phone_resource_usage = #{phoneResourceUsage},</if>
+            <if test="crResourceUsage != null">cr_resource_usage = #{crResourceUsage},</if>
+            <if test="otherResourceUsage != null">other_resource_usage = #{otherResourceUsage},</if>
+            <if test="yxlClientNum != null">yxl_client_num = #{yxlClientNum},</if>
+            <if test="yxlClientRatio != null">yxl_client_ratio = #{yxlClientRatio},</if>
+            <if test="cyhdyhywzxl != null">cyhdyhywzxl = #{cyhdyhywzxl},</if>
+            <if test="salesContribution != null">sales_contribution = #{salesContribution},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAmdasCollectById" parameterType="Long">
+        delete from amdas_collect where id = #{id}
+    </delete>
+
+    <delete id="deleteAmdasCollectByIds" parameterType="String">
+        delete from amdas_collect where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

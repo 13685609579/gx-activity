@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.meap.mapper.AmdasApaMapper">
+    
+    <resultMap type="AmdasApa" id="AmdasApaResult">
+        <result property="id"    column="id"    />
+        <result property="month"    column="month"    />
+        <result property="activityName"    column="activity_name"    />
+        <result property="participantsNum"    column="participants_num"    />
+        <result property="totalResource"    column="total_resource"    />
+        <result property="convertedResource"    column="converted_resource"    />
+        <result property="perCapitaUseResource"    column="per_capita_use_resource"    />
+        <result property="shopkeeperResourceBill"    column="shopkeeper_resource_bill"    />
+        <result property="shopkeeperResourceFlowRate"    column="shopkeeper_resource_flow_rate"    />
+        <result property="shopkeeperResourceAllowance"    column="shopkeeper_resource_allowance"    />
+        <result property="wtResourceBill"    column="wt_resource_bill"    />
+        <result property="wtResourceFlowRate"    column="wt_resource_flow_rate"    />
+        <result property="wtResourceAllowance"    column="wt_resource_allowance"    />
+        <result property="stResourceBill"    column="st_resource_bill"    />
+        <result property="stResourceFlowRate"    column="st_resource_flow_rate"    />
+        <result property="stResourceAllowance"    column="st_resource_allowance"    />
+        <result property="monthActive"    column="month_active"    />
+        <result property="monthRatio"    column="month_ratio"    />
+        <result property="towMonthActive"    column="tow_month_active"    />
+        <result property="towMonthRatio"    column="tow_month_ratio"    />
+        <result property="threeMonthActive"    column="three_month_active"    />
+        <result property="threeMonthRatio"    column="three_month_ratio"    />
+        <result property="fourMonthActive"    column="four_month_active"    />
+        <result property="fourMonthRatio"    column="four_month_ratio"    />
+        <result property="fiveMonthActive"    column="five_month_active"    />
+        <result property="fiveMonthRatio"    column="five_month_ratio"    />
+        <result property="sixMonthActive"    column="six_month_active"    />
+        <result property="sixMonthRatio"    column="six_month_ratio"    />
+        <result property="checkCustomersNum"    column="check_customers_num"    />
+        <result property="checkCustomersRatio"    column="check_customers_ratio"    />
+        <result property="monthNewcustomersNum"    column="month_newcustomers_num"    />
+        <result property="monthNewcustomersRatio"    column="month_newcustomers_ratio"    />
+        <result property="salesCustomersNum"    column="sales_customers_num"    />
+        <result property="salesCustomersRatio"    column="sales_customers_ratio"    />
+        <result property="totalBusinessSales"    column="total_business_sales"    />
+        <result property="salesPerCapita"    column="sales_per_capita"    />
+    </resultMap>
+
+    <sql id="selectAmdasApaVo">
+        select id, month, activity_name, participants_num, total_resource, converted_resource, per_capita_use_resource, shopkeeper_resource_bill, shopkeeper_resource_flow_rate, shopkeeper_resource_allowance, wt_resource_bill, wt_resource_flow_rate, wt_resource_allowance, st_resource_bill, st_resource_flow_rate, st_resource_allowance, month_active, month_ratio, tow_month_active, tow_month_ratio, three_month_active, three_month_ratio, four_month_active, four_month_ratio, five_month_active, five_month_ratio, six_month_active, six_month_ratio, check_customers_num, check_customers_ratio, month_newcustomers_num, month_newcustomers_ratio, sales_customers_num, sales_customers_ratio, total_business_sales, sales_per_capita from amdas_apa
+    </sql>
+
+    <select id="selectAmdasApaList" parameterType="AmdasApa" resultMap="AmdasApaResult">
+        <include refid="selectAmdasApaVo"/>
+        <where>  
+            <if test="month != null  and month != ''"> and month like concat('%', #{month}, '%')</if>
+            <if test="activityName != null  and activityName != ''"> and activity_name like concat('%', #{activityName}, '%')</if>
+        </where>
+        order by month desc
+    </select>
+    
+    <select id="selectAmdasApaById" parameterType="Long" resultMap="AmdasApaResult">
+        <include refid="selectAmdasApaVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertAmdasApa" parameterType="AmdasApa" useGeneratedKeys="true" keyProperty="id">
+        insert into amdas_apa
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="month != null">month,</if>
+            <if test="activityName != null">activity_name,</if>
+            <if test="participantsNum != null">participants_num,</if>
+            <if test="totalResource != null">total_resource,</if>
+            <if test="convertedResource != null">converted_resource,</if>
+            <if test="perCapitaUseResource != null">per_capita_use_resource,</if>
+            <if test="shopkeeperResourceBill != null">shopkeeper_resource_bill,</if>
+            <if test="shopkeeperResourceFlowRate != null">shopkeeper_resource_flow_rate,</if>
+            <if test="shopkeeperResourceAllowance != null">shopkeeper_resource_allowance,</if>
+            <if test="wtResourceBill != null">wt_resource_bill,</if>
+            <if test="wtResourceFlowRate != null">wt_resource_flow_rate,</if>
+            <if test="wtResourceAllowance != null">wt_resource_allowance,</if>
+            <if test="stResourceBill != null">st_resource_bill,</if>
+            <if test="stResourceFlowRate != null">st_resource_flow_rate,</if>
+            <if test="stResourceAllowance != null">st_resource_allowance,</if>
+            <if test="monthActive != null">month_active,</if>
+            <if test="monthRatio != null">month_ratio,</if>
+            <if test="towMonthActive != null">tow_month_active,</if>
+            <if test="towMonthRatio != null">tow_month_ratio,</if>
+            <if test="threeMonthActive != null">three_month_active,</if>
+            <if test="threeMonthRatio != null">three_month_ratio,</if>
+            <if test="fourMonthActive != null">four_month_active,</if>
+            <if test="fourMonthRatio != null">four_month_ratio,</if>
+            <if test="fiveMonthActive != null">five_month_active,</if>
+            <if test="fiveMonthRatio != null">five_month_ratio,</if>
+            <if test="sixMonthActive != null">six_month_active,</if>
+            <if test="sixMonthRatio != null">six_month_ratio,</if>
+            <if test="checkCustomersNum != null">check_customers_num,</if>
+            <if test="checkCustomersRatio != null">check_customers_ratio,</if>
+            <if test="monthNewcustomersNum != null">month_newcustomers_num,</if>
+            <if test="monthNewcustomersRatio != null">month_newcustomers_ratio,</if>
+            <if test="salesCustomersNum != null">sales_customers_num,</if>
+            <if test="salesCustomersRatio != null">sales_customers_ratio,</if>
+            <if test="totalBusinessSales != null">total_business_sales,</if>
+            <if test="salesPerCapita != null">sales_per_capita,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="month != null">#{month},</if>
+            <if test="activityName != null">#{activityName},</if>
+            <if test="participantsNum != null">#{participantsNum},</if>
+            <if test="totalResource != null">#{totalResource},</if>
+            <if test="convertedResource != null">#{convertedResource},</if>
+            <if test="perCapitaUseResource != null">#{perCapitaUseResource},</if>
+            <if test="shopkeeperResourceBill != null">#{shopkeeperResourceBill},</if>
+            <if test="shopkeeperResourceFlowRate != null">#{shopkeeperResourceFlowRate},</if>
+            <if test="shopkeeperResourceAllowance != null">#{shopkeeperResourceAllowance},</if>
+            <if test="wtResourceBill != null">#{wtResourceBill},</if>
+            <if test="wtResourceFlowRate != null">#{wtResourceFlowRate},</if>
+            <if test="wtResourceAllowance != null">#{wtResourceAllowance},</if>
+            <if test="stResourceBill != null">#{stResourceBill},</if>
+            <if test="stResourceFlowRate != null">#{stResourceFlowRate},</if>
+            <if test="stResourceAllowance != null">#{stResourceAllowance},</if>
+            <if test="monthActive != null">#{monthActive},</if>
+            <if test="monthRatio != null">#{monthRatio},</if>
+            <if test="towMonthActive != null">#{towMonthActive},</if>
+            <if test="towMonthRatio != null">#{towMonthRatio},</if>
+            <if test="threeMonthActive != null">#{threeMonthActive},</if>
+            <if test="threeMonthRatio != null">#{threeMonthRatio},</if>
+            <if test="fourMonthActive != null">#{fourMonthActive},</if>
+            <if test="fourMonthRatio != null">#{fourMonthRatio},</if>
+            <if test="fiveMonthActive != null">#{fiveMonthActive},</if>
+            <if test="fiveMonthRatio != null">#{fiveMonthRatio},</if>
+            <if test="sixMonthActive != null">#{sixMonthActive},</if>
+            <if test="sixMonthRatio != null">#{sixMonthRatio},</if>
+            <if test="checkCustomersNum != null">#{checkCustomersNum},</if>
+            <if test="checkCustomersRatio != null">#{checkCustomersRatio},</if>
+            <if test="monthNewcustomersNum != null">#{monthNewcustomersNum},</if>
+            <if test="monthNewcustomersRatio != null">#{monthNewcustomersRatio},</if>
+            <if test="salesCustomersNum != null">#{salesCustomersNum},</if>
+            <if test="salesCustomersRatio != null">#{salesCustomersRatio},</if>
+            <if test="totalBusinessSales != null">#{totalBusinessSales},</if>
+            <if test="salesPerCapita != null">#{salesPerCapita},</if>
+         </trim>
+    </insert>
+
+    <update id="updateAmdasApa" parameterType="AmdasApa">
+        update amdas_apa
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="month != null">month = #{month},</if>
+            <if test="activityName != null">activity_name = #{activityName},</if>
+            <if test="participantsNum != null">participants_num = #{participantsNum},</if>
+            <if test="totalResource != null">total_resource = #{totalResource},</if>
+            <if test="convertedResource != null">converted_resource = #{convertedResource},</if>
+            <if test="perCapitaUseResource != null">per_capita_use_resource = #{perCapitaUseResource},</if>
+            <if test="shopkeeperResourceBill != null">shopkeeper_resource_bill = #{shopkeeperResourceBill},</if>
+            <if test="shopkeeperResourceFlowRate != null">shopkeeper_resource_flow_rate = #{shopkeeperResourceFlowRate},</if>
+            <if test="shopkeeperResourceAllowance != null">shopkeeper_resource_allowance = #{shopkeeperResourceAllowance},</if>
+            <if test="wtResourceBill != null">wt_resource_bill = #{wtResourceBill},</if>
+            <if test="wtResourceFlowRate != null">wt_resource_flow_rate = #{wtResourceFlowRate},</if>
+            <if test="wtResourceAllowance != null">wt_resource_allowance = #{wtResourceAllowance},</if>
+            <if test="stResourceBill != null">st_resource_bill = #{stResourceBill},</if>
+            <if test="stResourceFlowRate != null">st_resource_flow_rate = #{stResourceFlowRate},</if>
+            <if test="stResourceAllowance != null">st_resource_allowance = #{stResourceAllowance},</if>
+            <if test="monthActive != null">month_active = #{monthActive},</if>
+            <if test="monthRatio != null">month_ratio = #{monthRatio},</if>
+            <if test="towMonthActive != null">tow_month_active = #{towMonthActive},</if>
+            <if test="towMonthRatio != null">tow_month_ratio = #{towMonthRatio},</if>
+            <if test="threeMonthActive != null">three_month_active = #{threeMonthActive},</if>
+            <if test="threeMonthRatio != null">three_month_ratio = #{threeMonthRatio},</if>
+            <if test="fourMonthActive != null">four_month_active = #{fourMonthActive},</if>
+            <if test="fourMonthRatio != null">four_month_ratio = #{fourMonthRatio},</if>
+            <if test="fiveMonthActive != null">five_month_active = #{fiveMonthActive},</if>
+            <if test="fiveMonthRatio != null">five_month_ratio = #{fiveMonthRatio},</if>
+            <if test="sixMonthActive != null">six_month_active = #{sixMonthActive},</if>
+            <if test="sixMonthRatio != null">six_month_ratio = #{sixMonthRatio},</if>
+            <if test="checkCustomersNum != null">check_customers_num = #{checkCustomersNum},</if>
+            <if test="checkCustomersRatio != null">check_customers_ratio = #{checkCustomersRatio},</if>
+            <if test="monthNewcustomersNum != null">month_newcustomers_num = #{monthNewcustomersNum},</if>
+            <if test="monthNewcustomersRatio != null">month_newcustomers_ratio = #{monthNewcustomersRatio},</if>
+            <if test="salesCustomersNum != null">sales_customers_num = #{salesCustomersNum},</if>
+            <if test="salesCustomersRatio != null">sales_customers_ratio = #{salesCustomersRatio},</if>
+            <if test="totalBusinessSales != null">total_business_sales = #{totalBusinessSales},</if>
+            <if test="salesPerCapita != null">sales_per_capita = #{salesPerCapita},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteAmdasApaById" parameterType="Long">
+        delete from amdas_apa where id = #{id}
+    </delete>
+
+    <delete id="deleteAmdasApaByIds" parameterType="String">
+        delete from amdas_apa where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
